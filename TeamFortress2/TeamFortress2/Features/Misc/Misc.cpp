@@ -37,9 +37,7 @@ void CMisc::SpeedHack()
 {
 	ConVar* h_framerate = g_Interfaces.CVars->FindVar(_("host_framerate"));
 	ConVar* updaterate = g_Interfaces.CVars->FindVar(_("cl_updaterate"));
-	ConVar* cmdrate = g_Interfaces.CVars->FindVar(_("cl_cmdrate"));
 	int update_Rate = updaterate->GetInt();
-	int command_Rate = cmdrate->GetInt();
 	ConVar* h_timescale = g_Interfaces.CVars->FindVar(_("host_timescale"));
 	ConVar* cheats = g_Interfaces.CVars->FindVar(_("sv_cheats"));
 	if (Vars::Misc::CL_Move::SEnabled.m_Var)
@@ -47,8 +45,7 @@ void CMisc::SpeedHack()
 		cheats->SetValue(1);
 		h_timescale->SetValue(Vars::Misc::CL_Move::SFactor.m_Var);
 		h_framerate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
-		cmdrate->SetValue(command_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
-		cmdrate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
+		updaterate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
 	}
 	else
 	{
