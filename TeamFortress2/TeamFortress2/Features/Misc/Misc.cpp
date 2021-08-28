@@ -178,7 +178,7 @@ std::string GetSpam(const int nIndex) {
 
 	switch (nIndex)
 	{
-		case 0: str = XorStr("say deathpole - shitting on ur p2c with superior speedhack method").str(); break;
+		case 0: str = XorStr("say deathpole - shitting on ur p2c with superior crimwalk").str(); break;
 		case 1: str = XorStr("say deathpole - go cry to senator to fix your retarded cheat").str(); break;
 		case 2: str = XorStr("say deathpole - best cheat for speedhack hvh wdym").str(); break;
 		case 3: str = XorStr("say deathpole - cry more retard lOl").str(); break;

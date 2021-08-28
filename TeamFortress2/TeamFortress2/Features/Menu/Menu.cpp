@@ -1456,7 +1456,7 @@ void CMenu::Run()
 
 							GroupBoxStart();
 							{
-								CheckBox(Vars::Misc::CL_Move::SEnabled, _(L"Master switch to enable speedhack."));
+								CheckBox(Vars::Misc::CL_Move::SEnabled, _(L"Master switch to enable crimwalk."));
 								InputInt(Vars::Misc::CL_Move::SFactor, 1, 50);
 							}
 							GroupBoxEnd(_(L"crimwalk (requires server allowance)"), 210);
