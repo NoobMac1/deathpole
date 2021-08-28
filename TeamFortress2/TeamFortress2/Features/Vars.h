@@ -409,7 +409,7 @@ namespace Vars
 			inline CVar<bool> Doubletap		{ true, L"Double Tap" };
 			inline CVar<bool> DoubletapProj	{ true, L"Double Tap" };
 			inline CVar<int> RechargeKey	{ 0x52, L"Recharge Key" }; //R
-			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" };
+			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" }; 
 			inline CVar<int> SFactor		{ 1, L"Crimwalk Factor" };
 		}
 	}
