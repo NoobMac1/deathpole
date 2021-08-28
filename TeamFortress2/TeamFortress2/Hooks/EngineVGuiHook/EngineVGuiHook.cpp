@@ -97,12 +97,12 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 
-							if (g_GlobalInfo.m_nShifted)
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 64, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"FLAT [%i / %i]"), g_GlobalInfo.m_nShifted, MAX_NEW_COMMANDS);
+								if (g_GlobalInfo.m_nShifted)
+								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 64, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"WAIT"), g_GlobalInfo.m_nShifted, MAX_NEW_COMMANDS);
 							else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 178, 0, 255 }, ALIGN_CENTERHORIZONTAL, _(L"CHARGING [%i / %i]"), g_GlobalInfo.m_nWaitForShift, DT_WAIT_CALLS);
+								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 178, 0, 255 }, ALIGN_CENTERHORIZONTAL, _(L"[%i / %i]"), g_GlobalInfo.m_nWaitForShift, DT_WAIT_CALLS);
 							else if (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE || pWeapon->GetWeaponID() != TF_WEAPON_PIPEBOMBLAUNCHER)
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 25, 255, 25, 255 }, ALIGN_CENTERHORIZONTAL, _(L"ENABLED."));
+								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 25, 255, 25, 255 }, ALIGN_CENTERHORIZONTAL, _(L"DT"));
 						}
 					}
 				}
