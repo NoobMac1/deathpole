@@ -377,7 +377,7 @@ namespace Vars
 
 		inline CVar<bool> WorldModulation			{ false, L"World Modulation" };
 
-	/*	namespace Skins
+		namespace Skins
 		{
 			inline CVar<bool> Enabled				{ false, L"Active" };
 			inline CVar<int> Sheen					{ 0, L"Sheen" };
@@ -387,7 +387,7 @@ namespace Vars
 			inline CVar<bool> Override				{ false, L"Style Override" };
 		}
 	}
-	*/
+	
 
 	namespace Misc
 	{
