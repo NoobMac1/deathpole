@@ -1313,7 +1313,7 @@ void CMenu::Run()
 							}
 							GroupBoxEnd(_(L"Other"), 200);
 
-							GroupBoxStart();
+							/* GroupBoxStart();
 							{
 								CheckBox(Vars::Visuals::Skins::Enabled, _(L"Enabled"));
 								ComboBox(Vars::Visuals::Skins::Effect, {
@@ -1353,7 +1353,7 @@ void CMenu::Run()
 							GroupBoxEnd(_(L"Weapon Attributes"), 150);
 							break;
 						}
-
+*/
 						case EVisualsTabs::TAB_COLORS:
 						{
 							Rect_t checkpoint = m_LastWidget;
