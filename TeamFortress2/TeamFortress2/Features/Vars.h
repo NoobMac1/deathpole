@@ -377,7 +377,7 @@ namespace Vars
 
 		inline CVar<bool> WorldModulation			{ false, L"World Modulation" };
 
-		namespace Skins
+	/*	namespace Skins
 		{
 			inline CVar<bool> Enabled				{ false, L"Active" };
 			inline CVar<int> Sheen					{ 0, L"Sheen" };
@@ -387,6 +387,7 @@ namespace Vars
 			inline CVar<bool> Override				{ false, L"Style Override" };
 		}
 	}
+	*/
 
 	namespace Misc
 	{
@@ -409,7 +410,7 @@ namespace Vars
 			inline CVar<bool> Doubletap		{ true, L"Double Tap" };
 			inline CVar<bool> DoubletapProj	{ true, L"Double Tap" };
 			inline CVar<int> RechargeKey	{ 0x52, L"Recharge Key" }; //R
-			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" }; 
+			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" };
 			inline CVar<int> SFactor		{ 1, L"Crimwalk Factor" };
 		}
 	}
