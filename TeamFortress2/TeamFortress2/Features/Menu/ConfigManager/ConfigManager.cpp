@@ -448,6 +448,13 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Misc::NoPush);
 			SAVE_VAR(Vars::Misc::AutoStrafe);
 			SAVE_VAR(Vars::Misc::EdgeJump);
+			SAVE_VAR(Vars::Misc::CheatBypass);
+			SAVE_VAR(Vars::Misc::CL_Move::Doubletap);
+			SAVE_VAR(Vars::Misc::CL_Move::DoubletapProj);
+			SAVE_VAR(Vars::Misc::CL_Move::Enabled);
+			SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
+			SAVE_VAR(Vars::Misc::CL_Move::SFactor);
+			SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);
 		}
 
 		//AntiHack
@@ -488,6 +495,9 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Colors::StaticPropModulation);
 			SAVE_OTHER(Colors::FOVCircle);
 			SAVE_OTHER(Colors::Bones);
+			SAVE_OTHER(Colors::Ticks);
+			SAVE_OTHER(Colors::TicksOutline);
+
 
 			SAVE_OTHER(g_Radar.m_nRadarX);
 			SAVE_OTHER(g_Radar.m_nRadarY);
@@ -840,8 +850,15 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Misc::MedalFlip);
 			LOAD_VAR(Vars::Misc::ChatSpam);
 			LOAD_VAR(Vars::Misc::NoPush);
+			LOAD_VAR(Vars::Misc::CheatBypass);
 			LOAD_VAR(Vars::Misc::EdgeJump);
 			LOAD_VAR(Vars::Misc::AutoStrafe);
+			LOAD_VAR(Vars::Misc::CL_Move::Enabled);
+			LOAD_VAR(Vars::Misc::CL_Move::Doubletap);
+			LOAD_VAR(Vars::Misc::CL_Move::DoubletapProj);
+			LOAD_VAR(Vars::Misc::CL_Move::RechargeKey);
+			LOAD_VAR(Vars::Misc::CL_Move::SEnabled);
+			LOAD_VAR(Vars::Misc::CL_Move::SFactor);
 		}
 
 		//AntiHack
@@ -882,6 +899,8 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Colors::StaticPropModulation);
 			LOAD_OTHER(Colors::FOVCircle);
 			LOAD_OTHER(Colors::Bones);
+			LOAD_OTHER(Colors::Ticks);
+			LOAD_OTHER(Colors::TicksOutline);
 
 			LOAD_OTHER(g_Radar.m_nRadarX);
 			LOAD_OTHER(g_Radar.m_nRadarY);

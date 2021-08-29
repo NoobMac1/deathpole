@@ -101,7 +101,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							float ratio = (charged / DT_WAIT_CALLS);
 
 							g_Draw.OutlinedRect(g_ScreenSize.c - 53, nY - 8, 106, 16, Colors::TicksOutline);
-							g_Draw.String(FONT_MENU, g_ScreenSize.c - 52, nY - 20, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
+							g_Draw.String(FONT_MISC, g_ScreenSize.c - 52, nY - 20, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 							if (g_GlobalInfo.m_nShifted)
 							{
 								g_Draw.Rect(g_ScreenSize.c - 52, nY - 7, 104, 14, { 17, 24, 26, 255 });

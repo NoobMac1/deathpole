@@ -49,7 +49,10 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 		{ 0x0, _("Verdana"), 12, 0, FONTFLAG_ANTIALIAS },
 
 		//FONT_DEBUG
-		{ 0x0, _("Arial"), 16, 0, FONTFLAG_OUTLINE }
+		{ 0x0, _("Arial"), 16, 0, FONTFLAG_OUTLINE },
+
+		//FONT_MISC
+		{ 0x0, _("Verdana"), 10, 0, FONTFLAG_OUTLINE }
 	});
 
 	g_Interfaces.CVars->ConsoleColorPrintf({ 0, 0, 255, 255 }, _("DeathPole Injected!\n"));
