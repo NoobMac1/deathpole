@@ -1391,7 +1391,8 @@ void CMenu::Run()
 								InputColor(Colors::WorldModulation, _(L"World Color"));
 								InputColor(Colors::StaticPropModulation, _(L"Prop Color"));
 								InputColor(Colors::FOVCircle, _(L"FOV Circle"));
-								InputColor(Colors::Bones, _(L"Bone color"));
+								InputColor(Colors::Bones, _(L"Bone Color"));
+								InputColor(Colors::Ticks, _(L"DT Indicator Color"));
 							}
 							GroupBoxEnd(_(L"Others"), 250);
 
