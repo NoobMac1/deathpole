@@ -88,7 +88,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
-					const auto& pLocal  = g_EntityCache.m_pLocal;
+					const auto& pLocal = g_EntityCache.m_pLocal;
 					const auto& pWeapon = g_EntityCache.m_pLocalWeapon;
 
 					if (pLocal && pWeapon)
@@ -97,25 +97,28 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 
+							g_Draw.OutlinedRect(g_ScreenSize.c - 53, nY - 11, 106, 22, { 255, 255, 255, 255 });
+							float charged = (DT_WAIT_CALLS - g_GlobalInfo.m_nWaitForShift);
+							float ratio = (charged / DT_WAIT_CALLS);
+
+							g_Draw.OutlinedRect(g_ScreenSize.c - 53, nY - 11, 106, 22, { 255, 255, 255, 255 });
 							if (g_GlobalInfo.m_nShifted)
 							{
-								g_Draw.OutlinedRect(g_ScreenSize.c, g_ScreenSize.c - 10, 8, 12, { 255, 64, 64, 255 });
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 64, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"WAIT"));
+								//g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 64, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"WAIT"));
 							}
 							else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
 							{
-								g_Draw.OutlinedRect(g_ScreenSize.c, g_ScreenSize.c - 10, 8, 12, { 255, 178, 0, 255 });
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 178, 0, 255 }, ALIGN_CENTERHORIZONTAL, _(L"[%i / %i]"), g_GlobalInfo.m_nWaitForShift, DT_WAIT_CALLS);
+								g_Draw.Rect(g_ScreenSize.c - 52, nY - 10, 104 * ratio, 20, { 148, 246, 255, 255 });
+								//g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 255, 178, 0, 255 }, ALIGN_CENTERHORIZONTAL, _(L"[%i / %i]"), g_GlobalInfo.m_nWaitForShift, DT_WAIT_CALLS);
 							}
 							else if (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE || pWeapon->GetWeaponID() != TF_WEAPON_PIPEBOMBLAUNCHER)
 							{
-								g_Draw.OutlinedRect(g_ScreenSize.c, g_ScreenSize.c - 10, 8, 12, { 25, 255, 25, 255 });
-								g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 25, 255, 25, 255 }, ALIGN_CENTERHORIZONTAL, _(L"DT"));
+								g_Draw.Rect(g_ScreenSize.c - 52, nY - 10, 104, 20, { 148, 246, 255, 255 });
+								//g_Draw.String(FONT_MENU, g_ScreenSize.c, nY, { 25, 255, 25, 255 }, ALIGN_CENTERHORIZONTAL, _(L"DT"));
 							}
 						}
 					}
 				}
-
 				//Current Active Aimbot FOV
 				if (Vars::Visuals::AimFOVAlpha.m_Var && g_GlobalInfo.m_flCurAimFOV)
 				{

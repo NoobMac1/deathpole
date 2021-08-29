@@ -101,6 +101,7 @@ bool CAimbotProjectile::GetProjectileInfo(CBaseCombatWeapon *pWeapon, Projectile
 
 		case Pyro_m_DragonsFury: {
 			out = { 3000.0f, 0.0f, 0.12f };
+			m_bIsFlameThrower = true;
 			break;
 		}
 
@@ -605,7 +606,7 @@ void CAimbotProjectile::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUs
 		if (ShouldFire(pCmd))
 		{
 			pCmd->buttons |= IN_ATTACK;
-			if (Vars::Misc::CL_Move::Enabled.m_Var && Vars::Misc::CL_Move::DoubletapProj.m_Var && (pCmd->buttons & IN_ATTACK) && !g_GlobalInfo.m_nShifted && !g_GlobalInfo.m_nWaitForShift && (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE || pWeapon->GetWeaponID() != TF_WEAPON_PIPEBOMBLAUNCHER))
+			if (Vars::Misc::CL_Move::Enabled.m_Var && Vars::Misc::CL_Move::DoubletapProj.m_Var && (pCmd->buttons & IN_ATTACK) && !g_GlobalInfo.m_nShifted && !g_GlobalInfo.m_nWaitForShift && (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE))
 			{
 				g_GlobalInfo.m_bShouldShift = true;
 			}
