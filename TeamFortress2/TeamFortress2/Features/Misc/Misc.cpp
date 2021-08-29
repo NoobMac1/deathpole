@@ -10,6 +10,13 @@ void CMisc::Run(CUserCmd* pCmd)
 	NoPush();
 	CheatBypass();
 	SpeedHack();
+	ConsoleStuff();
+}
+
+void CMisc::ConsoleStuff()
+{
+	ConVar* cpuThrottle = g_Interfaces.CVars->FindVar(_("engine_no_focus_sleep"));
+	cpuThrottle->SetValue(0);
 }
 
 void CMisc::NoPush()

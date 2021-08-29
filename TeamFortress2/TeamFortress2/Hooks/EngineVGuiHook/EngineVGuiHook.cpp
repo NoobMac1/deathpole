@@ -93,7 +93,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 
 					if (pLocal && pWeapon)
 					{
-						if (pLocal->GetLifeState() == LIFE_ALIVE)
+						if (pLocal->GetLifeState() == LIFE_ALIVE && !Vars::Visuals::ThirdPerson.m_Var)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 

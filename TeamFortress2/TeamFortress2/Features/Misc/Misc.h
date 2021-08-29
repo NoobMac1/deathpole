@@ -18,6 +18,7 @@ public:
 	void CheatBypass();
 	void SpeedHack();
 	void NoPush();
+	void ConsoleStuff();
 };
 
 inline CMisc g_Misc;
