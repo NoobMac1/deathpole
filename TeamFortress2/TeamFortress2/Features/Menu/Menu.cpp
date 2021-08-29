@@ -1393,6 +1393,7 @@ void CMenu::Run()
 								InputColor(Colors::FOVCircle, _(L"FOV Circle"));
 								InputColor(Colors::Bones, _(L"Bone Color"));
 								InputColor(Colors::Ticks, _(L"DT Indicator Color"));
+								InputColor(Colors::TicksOutline, _(L"DT Indicator Outline"));
 							}
 							GroupBoxEnd(_(L"Others"), 250);
 

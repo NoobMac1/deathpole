@@ -15,7 +15,6 @@
     <ClCompile Include="TeamFortress2\Features\Misc\Misc.cpp" />
     <ClCompile Include="TeamFortress2\Features\Chams\Chams.cpp" />
     <ClCompile Include="TeamFortress2\Features\Prediction\Prediction.cpp" />
-    <ClCompile Include="TeamFortress2\Features\ds\Radar.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpectatorList\SpectatorList.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpyWarning\SpyWarning.cpp" />
     <ClCompile Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.cpp" />
@@ -64,7 +63,6 @@
     <ClCompile Include="TeamFortress2\Hooks\DrawStaticPropsHook\DrawStaticPropsHook.cpp" />
     <ClCompile Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\EngineHook\EngineHook.cpp" />
-    <ClCompile Include="TeamFortress2\Features\DT Indicators\DTInd.cpp" />
     <ClCompile Include="TeamFortress2\Features\Radar\Radar.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +79,6 @@
     <ClInclude Include="TeamFortress2\Features\Misc\Misc.h" />
     <ClInclude Include="TeamFortress2\Features\Chams\Chams.h" />
     <ClInclude Include="TeamFortress2\Features\Prediction\Prediction.h" />
-    <ClInclude Include="TeamFortress2\Features\ds\Radar.h" />
     <ClInclude Include="TeamFortress2\Features\SpectatorList\SpectatorList.h" />
     <ClInclude Include="TeamFortress2\Features\SpyWarning\SpyWarning.h" />
     <ClInclude Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.h" />
@@ -436,7 +433,6 @@
     <ClInclude Include="TeamFortress2\SDK\Interfaces\EngineEffects\EngineEffects.h" />
     <ClInclude Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.h" />
     <ClInclude Include="TeamFortress2\Hooks\EngineHook\EngineHook.h" />
-    <ClInclude Include="TeamFortress2\Features\DT Indicators\DTInd.h" />
     <ClInclude Include="TeamFortress2\Features\Radar\Radar.h" />
   </ItemGroup>
 </Project>
