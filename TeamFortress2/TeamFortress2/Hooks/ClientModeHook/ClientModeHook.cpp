@@ -54,9 +54,6 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		{
 			const int nItemDefIndex = pWeapon->GetItemDefIndex();
 
-			if (g_GlobalInfo.m_nCurItemDefIndex != nItemDefIndex || !pWeapon->GetClip1())
-				g_GlobalInfo.m_nWaitForShift = DT_WAIT_CALLS;
-
 			g_GlobalInfo.m_nCurItemDefIndex = nItemDefIndex;
 			g_GlobalInfo.m_bWeaponCanHeadShot = pWeapon->CanWeaponHeadShot();
 			g_GlobalInfo.m_bWeaponCanAttack = pWeapon->CanShoot(pLocal);
