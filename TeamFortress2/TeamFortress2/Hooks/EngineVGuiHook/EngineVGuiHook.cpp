@@ -101,22 +101,19 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							float ratio = (charged / DT_WAIT_CALLS);
 
 							g_Draw.OutlinedRect(g_ScreenSize.c - 53, nY - 8, 106, 16, Colors::TicksOutline);
-							g_Draw.String(FONT_MENU, g_ScreenSize.c - 52, nY - 15, { 255, 255, 25, 255 }, ALIGN_CENTERHORIZONTAL, _(L"CHARGE"));
+							g_Draw.String(FONT_MENU, g_ScreenSize.c - 52, nY - 20, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 							if (g_GlobalInfo.m_nShifted)
 							{
 								g_Draw.Rect(g_ScreenSize.c - 52, nY - 7, 104, 14, { 17, 24, 26, 255 });
-								g_Draw.String(FONT_MENU, g_ScreenSize.c + 52, nY - 20, { 166, 21, 35, 255 }, ALIGN_CENTERHORIZONTAL, _(L"NO CHARGE"));
 							}
 							else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
 							{
 								g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio), nY - 7, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
 								g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c - 52 + (104 * ratio), nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
-								g_Draw.String(FONT_MENU, g_ScreenSize.c + 52, nY - 20, { 154, 101, 41, 255 }, ALIGN_CENTERHORIZONTAL, _(L"CHARGING"));
 							}
 							else if (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE || pWeapon->GetWeaponID() != TF_WEAPON_PIPEBOMBLAUNCHER)
 							{
 								g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c + 52, nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
-								g_Draw.String(FONT_MENU, g_ScreenSize.c + 52, nY - 20, { 23, 100, 54, 255 }, ALIGN_CENTERHORIZONTAL, _(L"READY"));
 							}
 						}
 					}
