@@ -1474,7 +1474,7 @@ void CMenu::Run()
 								ComboBox(Vars::AntiHack::AntiAim::Pitch, { { 0, _(L"None") }, { 1, _(L"Up") }, { 2, _(L"Down") }, { 3, _(L"Fake Up") }, { 4, _(L"Fake Down") }, { 5, _(L"Custom") } });
 								if (Vars::AntiHack::AntiAim::Pitch.m_Var == 5)
 								{
-									CMenu::InputInt(Vars::AntiHack::AntiAim::PitchOffset, -180, 180)
+									CMenu::InputInt(Vars::AntiHack::AntiAim::PitchOffset, -180, 180);
 								}
 								ComboBox(Vars::AntiHack::AntiAim::YawReal, { { 0, _(L"None") }, { 1, _(L"Left") }, { 2, _(L"Right") }, { 3, _(L"Backwards") }, { 4, _(L"Custom") } });
 								if (Vars::AntiHack::AntiAim::YawReal.m_Var == 4)
