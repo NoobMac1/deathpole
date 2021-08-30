@@ -17,9 +17,7 @@ void CMisc::Run(CUserCmd* pCmd)
 void CMisc::ConsoleStuff()
 {
 	ConVar* cpuThrottle = g_Interfaces.CVars->FindVar(_("engine_no_focus_sleep"));
-	ConVar* usrcmds = g_Interfaces.CVars->FindVar(_("sv_maxusrcmdprocessticks"));
 	cpuThrottle->SetValue(0);
-	usrcmds->SetValue(26);
 }
 
 void CMisc::Interp()
