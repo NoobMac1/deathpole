@@ -78,15 +78,21 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 		float flElapsed = g_Interfaces.Engine->Time() - flPressedTime;
 		if ((GetAsyncKeyState(Vars::AntiHack::AntiAim::InvertKey.m_Var) & 0x8000) && flElapsed > 0.2f)
 		{
-			switch (Vars::AntiHack::AntiAim::YawReal.m_Var) {
-			case 1: { Vars::AntiHack::AntiAim::YawReal.m_Var = 2;  break; }
-			case 2: { Vars::AntiHack::AntiAim::YawReal.m_Var = 1;  break; }
-			default: { bYawSet = false; break; }
+			if (Vars::AntiHack::AntiAim::YawReal.m_Var == 1 || Vars::AntiHack::AntiAim::YawReal.m_Var == 2)
+			{
+				switch (Vars::AntiHack::AntiAim::YawReal.m_Var) {
+				case 1: { Vars::AntiHack::AntiAim::YawReal.m_Var = 2;  break; }
+				case 2: { Vars::AntiHack::AntiAim::YawReal.m_Var = 1;  break; }
+				default: { bYawSet = false; break; }
+				}
 			}
-			switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
-			case 1: { Vars::AntiHack::AntiAim::YawFake.m_Var = 2;  break; }
-			case 2: { Vars::AntiHack::AntiAim::YawFake.m_Var = 1;  break; }
-			default: { bYawSet = false; break; }
+			else if (Vars::AntiHack::AntiAim::YawFake.m_Var == 1 || Vars::AntiHack::AntiAim::YawFake.m_Var == 2)
+			{
+				switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
+				case 1: { Vars::AntiHack::AntiAim::YawFake.m_Var = 2;  break; }
+				case 2: { Vars::AntiHack::AntiAim::YawFake.m_Var = 1;  break; }
+				default: { bYawSet = false; break; }
+				}
 			}
 			flPressedTime = g_Interfaces.Engine->Time();
 		}
