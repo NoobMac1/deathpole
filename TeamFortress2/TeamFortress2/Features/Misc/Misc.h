@@ -19,6 +19,7 @@ public:
 	void SpeedHack();
 	void NoPush();
 	void ConsoleStuff();
+	void Interp();
 };
 
 inline CMisc g_Misc;

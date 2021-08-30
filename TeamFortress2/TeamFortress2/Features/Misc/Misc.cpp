@@ -11,12 +11,37 @@ void CMisc::Run(CUserCmd* pCmd)
 	CheatBypass();
 	SpeedHack();
 	ConsoleStuff();
+	Interp();
 }
 
 void CMisc::ConsoleStuff()
 {
 	ConVar* cpuThrottle = g_Interfaces.CVars->FindVar(_("engine_no_focus_sleep"));
+	ConVar* usrcmds = g_Interfaces.CVars->FindVar(_("sv_maxusrcmdprocessticks"));
 	cpuThrottle->SetValue(0);
+	usrcmds->SetValue(26);
+}
+
+void CMisc::Interp()
+{
+	ConVar* interpRatio = g_Interfaces.CVars->FindVar(_("cl_interp_ratio"));
+	ConVar* interp = g_Interfaces.CVars->FindVar(_("cl_interpolate"));
+	ConVar* interpAmount = g_Interfaces.CVars->FindVar(_("cl_interp"));
+	ConVar* interpRatioServer = g_Interfaces.CVars->FindVar(_("sv_client_min_interp_ratio"));
+	if (Vars::Misc::DisableInterpolation.m_Var)
+	{
+		interpRatioServer->SetValue(0);
+		interpRatio->SetValue(0);
+		interpAmount->SetValue(0);
+		interp->SetValue(0);
+	}
+	else
+	{
+		interpRatioServer->SetValue(1);
+		interpRatio->SetValue(1);
+		interpAmount->SetValue(0);
+		interp->SetValue(1);
+	}
 }
 
 void CMisc::NoPush()
@@ -25,6 +50,10 @@ void CMisc::NoPush()
 	if (Vars::Misc::NoPush.m_Var)
 	{
 		push->SetValue(0);
+	}
+	else
+	{
+		push->SetValue(1);
 	}
 }
 
