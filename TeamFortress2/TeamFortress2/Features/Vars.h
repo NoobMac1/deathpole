@@ -421,6 +421,7 @@ namespace Vars
 		{
 			inline CVar<bool> Active	{ false, L"Active" };
 			inline CVar<int> Pitch		{ 0, L"Pitch" };	//none, up, down, fake up, fake down
+			inline CVar<int> PitchOffset{ 0, L"Pitch Offset" };
 			inline CVar<int> YawReal	{ 0, L"Yaw Real" };	//none, l, r, backwards, custom
 			inline CVar<int> YawFake	{ 0, L"Yaw Fake" };	//none, l, r, backwards, custom
 			inline CVar<int> YawRealOffset{ -180, L"Real Offset" };
