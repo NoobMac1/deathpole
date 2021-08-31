@@ -70,6 +70,7 @@ void CMisc::EdgeJump(CUserCmd* pCmd, const int nOldFlags)
 void CMisc::SpeedHack()
 {
 	ConVar* h_framerate = g_Interfaces.CVars->FindVar(_("host_framerate"));
+	ConVar* framerate = g_Interfaces.CVars->FindVar(_("fps_max"));
 	ConVar* updaterate = g_Interfaces.CVars->FindVar(_("cl_updaterate"));
 	int update_Rate = updaterate->GetInt();
 	ConVar* h_timescale = g_Interfaces.CVars->FindVar(_("host_timescale"));
@@ -80,11 +81,15 @@ void CMisc::SpeedHack()
 		h_timescale->SetValue(Vars::Misc::CL_Move::SFactor.m_Var);
 		h_framerate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
 		updaterate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
+		framerate->SetValue(update_Rate / Vars::Misc::CL_Move::SFactor.m_Var);
+
 	}
 	else
 	{
 		h_framerate->SetValue(0);
 		h_timescale->SetValue(1);
+		updaterate->SetValue(1000);
+		framerate->SetValue(0);
 	}
 }
 

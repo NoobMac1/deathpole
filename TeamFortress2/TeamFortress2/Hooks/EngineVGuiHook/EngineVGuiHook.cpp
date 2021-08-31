@@ -85,6 +85,12 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 					}
 				}
 
+				//cheat tag
+				{
+					ConVar* updRate = g_Interfaces.CVars->FindVar(_("cl_updaterate")); 
+					g_Draw.String(FONT_MISC, 10, (g_ScreenSize.h/100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"Death Pole"));
+				}
+
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
