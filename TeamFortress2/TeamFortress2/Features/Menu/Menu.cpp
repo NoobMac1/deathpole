@@ -693,7 +693,8 @@ void CMenu::Run()
 	{
 		m_szCurTip = L"";
 		g_InputHelper.Update();
-
+		
+		/*
 		//Do the Watermark
 		{
 			g_Draw.Rect(20, 25, 145, 5, Vars::Menu::Colors::TitleBar);
@@ -701,6 +702,7 @@ void CMenu::Run()
 			g_Draw.String(FONT_MENU, 22, 32, Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("deathpole"));
 			g_Draw.String(FONT_MENU, 22, 32 + (g_Draw.m_vecFonts[FONT_MENU].nTall * 2), Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("pasters: baan & 55g"));
 		}
+		*/
 
 		//Do the Window
 		{

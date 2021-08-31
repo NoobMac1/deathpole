@@ -87,7 +87,7 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 				default: { bYawSet = false; break; }
 				}
 			}
-			else if (Vars::AntiHack::AntiAim::YawFake.m_Var == 1 || Vars::AntiHack::AntiAim::YawFake.m_Var == 2)
+			if (Vars::AntiHack::AntiAim::YawFake.m_Var == 1 || Vars::AntiHack::AntiAim::YawFake.m_Var == 2)
 			{
 				switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
 				case 1: { Vars::AntiHack::AntiAim::YawFake.m_Var = 2;  break; }
