@@ -85,9 +85,9 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 					}
 				}
 
-				//cheat tag
+				//watermark n dat
 				{
-					g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h/100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"Death Pole"));
+					g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h/100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole | alpha | logged in as developer"));
 				}
 
 				//Tickbase info
