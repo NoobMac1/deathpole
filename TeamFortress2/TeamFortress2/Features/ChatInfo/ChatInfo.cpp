@@ -47,7 +47,7 @@ void CChatInfo::FireGameEvent(CGameEvent* pEvent)
 						if (g_Interfaces.Engine->GetPlayerInfo(nIndex, &pi))
 						{
 							char szBuff[85];
-							sprintf(szBuff, _("\x3%s is now %s"), pi.name, Utils::GetClassByIndex(pEvent->GetInt(XorStr("class").c_str())));
+							sprintf(szBuff, _("deathpole | \x3%s is now %s"), pi.name, Utils::GetClassByIndex(pEvent->GetInt(XorStr("class").c_str())));
 							g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(nIndex, szBuff);
 						}
 					}
