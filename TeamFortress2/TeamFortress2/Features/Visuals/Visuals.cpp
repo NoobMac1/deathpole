@@ -58,15 +58,12 @@ void CVisuals::ThirdPerson()
 		if (!bIsInThirdPerson)
 			pLocal->ForceTauntCam(1);
 
-		if (bIsInThirdPerson && Vars::Visuals::ThirdPersonSilentAngles.m_Var)
+		if (bIsInThirdPerson)
 		{
 			g_Interfaces.Prediction->SetLocalViewAngles(g_GlobalInfo.m_vRealViewAngles);
 
-			if (Vars::Visuals::ThirdPersonInstantYaw.m_Var)
-			{
-				if (const auto &pAnimState = pLocal->GetAnimState())
-					pAnimState->m_flCurrentFeetYaw = g_GlobalInfo.m_vRealViewAngles.y;
-			}
+			if (const auto &pAnimState = pLocal->GetAnimState())
+				pAnimState->m_flCurrentFeetYaw = g_GlobalInfo.m_vRealViewAngles.y;
 		}
 	}
 }
