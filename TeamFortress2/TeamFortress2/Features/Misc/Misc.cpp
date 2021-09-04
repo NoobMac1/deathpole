@@ -17,13 +17,13 @@ void CMisc::Run(CUserCmd* pCmd)
 void CMisc::ConsoleStuff()
 {
 	ConVar* cpuThrottle = g_Interfaces.CVars->FindVar(_("engine_no_focus_sleep"));
-	ConVar* localFootsteps = g_Interfaces.CVars->FindVar(_("mp_footsteps")); //Maybe disables local footsteps? reverse nullcore dll to see if it is a cvar, i'm too lazy
+	//ConVar* localFootsteps = g_Interfaces.CVars->FindVar(_("mp_footsteps")); //Maybe disables local footsteps? reverse nullcore dll to see if it is a cvar, i'm too lazy
 	ConVar* holidayForce = g_Interfaces.CVars->FindVar(_("tf_force_holidays_off")); //Maybe disables holiday events? if so, stops issues with chams
 	ConVar* maxYaw = g_Interfaces.CVars->FindVar(_("mp_feetyawrate")); //How many degrees per second that we can turn our feet or upper body.
 	maxYaw->SetValue(999999999); //Set it to some high number for pseudo removal of the limit?
 	cpuThrottle->SetValue(0);
 	holidayForce->SetValue(1);
-	localFootsteps->SetValue(0);
+	//localFootsteps->SetValue(0);
 }
 
 void CMisc::Interp()

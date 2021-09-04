@@ -4,7 +4,7 @@
 Vec3 CAimbotProjectile::Predictor_t::Extrapolate(float time)
 {
 	Vec3 vecOut = {};
-
+	g_GlobalInfo.m_vPosition = m_vPosition;
 	if (m_pEntity->IsOnGround())
 		vecOut = (m_vPosition + (m_vVelocity * time));
 

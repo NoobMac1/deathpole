@@ -8,6 +8,7 @@
 #include "../../Features/Misc/Misc.h"
 #include "../../Features/Radar/Radar.h"
 #include "../../Features/Aimbot/AimbotMelee/AimbotMelee.h"
+#include "../../Features/Aimbot/AimbotProjectile/AimbotProjectile.h"
 
 void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 {
@@ -57,30 +58,25 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				//Projectile Aim's Predicted Position
 				if (!g_GlobalInfo.m_vPredictedPos.IsZero())
 				{
-					if (Vars::Visuals::CrosshairAimPos.m_Var ? g_GlobalInfo.m_vAimPos.IsZero() : true)
 					{
 						static const int size = 10;
 						Vec3 vecScreen = Vec3();
-
-						if (Utils::W2S(g_GlobalInfo.m_vPredictedPos, vecScreen))
+						Vec3 vecStart = Vec3();
+						Utils::W2S(g_GlobalInfo.m_vPredictedPos, vecStart);
+						if (Utils::W2S(g_GlobalInfo.m_vPosition, vecScreen))
 						{
+							g_Draw.Line(
+								static_cast<int>(vecScreen.x),
+								static_cast<int>(vecScreen.y),
+								static_cast<int>(vecStart.x),
+								static_cast<int>(vecStart.y),
+								{ 255, 255, 255, 255 });
+
 							g_Draw.OutlinedRect(
-								static_cast<int>(vecScreen.x - (size / 2)),
-								static_cast<int>(vecScreen.y - (size / 2)),
+								static_cast<int>(vecStart.x - (size / 2)),
+								static_cast<int>(vecStart.y - (size / 2)),
 								size, size,
-								{ 0, 255, 0, 255 });
-
-							g_Draw.OutlinedRect(
-								static_cast<int>(vecScreen.x - (size / 2)) - 1,
-								static_cast<int>(vecScreen.y - (size / 2)) - 1,
-								size + 2, size + 2,
-								Colors::OutlineESP);
-
-							g_Draw.OutlinedRect(
-								static_cast<int>(vecScreen.x - (size / 2)) + 1,
-								static_cast<int>(vecScreen.y - (size / 2)) + 1,
-								size - 2, size - 2,
-								Colors::OutlineESP);
+								{ 255, 113, 35, 255 });
 						}
 					}
 				}
@@ -116,7 +112,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 								g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio), nY - 7, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
 								g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c - 52 + (104 * ratio), nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
 							}
-							else if (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE || pWeapon->GetWeaponID() != TF_WEAPON_PIPEBOMBLAUNCHER)
+							else
 							{
 								g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c + 52, nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
 							}
