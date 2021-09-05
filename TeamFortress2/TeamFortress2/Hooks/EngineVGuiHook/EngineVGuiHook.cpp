@@ -103,21 +103,23 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 
 								float charged = (DT_WAIT_CALLS - g_GlobalInfo.m_nWaitForShift);
 								float ratio = (charged / DT_WAIT_CALLS);
+								int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
+								int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
 
-								g_Draw.OutlinedRect(g_ScreenSize.c - 53, nY - 8, 106, 16, Colors::TicksOutline);
-								g_Draw.String(FONT_MISC, g_ScreenSize.c - 52, nY - 20, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
+								g_Draw.OutlinedRect(g_ScreenSize.c - 53 + xoff, nY - 8 + yoff, 106, 16, Colors::TicksOutline);
+								g_Draw.String(FONT_MISC, g_ScreenSize.c - 52 + xoff, nY - 20 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 								if (g_GlobalInfo.m_nShifted)
 								{
-									g_Draw.Rect(g_ScreenSize.c - 52, nY - 7, 104, 14, { 17, 24, 26, 255 });
+									g_Draw.Rect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, 104, 14, { 17, 24, 26, 255 });
 								}
 								else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
 								{
-									g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio), nY - 7, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
-									g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c - 52 + (104 * ratio), nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
+									g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY - 7 + yoff, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
+									g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
 								}
 								else
 								{
-									g_Draw.GradientRect(g_ScreenSize.c - 52, nY - 7, g_ScreenSize.c + 52, nY + 7, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
+									g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c + 52 + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, Colors::Ticks, TRUE);
 								}
 							}
 						}

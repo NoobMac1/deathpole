@@ -414,6 +414,8 @@ namespace Vars
 			inline CVar<int> RechargeKey	{ 0x52, L"Recharge Key" }; //R
 			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" };
 			inline CVar<int> SFactor		{ 1, L"Crimwalk Factor" };
+			inline CVar<int> DTBarX			{ 0, L"DT Bar X Offset"};
+			inline CVar<int> DTBarY			{ 0, L"DT Bar Y Offset"};
 		}
 	}
 

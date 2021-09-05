@@ -1508,6 +1508,8 @@ void CMenu::Run()
 							GroupBoxStart();
 							{
 								CheckBox(Vars::Visuals::ThirdPersonDTBar, _(L"Show DT Bar in Third Person"));
+								InputInt(Vars::Misc::CL_Move::DTBarX, -g_ScreenSize.w, g_ScreenSize.w);
+								InputInt(Vars::Misc::CL_Move::DTBarY, -g_ScreenSize.h, g_ScreenSize.h);
 							}
 						}
 					}

@@ -456,6 +456,8 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
 			SAVE_VAR(Vars::Misc::CL_Move::SFactor);
 			SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarX);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarY);
 		}
 
 		//AntiHack
@@ -865,6 +867,8 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Misc::CL_Move::RechargeKey);
 			LOAD_VAR(Vars::Misc::CL_Move::SEnabled);
 			LOAD_VAR(Vars::Misc::CL_Move::SFactor);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarX);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarY);
 		}
 
 		//AntiHack
