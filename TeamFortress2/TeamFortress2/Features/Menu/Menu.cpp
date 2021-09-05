@@ -742,7 +742,7 @@ void CMenu::Run()
 			enum struct EMainTabs	 { TAB_AIM, TAB_VISUALS, TAB_MISC, TAB_CONFIGS};
 			enum struct EAimTabs	 { TAB_AIMBOT, TAB_TRIGGERBOT, TAB_OTHER };
 			enum struct EVisualsTabs { TAB_ESP, TAB_RADAR, TAB_CHAMS, TAB_GLOW, TAB_OTHER, TAB_SKINS, TAB_COLORS };
-			enum struct EMiscTabs	 { TAB_HVH, TAB_MAIN, TAB_TICKBASE };
+			enum struct EMiscTabs	 { TAB_HVH, TAB_MAIN, TAB_TICKBASE, TAB_DEVELOPER };
 
 			m_LastWidget = { Vars::Menu::Position.x + Vars::Menu::SpacingX, Vars::Menu::Position.y, 0, 0 };
 
@@ -1288,8 +1288,8 @@ void CMenu::Run()
 							{
 								CheckBox(Vars::Visuals::ThirdPerson, _(L"Thirdperson master switch"));
 								InputKey(Vars::Visuals::ThirdPersonKey);
-								CheckBox(Vars::Visuals::ThirdPersonSilentAngles, _(L"Show silent angles on thirdperson"));
-								CheckBox(Vars::Visuals::ThirdPersonInstantYaw, _(L"Set yaw instantly on thirdperson"));
+								//CheckBox(Vars::Visuals::ThirdPersonSilentAngles, _(L"Show silent angles on thirdperson"));
+								//CheckBox(Vars::Visuals::ThirdPersonInstantYaw, _(L"Set yaw instantly on thirdperson"));
 							}
 							GroupBoxEnd(_(L"ThirdPerson"), 190);
 
@@ -1424,6 +1424,12 @@ void CMenu::Run()
 						if (Button(_(L"HvH"), Tab == EMiscTabs::TAB_HVH, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
 							Tab = EMiscTabs::TAB_HVH;
 
+						checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX;
+						m_LastWidget = checkpoint_move;
+
+						if (Button(_(L"Developer"), Tab == EMiscTabs::TAB_DEVELOPER, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+							Tab = EMiscTabs::TAB_DEVELOPER;
+
 						m_LastWidget = checkpoint_line;
 						g_Draw.Line(checkpoint_line.x, checkpoint_line.y, Vars::Menu::Position.x + Vars::Menu::Position.w - 1, checkpoint_line.y, Vars::Menu::Colors::OutlineMenu);
 						checkpoint_line.x += Vars::Menu::SpacingX;
@@ -1495,6 +1501,14 @@ void CMenu::Run()
 							}
 							GroupBoxEnd(_(L"AntiAim"), 180);
 							break;
+						}
+
+						case EMiscTabs::TAB_DEVELOPER:
+						{
+							GroupBoxStart();
+							{
+								CheckBox(Vars::Visuals::ThirdPersonDTBar, _(L"Show DT Bar in Third Person"));
+							}
 						}
 					}
 

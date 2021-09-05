@@ -370,10 +370,12 @@ namespace Vars
 		inline CVar<bool> Snow{ true, L"Menu Snow" };
 		inline CVar<bool> ToolTips{ false, L"Menu tooltips" };
 
-		inline CVar<bool> ThirdPerson				{ false, L"Active" };
-		inline CVar<int> ThirdPersonKey				{ 0x0, L"Toggle Key"};
-		inline CVar<bool> ThirdPersonSilentAngles	{ true, L"Silent Angles" };
-		inline CVar<bool> ThirdPersonInstantYaw		{ true, L"Instant Yaw" };
+		inline CVar<bool> ThirdPerson						{ false, L"Active" };
+		inline CVar<int> ThirdPersonKey						{ 0x0, L"Toggle Key"};
+		inline CVar<bool> ThirdPersonSilentAngles			{ true, L"Silent Angles" };
+		inline CVar<bool> ThirdPersonInstantYaw				{ true, L"Instant Yaw" };
+		inline CVar<bool> ThirdPersonDTBar	{ true, L"DT Bar Thirdperson" };
+
 
 		inline CVar<bool> WorldModulation			{ false, L"World Modulation" };
 

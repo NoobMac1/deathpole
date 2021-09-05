@@ -429,6 +429,7 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Visuals::ThirdPersonKey);
 			SAVE_VAR(Vars::Visuals::ThirdPersonSilentAngles);
 			SAVE_VAR(Vars::Visuals::ThirdPersonInstantYaw);
+			SAVE_VAR(Vars::Visuals::ThirdPersonDTBar);
 
 			SAVE_VAR(Vars::Visuals::WorldModulation);
 
@@ -465,6 +466,10 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::AntiHack::AntiAim::Pitch);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawReal);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawFake);
+				SAVE_VAR(Vars::AntiHack::AntiAim::YawFakeOffset);
+				SAVE_VAR(Vars::AntiHack::AntiAim::YawRealOffset);
+				SAVE_VAR(Vars::AntiHack::AntiAim::PitchOffset);
+				SAVE_VAR(Vars::AntiHack::AntiAim::InvertKey);
 			}
 		}
 
@@ -833,6 +838,7 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::ThirdPersonKey);
 			LOAD_VAR(Vars::Visuals::ThirdPersonSilentAngles);
 			LOAD_VAR(Vars::Visuals::ThirdPersonInstantYaw);
+			LOAD_VAR(Vars::Visuals::ThirdPersonDTBar);
 
 			LOAD_VAR(Vars::Visuals::WorldModulation);
 			
@@ -869,6 +875,10 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::AntiHack::AntiAim::Pitch);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawReal);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawFake);
+				LOAD_VAR(Vars::AntiHack::AntiAim::YawFakeOffset);
+				LOAD_VAR(Vars::AntiHack::AntiAim::YawRealOffset);
+				LOAD_VAR(Vars::AntiHack::AntiAim::PitchOffset);
+				LOAD_VAR(Vars::AntiHack::AntiAim::InvertKey);
 			}
 		}
 
