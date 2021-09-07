@@ -351,8 +351,9 @@ Vec3 CAimbotProjectile::GetAimPos(CBaseEntity *pLocal, CBaseEntity *pEntity)
 					Vec3 vToEnt = pEntity->GetAbsOrigin() - pLocal->GetAbsOrigin();
 					vToEnt.NormalizeInPlace();
 
-					if (vToEnt.Dot(vEntForward) > 0.1071f)
-						vPos.z += 5.0f;
+					//commented out cuz makes u miss heavys on huntsman
+					//if (vToEnt.Dot(vEntForward) > 0.1071f)
+						vPos.z += 6.0f;
 
 					return vPos;
 				}
