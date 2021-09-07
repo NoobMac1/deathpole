@@ -83,7 +83,9 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 
 				//watermark n dat
 				{
+					auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING)*1000);
 					g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h/100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole"));
+					g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h/100) * 17, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"ping: %d"), ping);
 				}
 
 				//Tickbase info
