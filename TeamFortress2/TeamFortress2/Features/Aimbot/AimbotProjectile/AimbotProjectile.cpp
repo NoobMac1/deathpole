@@ -4,6 +4,7 @@
 Vec3 CAimbotProjectile::Predictor_t::Extrapolate(float time)
 {
 	Vec3 vecOut = {};
+
 	g_GlobalInfo.m_vPosition = m_vPosition;
 	if (m_pEntity->IsOnGround())
 		vecOut = (m_vPosition + (m_vVelocity * time));
@@ -101,7 +102,6 @@ bool CAimbotProjectile::GetProjectileInfo(CBaseCombatWeapon *pWeapon, Projectile
 
 		case Pyro_m_DragonsFury: {
 			out = { 3000.0f, 0.0f, 0.12f };
-			m_bIsFlameThrower = true;
 			break;
 		}
 
@@ -205,6 +205,7 @@ bool CAimbotProjectile::CalcProjAngle(const Vec3 &vLocalPos, const Vec3 &vTarget
 	return true;
 }
 
+
 bool CAimbotProjectile::SolveProjectile(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserCmd *pCmd, Predictor_t &Predictor, const ProjectileInfo_t &ProjInfo, Solution_t &out)
 {
 	INetChannelInfo *pNetChannel = reinterpret_cast<INetChannelInfo *>(g_Interfaces.Engine->GetNetChannelInfo());
@@ -220,21 +221,22 @@ bool CAimbotProjectile::SolveProjectile(CBaseEntity *pLocal, CBaseCombatWeapon *
 
 	Vec3 vLocalPos = pLocal->GetEyePosition();
 
-	float fInterp = g_ConVars.cl_interp->GetFloat();
-	float fLatency = (pNetChannel->GetLatency(FLOW_OUTGOING) + pNetChannel->GetLatency(FLOW_INCOMING));
+	float fLatency = pNetChannel->GetLatency(FLOW_OUTGOING) + pNetChannel->GetLatency(FLOW_INCOMING);
 
 	float MAX_TIME = ProjInfo.m_flMaxTime;
 	float TIME_STEP = (MAX_TIME / 128.0f);
 
 	for (float fPredTime = 0.0f; fPredTime < MAX_TIME; fPredTime += TIME_STEP)
 	{
-		float fCorrectTime = (fPredTime + fInterp + fLatency);
+		float fCorrectTime = (fPredTime + fLatency);
 		Vec3 vPredictedPos = Predictor.Extrapolate(fCorrectTime);
 
 		switch (pWeapon->GetWeaponID())
 		{
 			case TF_WEAPON_GRENADELAUNCHER:
 			case TF_WEAPON_PIPEBOMBLAUNCHER:
+			case TF_WEAPON_STICKBOMB:
+			case TF_WEAPON_STICKY_BALL_LAUNCHER:
 			{
 				Vec3 vDelta = (vPredictedPos - vLocalPos);
 				float fRange = Math::VectorNormalize(vDelta);
@@ -257,13 +259,17 @@ bool CAimbotProjectile::SolveProjectile(CBaseEntity *pLocal, CBaseCombatWeapon *
 
 		Utils::TraceHull(Predictor.m_vPosition, vPredictedPos, Vec3(-2, -2, -2), Vec3(2, 2, 2), MASK_SOLID_BRUSHONLY, &TraceFilter, &Trace);
 
-		if (Trace.DidHit())
+		if (Trace.DidHit()) {
+
 			vPredictedPos.z = Trace.vEndPos.z;
+		}
 
 		switch (pWeapon->GetWeaponID())
 		{
 			case TF_WEAPON_GRENADELAUNCHER:
 			case TF_WEAPON_PIPEBOMBLAUNCHER:
+			case TF_WEAPON_STICKBOMB:
+			case TF_WEAPON_STICKY_BALL_LAUNCHER:
 			{
 				Vec3 vecOffset(16.0f, 8.0f, -6.0f);
 				Utils::GetProjectileFireSetup(pLocal, pCmd->viewangles, vecOffset, &vLocalPos);
@@ -283,9 +289,13 @@ bool CAimbotProjectile::SolveProjectile(CBaseEntity *pLocal, CBaseCombatWeapon *
 			switch (pWeapon->GetWeaponID())
 			{
 				case TF_WEAPON_ROCKETLAUNCHER:
-				case TF_WEAPON_ROCKETLAUNCHER_DIRECTHIT:
+				//case TF_WEAPON_ROCKETLAUNCHER_DIRECTHIT:
+				case TF_WEAPON_DIRECTHIT:
+					// dragons furry
+				case 109:
 				case TF_WEAPON_FLAREGUN:
-				case TF_WEAPON_FLAREGUN_REVENGE:
+				//case TF_WEAPON_FLAREGUN_REVENGE:
+				case TF_WEAPON_RAYGUN_REVENGE:
 				case TF_WEAPON_COMPOUND_BOW:
 				case TF_WEAPON_SYRINGEGUN_MEDIC:
 				{
@@ -304,6 +314,8 @@ bool CAimbotProjectile::SolveProjectile(CBaseEntity *pLocal, CBaseCombatWeapon *
 
 				case TF_WEAPON_GRENADELAUNCHER:
 				case TF_WEAPON_PIPEBOMBLAUNCHER:
+				case TF_WEAPON_STICKBOMB:
+				case TF_WEAPON_STICKY_BALL_LAUNCHER:
 				{
 					Vec3 vecAngle = Vec3(), vecForward = Vec3(), vecRight = Vec3(), vecUp = Vec3();
 					Math::AngleVectors({ -RAD2DEG(out.m_flPitch), RAD2DEG(out.m_flYaw), 0.0f }, &vecForward, &vecRight, &vecUp);
@@ -351,8 +363,8 @@ Vec3 CAimbotProjectile::GetAimPos(CBaseEntity *pLocal, CBaseEntity *pEntity)
 					Vec3 vToEnt = pEntity->GetAbsOrigin() - pLocal->GetAbsOrigin();
 					vToEnt.NormalizeInPlace();
 
-					//commented out cuz makes u miss heavys on huntsman
-					//if (vToEnt.Dot(vEntForward) > 0.1071f)
+					//reduced to 6.0f due to dumb misses on heavies TODO: make this better
+					//if (vToEnt.Dot(vEntForward) > 0.1071f || (pEntity->GetClassNum() == 2 || pEntity->GetClassNum() == 4))
 						vPos.z += 6.0f;
 
 					return vPos;
@@ -372,6 +384,13 @@ ESortMethod CAimbotProjectile::GetSortMethod()
 		case 1: return ESortMethod::DISTANCE;
 		default: return ESortMethod::UNKNOWN;
 	}
+}
+
+void projectileTracer(CBaseEntity* pLocal, Target_t Target) {
+	Vec3 vecPos = g_GlobalInfo.m_WeaponType == EWeaponType::PROJECTILE ? g_GlobalInfo.m_vPredictedPos : Target.m_vPos;
+	//Color_t Color = (Utils::Rainbow());
+	Color_t Color = Vars::Visuals::BulletTracerRainbow.m_Var ? Utils::Rainbow() : Colors::BulletTracer;
+	g_Interfaces.DebugOverlay->AddLineOverlayAlpha(pLocal->GetShootPos(), vecPos, Color.r, Color.g, Color.b, Color.a, true, 5);
 }
 
 bool CAimbotProjectile::GetTargets(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon)
@@ -401,8 +420,15 @@ bool CAimbotProjectile::GetTargets(CBaseEntity *pLocal, CBaseCombatWeapon *pWeap
 				if (Vars::Aimbot::Global::IgnoreInvlunerable.m_Var && !Player->IsVulnerable())
 					continue;
 
-				if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked())
-					continue;
+				if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked()) {
+					int nCond = Player->GetCond();
+					if (nCond & TFCond_Milked || nCond & TFCond_Jarated) {
+						//pass
+					}
+					else {
+						continue;
+					}
+				}
 
 				if (Vars::Aimbot::Global::IgnoreTaunting.m_Var && Player->IsTaunting())
 					continue;
@@ -588,6 +614,7 @@ bool CAimbotProjectile::IsAttacking(CUserCmd *pCmd, CBaseCombatWeapon *pWeapon)
 
 void CAimbotProjectile::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserCmd *pCmd)
 {
+	static int nLastTracerTick = pCmd->tick_count;
 	m_bIsFlameThrower = false;
 
 	if (!Vars::Aimbot::Projectile::Active.m_Var)
@@ -596,6 +623,7 @@ void CAimbotProjectile::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUs
 	Target_t Target = {};
 
 	bool bShouldAim = (Vars::Aimbot::Global::AimKey.m_Var == VK_LBUTTON ? (pCmd->buttons & IN_ATTACK) : g_AimbotGlobal.IsKeyDown());
+
 
 	if (GetTarget(pLocal, pWeapon, pCmd, Target) && bShouldAim)
 	{
@@ -607,6 +635,7 @@ void CAimbotProjectile::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUs
 		if (ShouldFire(pCmd))
 		{
 			pCmd->buttons |= IN_ATTACK;
+
 			if (Vars::Misc::CL_Move::Enabled.m_Var && Vars::Misc::CL_Move::DoubletapProj.m_Var && (pCmd->buttons & IN_ATTACK) && !g_GlobalInfo.m_nShifted && !g_GlobalInfo.m_nWaitForShift && (pWeapon->GetWeaponID() != TF_WEAPON_COMPOUND_BOW || pWeapon->GetWeaponID() != TF_WEAPON_CLEAVER || pWeapon->GetWeaponID() != TF_WEAPON_ROCKETLAUNCHER || pWeapon->GetWeaponID() != TF_WEAPON_SNIPERRIFLE))
 			{
 				g_GlobalInfo.m_bShouldShift = true;
@@ -627,8 +656,16 @@ void CAimbotProjectile::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUs
 
 		bool bIsAttacking = IsAttacking(pCmd, pWeapon);
 
-		if (bIsAttacking)
+		if (bIsAttacking) {
 			g_GlobalInfo.m_bAttacking = true;
+			if (Vars::Visuals::BulletTracer.m_Var) {
+				if (Vars::Visuals::BulletTracer.m_Var && abs(pCmd->tick_count - nLastTracerTick) > 1) {
+				projectileTracer(pLocal, Target);
+				nLastTracerTick = pCmd->tick_count;
+				}
+			}
+			//g_Interfaces.DebugOverlay->AddLineOverlayAlpha(Target.m_vPos, g_GlobalInfo.m_vPredictedPos, 0, 255, 0, 255, true, 2); // Predicted aim pos
+		}
 
 		if (Vars::Aimbot::Projectile::AimMethod.m_Var == 1)
 		{

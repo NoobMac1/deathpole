@@ -40,6 +40,8 @@ void __stdcall ClientHook::FrameStageNotify::Hook(EClientFrameStage FrameStage)
 			}
 
 			g_Visuals.ThirdPerson();
+			g_Visuals.SkyboxChanger();
+
 			break;
 		}
 
@@ -55,10 +57,12 @@ void __stdcall ClientHook::FrameStageNotify::Hook(EClientFrameStage FrameStage)
 			break;
 		}
 
+#ifdef DEVELOPER_BUILD
 		case EClientFrameStage::FRAME_NET_UPDATE_POSTDATAUPDATE_START: {
 			g_AttributeChanger.Run();
 			break;
 		}
+#endif
 
 		case EClientFrameStage::FRAME_NET_UPDATE_END: 
 		{

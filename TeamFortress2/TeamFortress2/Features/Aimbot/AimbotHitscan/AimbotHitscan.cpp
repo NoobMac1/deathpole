@@ -66,8 +66,15 @@ bool CAimbotHitscan::GetTargets(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon)
 			if (Vars::Aimbot::Global::IgnoreInvlunerable.m_Var && !Player->IsVulnerable())
 				continue;
 
-			if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked())
-				continue;
+			if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked()) {
+				int nCond = Player->GetCond();
+				if (nCond & TFCond_Milked || nCond & TFCond_Jarated) {
+					//pass
+				}
+				else {
+					continue;
+				}
+			}
 
 			if (Vars::Aimbot::Global::IgnoreTaunting.m_Var && Player->IsTaunting())
 				continue;
@@ -481,8 +488,18 @@ bool CAimbotHitscan::IsAttacking(CUserCmd *pCmd, CBaseCombatWeapon *pWeapon)
 	return ((pCmd->buttons & IN_ATTACK) && g_GlobalInfo.m_bWeaponCanAttack);
 }
 
+void bulletTracer(CBaseEntity* pLocal, Target_t Target) {
+	Vec3 vecPos = g_GlobalInfo.m_WeaponType == EWeaponType::PROJECTILE ? g_GlobalInfo.m_vPredictedPos : Target.m_vPos;
+	//Color_t Color = (Utils::Rainbow());
+	Color_t Color = Vars::Visuals::BulletTracerRainbow.m_Var ? Utils::Rainbow() : Colors::BulletTracer;
+	g_Interfaces.DebugOverlay->AddLineOverlayAlpha(pLocal->GetShootPos(), vecPos, Color.r, Color.g, Color.b, Color.a, true, 5);
+}
+
+
 void CAimbotHitscan::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserCmd *pCmd)
 {
+	static int nLastTracerTick = pCmd->tick_count;
+
 	if (!Vars::Aimbot::Hitscan::Active.m_Var)
 		return;
 
@@ -514,6 +531,11 @@ void CAimbotHitscan::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserC
 				return;
 		}
 
+		if (Vars::Misc::CL_Move::WaitForDT.m_Var) {
+			if (g_GlobalInfo.m_nWaitForShift && !g_GlobalInfo.m_nShifted && GetAsyncKeyState(Vars::Misc::CL_Move::DoubletapKey.m_Var)) //if dt not ready and "ticks" = 0 and key is held, dont aimbot
+				return;
+		}
+
 		g_GlobalInfo.m_nCurrentTargetIdx = Target.m_pEntity->GetIndex();
 		g_GlobalInfo.m_bHitscanRunning = true;
 		g_GlobalInfo.m_bHitscanSilentActive = Vars::Aimbot::Hitscan::AimMethod.m_Var == 2;
@@ -531,11 +553,18 @@ void CAimbotHitscan::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserC
 			if (nWeaponID == TF_WEAPON_MINIGUN)
 				pCmd->buttons |= IN_ATTACK2;
 
+			if (g_GlobalInfo.m_nCurItemDefIndex == Engi_s_TheWrangler || g_GlobalInfo.m_nCurItemDefIndex == Engi_s_FestiveWrangler)
+				pCmd->buttons |= IN_ATTACK2;
+
 			pCmd->buttons |= IN_ATTACK;
 
 			if (Vars::Misc::CL_Move::Enabled.m_Var && Vars::Misc::CL_Move::Doubletap.m_Var && (pCmd->buttons & IN_ATTACK) && !g_GlobalInfo.m_nShifted && !g_GlobalInfo.m_nWaitForShift)
-			{
-					g_GlobalInfo.m_bShouldShift = true;
+			{/*
+				if (pLocal->GetClassNum() == CLASS_HEAVY && pWeapon->GetSlot() == SLOT_PRIMARY && !pLocal->GetVecVelocity().IsZero())
+					g_GlobalInfo.m_bShouldShift = false;
+				else*/
+				//FastStop(pCmd);
+				g_GlobalInfo.m_bShouldShift = true;
 			}
 
 			if (g_GlobalInfo.m_bAAActive && !g_GlobalInfo.m_bWeaponCanAttack)
@@ -563,8 +592,12 @@ void CAimbotHitscan::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserC
 
 		bool bIsAttacking = IsAttacking(pCmd, pWeapon);
 
-		if (bIsAttacking)
+		if (bIsAttacking) {
 			g_GlobalInfo.m_bAttacking = true;
+			if (Vars::Visuals::BulletTracer.m_Var && abs(pCmd->tick_count - nLastTracerTick) > 1) {
+				bulletTracer(pLocal, Target);
+			}
+		}
 
 		if (Vars::Misc::DisableInterpolation.m_Var && Target.m_TargetType == ETargetType::PLAYER && bIsAttacking) {
 			pCmd->tick_count = TIME_TO_TICKS(Target.m_pEntity->GetSimulationTime() +

@@ -64,7 +64,7 @@ enum EFonts
 	FONT_MENU,
 	FONT_DEBUG,
 
-	FONT_MISC
+	FONT_FEATURE
 };
 
 inline Draw_t g_Draw;

@@ -104,11 +104,12 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 		{
 			switch (Vars::AntiHack::AntiAim::YawReal.m_Var) {
 				case 1: { pCmd->viewangles.y += 90.0f;  break; }
-				case 2: { pCmd->viewangles.y -= 90.0f;  break; }
-				case 3: { pCmd->viewangles.y -= 180.0f; break; }
+				case 2: { pCmd->viewangles.y -= 90.0f; break; }
+				case 3: { pCmd->viewangles.y += 180.0f; break; }
 				case 4: { pCmd->viewangles.y -= Vars::AntiHack::AntiAim::YawRealOffset.m_Var; break; }
 				default: { bYawSet = false; break; }
 			}
+
 			g_GlobalInfo.m_vRealViewAngles.y = pCmd->viewangles.y;
 		}
 
@@ -116,12 +117,13 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 		{
 			float temp(g_GlobalInfo.m_vFakeViewAngles.y);
 			switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
-				case 1: { pCmd->viewangles.y += 90.0f;  break; }
-				case 2: { pCmd->viewangles.y -= 90.0f;  break; }
-				case 3: { pCmd->viewangles.y -= 180.0f; break; }
+				case 1: { pCmd->viewangles.y += 90.0f; break; }
+				case 2: { pCmd->viewangles.y -= 90.0f; break; }
+				case 3: { pCmd->viewangles.y += 180.0f; break; }
 				case 4: { pCmd->viewangles.y -= Vars::AntiHack::AntiAim::YawFakeOffset.m_Var; break; }
 				default: { bYawSet = false; break; }
 			}
+
 			g_GlobalInfo.m_vFakeViewAngles.y = pCmd->viewangles.y;
 		}
 

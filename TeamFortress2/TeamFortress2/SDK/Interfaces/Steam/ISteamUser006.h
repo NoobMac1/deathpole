@@ -15,7 +15,7 @@
 //=============================================================================
 
 #ifndef ISTEAMUSER006_H
-#define ISTEAMUSER006_H 
+#define ISTEAMUSER006_H
 #ifdef _WIN32
 #pragma once
 #endif

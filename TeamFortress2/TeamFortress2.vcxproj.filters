@@ -15,6 +15,7 @@
     <ClCompile Include="TeamFortress2\Features\Misc\Misc.cpp" />
     <ClCompile Include="TeamFortress2\Features\Chams\Chams.cpp" />
     <ClCompile Include="TeamFortress2\Features\Prediction\Prediction.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Radar\Radar.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpectatorList\SpectatorList.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpyWarning\SpyWarning.cpp" />
     <ClCompile Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.cpp" />
@@ -63,7 +64,10 @@
     <ClCompile Include="TeamFortress2\Hooks\DrawStaticPropsHook\DrawStaticPropsHook.cpp" />
     <ClCompile Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\EngineHook\EngineHook.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Radar\Radar.cpp" />
+    <ClCompile Include="TeamFortress2\Features\PlayerList\PlayerList.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Keybinds\Keybinds.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Console\Console.cpp" />
+    <ClCompile Include="TeamFortress2\Features\PlayerArrows\PlayerArrows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TeamFortress2\Features\Aimbot\Aimbot.h" />
@@ -79,6 +83,7 @@
     <ClInclude Include="TeamFortress2\Features\Misc\Misc.h" />
     <ClInclude Include="TeamFortress2\Features\Chams\Chams.h" />
     <ClInclude Include="TeamFortress2\Features\Prediction\Prediction.h" />
+    <ClInclude Include="TeamFortress2\Features\Radar\Radar.h" />
     <ClInclude Include="TeamFortress2\Features\SpectatorList\SpectatorList.h" />
     <ClInclude Include="TeamFortress2\Features\SpyWarning\SpyWarning.h" />
     <ClInclude Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.h" />
@@ -433,6 +438,9 @@
     <ClInclude Include="TeamFortress2\SDK\Interfaces\EngineEffects\EngineEffects.h" />
     <ClInclude Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.h" />
     <ClInclude Include="TeamFortress2\Hooks\EngineHook\EngineHook.h" />
-    <ClInclude Include="TeamFortress2\Features\Radar\Radar.h" />
+    <ClInclude Include="TeamFortress2\Features\PlayerList\PlayerList.h" />
+    <ClInclude Include="TeamFortress2\Features\Keybinds\Keybinds.h" />
+    <ClInclude Include="TeamFortress2\Features\Console\Console.h" />
+    <ClInclude Include="TeamFortress2\Features\PlayerArrows\PlayerArrows.h" />
   </ItemGroup>
 </Project>

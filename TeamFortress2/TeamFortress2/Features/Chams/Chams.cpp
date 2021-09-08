@@ -25,7 +25,7 @@ void CChams::Init()
 		\n\t\"$selfillumfresnel\" \"1\"\
 		\n\t\"$selfillumfresnelminmaxexp\" \"[-0.25 1 1]\"\
 		\n}\n")
-	});
+		});
 
 	m_pMatShiny = Utils::CreateMaterial({
 		_("\"VertexLitGeneric\"\
@@ -37,14 +37,14 @@ void CChams::Init()
 		\n\t\"$selfillumfresnel\" \"1\"\
 		\n\t\"$selfillumfresnelminmaxexp\" \"[-0.25 1 1]\"\
 		\n}\n")
-	});
+		});
 
 	m_pMatFlat = Utils::CreateMaterial({
 		_("\"UnlitGeneric\"\
 		\n{\
 		\n\t\"$basetexture\" \"vgui/white_additive\"\
 		\n}\n")
-	});
+		});
 
 	m_pMatFresnel = Utils::CreateMaterial({
 		_("\"VertexLitGeneric\"\
@@ -56,7 +56,7 @@ void CChams::Init()
 		\n\t\"$selfillumfresnelminmaxexp\" \"[0 1 1]\"\
 		\n\t\"$selfillumtint\" \"[0 0 0]\"\
 		\n}\n")
-	});
+		});
 }
 
 void CChams::Render()
@@ -114,7 +114,8 @@ void CChams::RenderPlayers(CBaseEntity *pLocal, IMatRenderContext *pRenderContex
 				case 1: { bMatWasForced = true; return m_pMatShaded; }
 				case 2: { bMatWasForced = true; return m_pMatShiny; }
 				case 3: { bMatWasForced = true; return m_pMatFlat; }
-				case 4: { bMatWasForced = true; return m_pMatFresnel; }
+				case 4: { bMatWasForced = true; return m_pMatBrick; }
+				case 6: { bMatWasForced = true; return m_pMatFresnel; }
 				default: return nullptr;
 			}
 		}());
@@ -159,6 +160,8 @@ void CChams::RenderPlayers(CBaseEntity *pLocal, IMatRenderContext *pRenderContex
 			g_Interfaces.RenderView->SetColorModulation(Color::TOFLOAT(DrawColor.r), Color::TOFLOAT(DrawColor.g), Color::TOFLOAT(DrawColor.b));
 		}
 
+
+
 		DrawModel(Player);
 
 		if (Vars::Chams::Players::Wearables.m_Var)
@@ -194,6 +197,8 @@ void CChams::RenderPlayers(CBaseEntity *pLocal, IMatRenderContext *pRenderContex
 
 	if (Vars::Chams::Players::IgnoreZ.m_Var)
 		pRenderContext->DepthRange(0.0f, 1.0f);
+
+
 }
 
 void CChams::RenderBuildings(CBaseEntity *pLocal, IMatRenderContext *pRenderContext)
@@ -216,7 +221,8 @@ void CChams::RenderBuildings(CBaseEntity *pLocal, IMatRenderContext *pRenderCont
 				case 1: { bMatWasForced = true; return m_pMatShaded; }
 				case 2: { bMatWasForced = true; return m_pMatShiny; }
 				case 3: { bMatWasForced = true; return m_pMatFlat; }
-				case 4: { bMatWasForced = true; return m_pMatFresnel; }
+				case 4: { bMatWasForced = true; return m_pMatBrick; }
+				case 5: { bMatWasForced = true; return m_pMatFresnel; }
 				default: return nullptr;
 			}
 		}());
@@ -277,7 +283,8 @@ void CChams::RenderWorld(CBaseEntity *pLocal, IMatRenderContext *pRenderContext)
 				case 1: { bMatWasForced = true; return m_pMatShaded; }
 				case 2: { bMatWasForced = true; return m_pMatShiny; }
 				case 3: { bMatWasForced = true; return m_pMatFlat; }
-				case 4: { bMatWasForced = true; return m_pMatFresnel; }
+				case 4: { bMatWasForced = true; return m_pMatBrick; }
+				case 5: { bMatWasForced = true; return m_pMatFresnel; }
 				default: return nullptr;
 			}
 		}());

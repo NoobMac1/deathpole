@@ -57,7 +57,7 @@ void CSpectatorList::DragSpecList(int& x, int& y, int w, int h, int offsety)
 	static POINT delta;
 	static bool drag = false;
 	static bool move = false;
-	bool held = GetAsyncKeyState(VK_LBUTTON);
+	bool held = GetKey(VK_LBUTTON);
 
 	if ((mousex > x && mousex < x + w && mousey > y - offsety && mousey < y - offsety + h) && held)
 	{
@@ -135,7 +135,16 @@ void CSpectatorList::DrawClassic()
 		if (!pLocal->IsAlive() || !GetSpectators(pLocal))
 			return;
 
-		int nDrawY = (g_ScreenSize.h / 2) + 50;
+		int nDrawY = (g_ScreenSize.h / 2) - 300;
+		int centerr = g_ScreenSize.c;
+		int addyy = g_Draw.m_vecFonts[FONT_ESP_NAME_OUTLINED].nTall;
+
+		g_Draw.String(
+			FONT_ESP_NAME_OUTLINED,
+			centerr, nDrawY - addyy,
+			{ 255,255,255,255 },
+			ALIGN_CENTERHORIZONTAL,
+			L"Spectating you");
 
 		for (const auto& Spectator : m_vecSpectators)
 		{
@@ -147,24 +156,26 @@ void CSpectatorList::DrawClassic()
 			int nAddX = 0, nAddY = g_Draw.m_vecFonts[FONT_ESP_NAME_OUTLINED].nTall;
 			if (Vars::Visuals::SpectatorList.m_Var == 3)
 			{
-				nDrawX -= 55;
+				//nDrawX -= 55;
+
+
 
 				PlayerInfo_t pi;
 				if (!g_Interfaces.Engine->GetPlayerInfo(Spectator.m_nIndex, &pi))
 					continue;
 
-				g_Draw.Avatar(nDrawX, nDrawY, 24, 24, pi.friendsID);
+				g_Draw.Avatar(nDrawX - (w / 2) - 25, nDrawY, 24, 24, pi.friendsID); // center - half the width of the string
 				nDrawY += 6;
 
-				nAddX = 25;
-				nAddY = 14;
+				//nAddX = 25;
+				//nAddY = 14;
 			}
 
 			g_Draw.String(
 				FONT_ESP_NAME_OUTLINED,
-				nDrawX + nAddX, nDrawY,
+				nDrawX, nDrawY,
 				Spectator.m_bIsFriend ? Colors::Friend : Utils::GetTeamColor(Spectator.m_nTeam),
-				ALIGN_DEFAULT,
+				ALIGN_CENTERHORIZONTAL,
 				L"[%ls] %ls", Spectator.m_sMode.data(), Spectator.m_sName.data());
 
 			nDrawY += nAddY;

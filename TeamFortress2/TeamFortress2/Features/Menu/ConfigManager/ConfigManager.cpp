@@ -6,6 +6,9 @@
 #include "../../../SDK/SDK.h"
 #include "../../Radar/Radar.h"
 #include "../../SpectatorList/SpectatorList.h"
+#include "../../PlayerList/PlayerList.h"
+#include "../../Console/Console.h"
+#include "../../Keybinds/Keybinds.h"
 
 #define SAVE_VAR(x) Save(_(L#x), x.m_Var)
 #define LOAD_VAR(x) Load(_(L#x), x.m_Var)
@@ -98,6 +101,8 @@ void CConfigManager::Load(const wchar_t *name, Color_t &val)
 CConfigManager::CConfigManager()
 {
 	m_sConfigPath = std::filesystem::current_path().wstring() + _(L"\\DeathPollConfigs");
+
+
 
 	if (!std::filesystem::exists(m_sConfigPath))
 		std::filesystem::create_directory(m_sConfigPath);
@@ -240,6 +245,7 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::ESP::Players::IgnoreTeammates);
 				SAVE_VAR(Vars::ESP::Players::IgnoreCloaked);
 				SAVE_VAR(Vars::ESP::Players::Name);
+				SAVE_VAR(Vars::ESP::Players::NameBox);
 				SAVE_VAR(Vars::ESP::Players::Uber);
 				SAVE_VAR(Vars::ESP::Players::Class);
 				SAVE_VAR(Vars::ESP::Players::Health);
@@ -259,6 +265,7 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::ESP::Buildings::Active);
 				SAVE_VAR(Vars::ESP::Buildings::IgnoreTeammates);
 				SAVE_VAR(Vars::ESP::Buildings::Name);
+				SAVE_VAR(Vars::ESP::Buildings::NameBox);
 				SAVE_VAR(Vars::ESP::Buildings::Health);
 				SAVE_VAR(Vars::ESP::Buildings::Owner);
 				SAVE_VAR(Vars::ESP::Buildings::Level);
@@ -322,9 +329,14 @@ void CConfigManager::Save(const wchar_t *name)
 			{
 				SAVE_VAR(Vars::Chams::DME::Active);
 				SAVE_VAR(Vars::Chams::DME::Hands);
+
+				SAVE_VAR(Vars::Chams::DME::HandsGlowOverlay);
 				SAVE_VAR(Vars::Chams::DME::HandsAlpha);
 				SAVE_VAR(Vars::Chams::DME::Weapon);
 				SAVE_VAR(Vars::Chams::DME::WeaponAlpha);
+				SAVE_VAR(Vars::Chams::DME::WeaponGlowOverlay);
+				SAVE_VAR(Vars::Chams::DME::WeaponRimMultiplier);
+				SAVE_VAR(Vars::Chams::DME::HandsRimMultiplier);
 			}
 		}
 
@@ -429,11 +441,16 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Visuals::ThirdPersonKey);
 			SAVE_VAR(Vars::Visuals::ThirdPersonSilentAngles);
 			SAVE_VAR(Vars::Visuals::ThirdPersonInstantYaw);
-			SAVE_VAR(Vars::Visuals::ThirdPersonDTBar);
-
 			SAVE_VAR(Vars::Visuals::WorldModulation);
+			SAVE_VAR(Vars::Visuals::SkyboxChanger);
+			SAVE_VAR(Vars::Visuals::BulletTracer);
+			SAVE_VAR(Vars::Visuals::BulletTracerRainbow);
+			SAVE_VAR(Vars::Visuals::OutOfFOVArrows);
+			
 
+#ifdef DEVELOPER_BUILD
 			SAVE_VAR(Vars::Visuals::Skins::Enabled);
+#endif
 		}
 
 		//Misc
@@ -445,19 +462,31 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Misc::NoisemakerSpam);
 			SAVE_VAR(Vars::Misc::DisableInterpolation);
 			SAVE_VAR(Vars::Misc::MedalFlip);
+			SAVE_VAR(Vars::Misc::AutoRocketJump);
 			SAVE_VAR(Vars::Misc::ChatSpam);
 			SAVE_VAR(Vars::Misc::NoPush);
 			SAVE_VAR(Vars::Misc::AutoStrafe);
+			SAVE_VAR(Vars::Misc::Directional);
 			SAVE_VAR(Vars::Misc::EdgeJump);
-			SAVE_VAR(Vars::Misc::CheatBypass);
-			SAVE_VAR(Vars::Misc::CL_Move::Doubletap);
-			SAVE_VAR(Vars::Misc::CL_Move::DoubletapProj);
-			SAVE_VAR(Vars::Misc::CL_Move::Enabled);
-			SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
-			SAVE_VAR(Vars::Misc::CL_Move::SFactor);
-			SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarX);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarY);
+			// CL_Move
+			{
+				SAVE_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
+				SAVE_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
+				SAVE_VAR(Vars::Misc::CL_Move::DoubletapProj);
+				SAVE_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
+				SAVE_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
+				SAVE_VAR(Vars::Misc::CL_Move::showhitboxes);// { true, L"Show hitboxes" };
+				SAVE_VAR(Vars::Misc::CL_Move::DoubletapKey);// { true, L"Doubletap" };
+				SAVE_VAR(Vars::Misc::CL_Move::TeleportKey);// { 0x46, L"Teleport Key" }; //F
+				SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::DoubletapKey);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::FakelagValue);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
+				SAVE_VAR(Vars::Misc::CL_Move::SFactor);
+			}
 		}
 
 		//AntiHack
@@ -483,6 +512,10 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Vars::Menu::Colors::Widget);
 			SAVE_OTHER(Vars::Menu::Colors::WidgetActive);
 			SAVE_OTHER(Vars::Menu::Colors::OutlineMenu);
+			SAVE_OTHER(Vars::Menu::Colors::FeatureOn);
+			SAVE_OTHER(Vars::Menu::Colors::FeatureOff);
+			SAVE_OTHER(Vars::Menu::Colors::FeatureBackground);
+			SAVE_OTHER(Vars::Menu::Colors::FeatureOutline);
 
 			SAVE_OTHER(Colors::OutlineESP);
 			SAVE_OTHER(Colors::Cond);
@@ -498,19 +531,25 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Colors::TeamBlu);
 			SAVE_OTHER(Colors::Hands);
 			SAVE_OTHER(Colors::Weapon);
+			SAVE_OTHER(Colors::HandsOverlay);
+			SAVE_OTHER(Colors::WeaponOverlay);
 			SAVE_OTHER(Colors::WorldModulation);
+			SAVE_OTHER(Colors::SkyModulation);
 			SAVE_OTHER(Colors::StaticPropModulation);
 			SAVE_OTHER(Colors::FOVCircle);
-			SAVE_OTHER(Colors::Bones);
-			SAVE_OTHER(Colors::Ticks);
-			SAVE_OTHER(Colors::TicksOutline);
-
+			SAVE_OTHER(Colors::BulletTracer);
 
 			SAVE_OTHER(g_Radar.m_nRadarX);
 			SAVE_OTHER(g_Radar.m_nRadarY);
 
 			SAVE_OTHER(g_SpectatorList.m_nSpecListX);
 			SAVE_OTHER(g_SpectatorList.m_nSpecListY);
+			SAVE_OTHER(g_PlayerList.m_nNewWindowX);
+			SAVE_OTHER(g_PlayerList.m_nNewWindowY);
+			SAVE_OTHER(g_Console.m_nConsoleX);
+			SAVE_OTHER(g_Console.m_nConsoleY);
+			SAVE_OTHER(g_Keybinds.m_nKeybindsX);
+			SAVE_OTHER(g_Keybinds.m_nKeybindsY);
 		}
 
 		m_Write.close();
@@ -651,6 +690,7 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::ESP::Players::IgnoreTeammates);
 				LOAD_VAR(Vars::ESP::Players::IgnoreCloaked);
 				LOAD_VAR(Vars::ESP::Players::Name);
+				LOAD_VAR(Vars::ESP::Players::NameBox);
 				LOAD_VAR(Vars::ESP::Players::Uber);
 				LOAD_VAR(Vars::ESP::Players::Class);
 				LOAD_VAR(Vars::ESP::Players::Health);
@@ -670,6 +710,7 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::ESP::Buildings::Active);
 				LOAD_VAR(Vars::ESP::Buildings::IgnoreTeammates);
 				LOAD_VAR(Vars::ESP::Buildings::Name);
+				LOAD_VAR(Vars::ESP::Buildings::NameBox);
 				LOAD_VAR(Vars::ESP::Buildings::Health);
 				LOAD_VAR(Vars::ESP::Buildings::Owner);
 				LOAD_VAR(Vars::ESP::Buildings::Level);
@@ -734,8 +775,12 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Chams::DME::Active);
 				LOAD_VAR(Vars::Chams::DME::Hands);
 				LOAD_VAR(Vars::Chams::DME::HandsAlpha);
+				LOAD_VAR(Vars::Chams::DME::HandsGlowOverlay);
 				LOAD_VAR(Vars::Chams::DME::Weapon);
 				LOAD_VAR(Vars::Chams::DME::WeaponAlpha);
+				LOAD_VAR(Vars::Chams::DME::WeaponGlowOverlay);
+				LOAD_VAR(Vars::Chams::DME::WeaponRimMultiplier);
+				LOAD_VAR(Vars::Chams::DME::HandsRimMultiplier);
 			}
 		}
 
@@ -840,11 +885,17 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::ThirdPersonKey);
 			LOAD_VAR(Vars::Visuals::ThirdPersonSilentAngles);
 			LOAD_VAR(Vars::Visuals::ThirdPersonInstantYaw);
-			LOAD_VAR(Vars::Visuals::ThirdPersonDTBar);
 
 			LOAD_VAR(Vars::Visuals::WorldModulation);
+			LOAD_VAR(Vars::Visuals::SkyboxChanger);
+
+			LOAD_VAR(Vars::Visuals::BulletTracer);
+			LOAD_VAR(Vars::Visuals::BulletTracerRainbow);
+			LOAD_VAR(Vars::Visuals::OutOfFOVArrows);
 			
+#ifdef DEVELOPER_BUILD
 			LOAD_VAR(Vars::Visuals::Skins::Enabled);
+#endif
 		}
 
 		//Misc
@@ -856,19 +907,30 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Misc::NoisemakerSpam);
 			LOAD_VAR(Vars::Misc::DisableInterpolation);
 			LOAD_VAR(Vars::Misc::MedalFlip);
+			LOAD_VAR(Vars::Misc::AutoRocketJump);
 			LOAD_VAR(Vars::Misc::ChatSpam);
 			LOAD_VAR(Vars::Misc::NoPush);
-			LOAD_VAR(Vars::Misc::CheatBypass);
 			LOAD_VAR(Vars::Misc::EdgeJump);
 			LOAD_VAR(Vars::Misc::AutoStrafe);
-			LOAD_VAR(Vars::Misc::CL_Move::Enabled);
-			LOAD_VAR(Vars::Misc::CL_Move::Doubletap);
-			LOAD_VAR(Vars::Misc::CL_Move::DoubletapProj);
-			LOAD_VAR(Vars::Misc::CL_Move::RechargeKey);
-			LOAD_VAR(Vars::Misc::CL_Move::SEnabled);
-			LOAD_VAR(Vars::Misc::CL_Move::SFactor);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarX);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarY);
+			LOAD_VAR(Vars::Misc::Directional);
+
+			// CL_Move
+			{
+				LOAD_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
+				LOAD_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
+				LOAD_VAR(Vars::Misc::CL_Move::DoubletapProj);
+				LOAD_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
+				LOAD_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
+				LOAD_VAR(Vars::Misc::CL_Move::showhitboxes);// { true, L"Show hitboxes" };
+				LOAD_VAR(Vars::Misc::CL_Move::DoubletapKey);// { true, L"Doubletap" };
+				LOAD_VAR(Vars::Misc::CL_Move::TeleportKey);// { 0x46, L"Teleport Key" }; //F
+				LOAD_VAR(Vars::Misc::CL_Move::RechargeKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::DoubletapKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::FakelagValue);// { 0x52, L"Recharge Key" }; //R
+			}
 		}
 
 		//AntiHack
@@ -894,6 +956,11 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Vars::Menu::Colors::Widget);
 			LOAD_OTHER(Vars::Menu::Colors::WidgetActive);
 			LOAD_OTHER(Vars::Menu::Colors::OutlineMenu);
+			LOAD_OTHER(Vars::Menu::Colors::FeatureOn);
+			LOAD_OTHER(Vars::Menu::Colors::FeatureOff);
+			LOAD_OTHER(Vars::Menu::Colors::FeatureBackground);
+			LOAD_OTHER(Vars::Menu::Colors::FeatureOutline);
+
 
 			LOAD_OTHER(Colors::OutlineESP);
 			LOAD_OTHER(Colors::Cond);
@@ -908,19 +975,32 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Colors::TeamRed);
 			LOAD_OTHER(Colors::TeamBlu);
 			LOAD_OTHER(Colors::Hands);
+			LOAD_OTHER(Colors::HandsOverlay);
 			LOAD_OTHER(Colors::Weapon);
+			LOAD_OTHER(Colors::WeaponOverlay);
 			LOAD_OTHER(Colors::WorldModulation);
+			LOAD_OTHER(Colors::SkyModulation);
 			LOAD_OTHER(Colors::StaticPropModulation);
 			LOAD_OTHER(Colors::FOVCircle);
 			LOAD_OTHER(Colors::Bones);
-			LOAD_OTHER(Colors::Ticks);
-			LOAD_OTHER(Colors::TicksOutline);
+			LOAD_OTHER(Colors::BulletTracer);
+
+
 
 			LOAD_OTHER(g_Radar.m_nRadarX);
 			LOAD_OTHER(g_Radar.m_nRadarY);
 
 			LOAD_OTHER(g_SpectatorList.m_nSpecListX);
 			LOAD_OTHER(g_SpectatorList.m_nSpecListY);
+
+			LOAD_OTHER(g_PlayerList.m_nNewWindowX);
+			LOAD_OTHER(g_PlayerList.m_nNewWindowY);
+
+			LOAD_OTHER(g_Console.m_nConsoleX);
+			LOAD_OTHER(g_Console.m_nConsoleY);
+
+			LOAD_OTHER(g_Keybinds.m_nKeybindsX);
+			LOAD_OTHER(g_Keybinds.m_nKeybindsY);
 		}
 
 		m_Read.close();

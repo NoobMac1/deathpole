@@ -75,7 +75,7 @@ void CAttributChanger::Run()
 void CAttributChanger::SaveConfig()
 {
 	if (m_szAttributePath.empty())
-		m_szAttributePath = (g_CFG.m_sConfigPath + _(L"\\SEOCore\\ATTRIBUTES.seo"));
+		m_szAttributePath = (g_CFG.m_sConfigPath + _(L"\\Deathcore\\ATTRIBUTES.dpc"));
 
 	m_Write = std::wofstream(m_szAttributePath, std::ios::out);
 
@@ -101,7 +101,7 @@ void CAttributChanger::SaveConfig()
 void CAttributChanger::LoadConfig()
 {
 	if (m_szAttributePath.empty())
-		m_szAttributePath = (g_CFG.m_sConfigPath + _(L"\\SEOCore\\ATTRIBUTES.seo"));
+		m_szAttributePath = (g_CFG.m_sConfigPath + _(L"\\DeathCore\\ATTRIBUTES.dpc"));
 
 	m_Read = std::wifstream(m_szAttributePath);
 

@@ -78,8 +78,15 @@ bool CAimbotMelee::GetTargets(CBaseEntity *pLocal, CBaseCombatWeapon* pWeapon)
 			if (Vars::Aimbot::Global::IgnoreInvlunerable.m_Var && !Player->IsVulnerable())
 				continue;
 
-			if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked())
-				continue;
+			if (Vars::Aimbot::Global::IgnoreCloaked.m_Var && Player->IsCloaked()) {
+				int nCond = Player->GetCond();
+				if (nCond & TFCond_Milked || nCond & TFCond_Jarated) {
+					//pass
+				}
+				else {
+					continue;
+				}
+			}
 
 			if (Vars::Aimbot::Global::IgnoreTaunting.m_Var && Player->IsTaunting())
 				continue;
@@ -219,10 +226,16 @@ void CAimbotMelee::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserCmd
 		if (ShouldSwing(pLocal, pWeapon, pCmd, Target))
 			pCmd->buttons |= IN_ATTACK;
 
+		if (Vars::Misc::CL_Move::Enabled.m_Var && Vars::Misc::CL_Move::Doubletap.m_Var && (pCmd->buttons & IN_ATTACK) && !g_GlobalInfo.m_nShifted && !g_GlobalInfo.m_nWaitForShift)
+		{
+			g_GlobalInfo.m_bShouldShift = true;
+		}
+
 		bool bIsAttacking = IsAttacking(pCmd, pWeapon);
 
-		if (bIsAttacking)
+		if (bIsAttacking) {
 			g_GlobalInfo.m_bAttacking = true;
+		}
 
 		if (Vars::Aimbot::Melee::AimMethod.m_Var == 2)
 		{
