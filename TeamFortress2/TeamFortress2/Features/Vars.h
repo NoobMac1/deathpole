@@ -419,7 +419,7 @@ namespace Vars
 		inline CVar<bool> ChatSpam              { false, L"Chat Spam" };
 		inline CVar<bool> NoPush				{ false, L"No Push" };
 		inline CVar<bool> EdgeJump				{ false, L"Edge Jump" };
-		inline CVar<bool> VoteRevealer{ false, L"Reveal votes" };
+		inline CVar<bool> VoteRevealer{ true, L"Reveal votes" }; //Auto-enabled wtf
 		inline CVar<bool> VotesInChat{ false, L"Reveal votes to party" };
 		inline CVar<int> Roll					{ false, L"Duck speed" };
 		inline CVar<int> mvmrespawn{ false, L"MvM Instant respawn" };
@@ -429,20 +429,23 @@ namespace Vars
 		{
 			inline CVar<bool> Enabled       { true, L"Enabled" };
 			inline CVar<bool> Doubletap		{ true, L"Doubletap" };
-			inline CVar<bool> DoubletapProj{ true, L"Doubletap" };
+			inline CVar<bool> DoubletapProj	{ true, L"Doubletap" };
 			inline CVar<bool> NotInAir		{ true, L"Dont DT in air" };
 			inline CVar<int> TeleportKey	{ 0x52, L"Teleport Key" }; //R
 			inline CVar<int> RechargeKey	{ 0x48, L"Recharge Key" }; //H
 			inline CVar<int> DoubletapKey	{ 0x56, L"Doubletap Key" }; //V
-			inline CVar<bool> SEnabled{ false, L"Crimwalk Enabled" };
-			inline CVar<int> SFactor{ 1, L"Crimwalk Factor" };
+			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" };
+			inline CVar<int> SFactor		{ 1, L"Crimwalk Factor" };
+			inline CVar<int> DTBarX			{ 0, L"DT Bar Offset X" };
+			inline CVar<int> DTBarY			{ 0, L"DT Bar Offset Y" };
 
-			inline CVar<bool> WaitForDT{ true, L"Wait for DT" };
-			inline CVar<bool> showhitboxes{ 1, L"Show Hitboxes" };
-			inline CVar<bool> Fakelag{ true, L"Fakelag" };
-			inline CVar<bool> FakelagOnKey{ true, L"Fakelag On Key" };
-			inline CVar<int> FakelagKey	{ 0x54, L"Fakelag Key" }; //T
-			inline CVar<int> FakelagValue{ 1, L"Fakelag value" };
+
+			inline CVar<bool> WaitForDT		{ true, L"Wait for DT" };
+			inline CVar<bool> showhitboxes	{ 1, L"Show Hitboxes" };
+			inline CVar<bool> Fakelag		{ true, L"Fakelag" };
+			inline CVar<bool> FakelagOnKey	{ true, L"Fakelag On Key" };
+			inline CVar<int> FakelagKey		{ 0x54, L"Fakelag Key" }; //T
+			inline CVar<int> FakelagValue	{ 1, L"Fakelag value" };
 		}
 	}
 

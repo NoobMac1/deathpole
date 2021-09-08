@@ -84,6 +84,7 @@ namespace Colors
 	inline Color_t FOVCircle =				{ 255, 255, 255, 255 };
 	inline Color_t Bones =					{ 255, 255, 255, 255 };
 	inline Color_t BulletTracer =			{ 84, 160, 255, 255 };
+	inline Color_t TicksOutline =			{ 255, 255, 255, 255 };
 }
 
 namespace Utils

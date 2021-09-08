@@ -48,11 +48,6 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			}
 		}
 
-		//watermark
-	//	auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
-		g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole"));
-	//	g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 17, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"ping: %d"), ping);
-
 		StartDrawing(g_Interfaces.Surface);
 		{
 			auto OtherDraws = [&]() -> void
@@ -86,24 +81,40 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 					}
 				}
 
+				//watermark
+				auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
+				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole"));
+				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 17, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"ping: %d"), ping);
+
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
 					const auto& pLocal = g_EntityCache.m_pLocal;
 					const auto& pWeapon = g_EntityCache.m_pLocalWeapon;
-
 					if (pLocal && pWeapon)
 					{
 						if (pLocal->GetLifeState() == LIFE_ALIVE)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
-
+							float charged = (DT_WAIT_CALLS - g_GlobalInfo.m_nWaitForShift);
+							float ratio = (charged / DT_WAIT_CALLS);
+							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
+							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
+							g_Draw.OutlinedRect(g_ScreenSize.c - 53 + xoff, nY - 8 + yoff, 106, 16, Colors::TicksOutline);
+							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - 52 + xoff, nY - 20 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 							if (g_GlobalInfo.m_nShifted)
-								g_Draw.String(FONT_DEBUG, g_ScreenSize.c, nY, { 255, 64, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"(%i / %i)"), g_GlobalInfo.m_nShifted, MAX_NEW_COMMANDS);
+							{
+								g_Draw.Rect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, 104, 14, { 17, 24, 26, 255 });
+							}
 							else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
-								g_Draw.String(FONT_DEBUG, g_ScreenSize.c, nY, { 255, 178, 0, 255 }, ALIGN_CENTERHORIZONTAL, _(L"FLAT"), g_GlobalInfo.m_nWaitForShift, DT_WAIT_CALLS);
+							{
+								g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY - 7 + yoff, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
+								g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+							}
 							else
-								g_Draw.String(FONT_DEBUG, g_ScreenSize.c, nY, { 0, 230, 64, 255 }, ALIGN_CENTERHORIZONTAL, _(L"DT"));
+							{
+								g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c + 52 + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+							}
 						}
 					}
 				}

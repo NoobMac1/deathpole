@@ -115,7 +115,7 @@ void CChams::RenderPlayers(CBaseEntity *pLocal, IMatRenderContext *pRenderContex
 				case 2: { bMatWasForced = true; return m_pMatShiny; }
 				case 3: { bMatWasForced = true; return m_pMatFlat; }
 				case 4: { bMatWasForced = true; return m_pMatBrick; }
-				case 6: { bMatWasForced = true; return m_pMatFresnel; }
+				case 5: { bMatWasForced = true; return m_pMatFresnel; }
 				default: return nullptr;
 			}
 		}());
