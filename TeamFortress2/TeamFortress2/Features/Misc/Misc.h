@@ -14,9 +14,11 @@ private:
 	void NoiseMakerSpam();
 	void InitSpamKV(void* pKV);
 	void ChatSpam();
+/*	
 	void CathookIdentify();
 	void showhitboxes();
 	void should();
+*/
 
 public:
 	void Run(CUserCmd *pCmd);

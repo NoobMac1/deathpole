@@ -424,7 +424,6 @@ namespace Vars
 		inline CVar<int> Roll					{ false, L"Duck speed" };
 		inline CVar<int> mvmrespawn{ false, L"MvM Instant respawn" };
 
-
 		namespace CL_Move
 		{
 			inline CVar<bool> Enabled       { true, L"Enabled" };
@@ -434,10 +433,12 @@ namespace Vars
 			inline CVar<int> TeleportKey	{ 0x52, L"Teleport Key" }; //R
 			inline CVar<int> RechargeKey	{ 0x48, L"Recharge Key" }; //H
 			inline CVar<int> DoubletapKey	{ 0x56, L"Doubletap Key" }; //V
-			inline CVar<bool> SEnabled		{ false, L"Crimwalk Enabled" };
-			inline CVar<int> SFactor		{ 1, L"Crimwalk Factor" };
+			inline CVar<bool> SEnabled		{ false, L"Speedhack Enabled" };
+			inline CVar<int> SFactor		{ 1, L"Speedhack Factor" };
 			inline CVar<int> DTBarX			{ 0, L"DT Bar Offset X" };
 			inline CVar<int> DTBarY			{ 0, L"DT Bar Offset Y" };
+			inline CVar<int> DTBarScaleX	{ 14, L"DT Bar Scale X" };
+			inline CVar<int> DTBarScaleY	{ 104, L"DT Bar Scale Y" };
 
 
 			inline CVar<bool> WaitForDT		{ true, L"Wait for DT" };

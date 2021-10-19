@@ -96,24 +96,43 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 						if (pLocal->GetLifeState() == LIFE_ALIVE)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
-							float charged = (DT_WAIT_CALLS - g_GlobalInfo.m_nWaitForShift);
-							float ratio = (charged / DT_WAIT_CALLS);
+
+							int MAXNEW = MAX_NEW_COMMANDS;
+							int nClass = pLocal->GetClassNum();
+							if (nClass == CLASS_HEAVY) {
+								MAXNEW = MAX_NEW_COMMANDS_HEAVY;
+							}
+
+							float charged = (MAXNEW - g_GlobalInfo.m_nShifted);
+							float ratio = (charged / MAXNEW);
+							if (ratio > 1) { ratio = 1; }
+							if (ratio < 0) { ratio = 0; } //player is playing as heavy, charges, changes to scout, maxnew changes to a value lower than heavies maxnew, becomes negative, slightly annoying
+
 							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
 							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
-							g_Draw.OutlinedRect(g_ScreenSize.c - 53 + xoff, nY - 8 + yoff, 106, 16, Colors::TicksOutline);
-							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - 52 + xoff, nY - 20 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
-							if (g_GlobalInfo.m_nShifted)
+							int xscale = (Vars::Misc::CL_Move::DTBarScaleX.m_Var);
+							int yscale = (Vars::Misc::CL_Move::DTBarScaleY.m_Var);
+
+							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), Colors::TicksOutline);
+							g_Draw.GradientRect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), (nY - (xscale / 2) + yoff + xscale), { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) - 10 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
+							if (ratio == 0)
 							{
-								g_Draw.Rect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, 104, 14, { 17, 24, 26, 255 });
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 55, 40, 255 }, ALIGN_REVERSE, _(L"FLAT"));
+								g_Draw.Rect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, yscale, xscale, { 17, 24, 26, 255 });
 							}
-							else if (!g_GlobalInfo.m_nShifted && g_GlobalInfo.m_nWaitForShift)
+							else if (ratio != 1)
 							{
-								g_Draw.Rect(g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY - 7 + yoff, 104 - (104 * ratio), 14, { 17, 24, 26, 255 });
-								g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c - 52 + (104 * ratio) + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 126, 0, 255 }, ALIGN_REVERSE, _(L"CHARGING"));
+								g_Draw.Rect(g_ScreenSize.c - (yscale/2) + (yscale * ratio) + xoff, nY - (xscale/2) + yoff, yscale - (yscale * ratio), xscale, { 17, 24, 26, 255 });				
+							}
+							else if (!g_GlobalInfo.m_nWaitForShift)
+							{
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 66, 255, 0, 255 }, ALIGN_REVERSE, _(L"DT READY"));
 							}
 							else
 							{
-								g_Draw.GradientRect(g_ScreenSize.c - 52 + xoff, nY - 7 + yoff, g_ScreenSize.c + 52 + xoff, nY + 7 + yoff, { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 46, 46, 255 }, ALIGN_REVERSE, _(L"DT IMPOSSIBLE"));
 							}
 						}
 					}

@@ -346,6 +346,31 @@ void CAimbotHitscan::Aim(CUserCmd *pCmd, Vec3 &vAngle)
 			break;
 		}
 
+		/*case 3: // fucked (disabled because I haven't been able to check if it works and don't want to anymore)
+		{
+			
+			if (vAngle.x > 0)
+			{
+				vAngle.x = (-180 + vAngle.x);
+			}
+			else
+			{
+				vAngle.x = (-180 - vAngle.x);
+			}
+
+			if (vAngle.y > 0)
+			{
+				vAngle.y = (-180 + vAngle.y);
+			}
+			else
+			{
+				vAngle.y = (-180 - vAngle.y);
+			}
+			Utils::FixMovement(pCmd, vAngle);
+			pCmd->viewangles = vAngle;
+			break;
+		} */
+
 		default: break;
 	}
 }
@@ -538,11 +563,11 @@ void CAimbotHitscan::Run(CBaseEntity *pLocal, CBaseCombatWeapon *pWeapon, CUserC
 
 		g_GlobalInfo.m_nCurrentTargetIdx = Target.m_pEntity->GetIndex();
 		g_GlobalInfo.m_bHitscanRunning = true;
-		g_GlobalInfo.m_bHitscanSilentActive = Vars::Aimbot::Hitscan::AimMethod.m_Var == 2;
+		g_GlobalInfo.m_bHitscanSilentActive = (Vars::Aimbot::Hitscan::AimMethod.m_Var == 2 || Vars::Aimbot::Hitscan::AimMethod.m_Var == 3);
 
 		if (Vars::Aimbot::Hitscan::SpectatedSmooth.m_Var && g_GlobalInfo.m_bLocalSpectated)
 			g_GlobalInfo.m_bHitscanSilentActive = false;
-
+	
 		if (g_GlobalInfo.m_bHitscanSilentActive)
 			g_GlobalInfo.m_vAimPos = Target.m_vPos;
 

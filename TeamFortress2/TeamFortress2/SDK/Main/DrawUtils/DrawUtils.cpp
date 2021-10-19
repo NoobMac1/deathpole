@@ -51,6 +51,12 @@ void Draw_t::String(const size_t& font_idx, int x, int y, const Color_t& clr, co
 			y -= (h / 2);
 			break;
 		}
+		case ALIGN_REVERSE: {
+			int w = 0, h = 0;
+			g_Interfaces.Surface->GetTextSize(m_vecFonts.at(font_idx).dwFont, wstr, w, h);
+			x -= (w);
+			break;
+		}
 		case ALIGN_CENTERVERTICAL: {
 			int w = 0, h = 0;
 			g_Interfaces.Surface->GetTextSize(m_vecFonts.at(font_idx).dwFont, wstr, w, h);
@@ -93,6 +99,12 @@ void Draw_t::String(const size_t &font_idx, int x, int y, const Color_t &clr, co
 			g_Interfaces.Surface->GetTextSize(m_vecFonts.at(font_idx).dwFont, wstr, w, h);
 			x -= (w / 2);
 			y -= (h / 2);
+			break;
+		}
+		case ALIGN_REVERSE: {
+			int w = 0, h = 0;
+			g_Interfaces.Surface->GetTextSize(m_vecFonts.at(font_idx).dwFont, wstr, w, h);
+			x -= (w);
 			break;
 		}
 		case ALIGN_CENTERVERTICAL: {

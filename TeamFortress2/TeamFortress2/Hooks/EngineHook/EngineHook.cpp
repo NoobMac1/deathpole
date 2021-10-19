@@ -8,6 +8,11 @@
 
 void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFinalTick)
 {
+	if (Vars::Misc::CL_Move::SEnabled.m_Var)
+	{
+		Func.Original<fn>()(accumulated_extra_samples, false);
+	}
+
 	if (Vars::Misc::CL_Move::Enabled.m_Var)
 	{
 		g_GlobalInfo.fast_stop = false;

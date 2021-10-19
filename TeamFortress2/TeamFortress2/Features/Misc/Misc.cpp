@@ -1,5 +1,4 @@
 #include "Misc.h"
-
 #include "../Vars.h"
 
 void CMisc::Run(CUserCmd* pCmd)
@@ -9,10 +8,10 @@ void CMisc::Run(CUserCmd* pCmd)
 	NoiseMakerSpam();
 	ChatSpam();
 	StopFast(pCmd);
-	SpeedHack();
 	Interp();
 	NoPush();
-	CathookIdentify();
+	SpeedHack();
+	//CathookIdentify();
 }
 
 static bool evready = false, connected = false;
@@ -61,28 +60,18 @@ void CMisc::Interp()
 	}
 }
 
-
 void CMisc::SpeedHack()
 {
-	ConVar* h_framerate = g_Interfaces.CVars->FindVar(_("host_framerate"));
-	ConVar* framerate = g_Interfaces.CVars->FindVar(_("fps_max"));
-	ConVar* updaterate = g_Interfaces.CVars->FindVar(_("cl_updaterate"));
 	ConVar* h_timescale = g_Interfaces.CVars->FindVar(_("host_timescale"));
 	ConVar* cheats = g_Interfaces.CVars->FindVar(_("sv_cheats"));
 	if (Vars::Misc::CL_Move::SEnabled.m_Var)
 	{
 		cheats->SetValue(1);
 		h_timescale->SetValue(Vars::Misc::CL_Move::SFactor.m_Var);
-		h_framerate->SetValue(66 / Vars::Misc::CL_Move::SFactor.m_Var);
-		updaterate->SetValue(66 / Vars::Misc::CL_Move::SFactor.m_Var);
-		framerate->SetValue(66);
 	}
 	else
 	{
-		h_framerate->SetValue(0);
 		h_timescale->SetValue(1);
-		updaterate->SetValue(1000); //choose a big fucking number lol
-		framerate->SetValue(0);
 	}
 }
 
@@ -172,10 +161,10 @@ const int nY = (g_ScreenSize.h / 2) + 20;
 void CMisc::NoPush() {
 	ConVar* noPush = g_Interfaces.CVars->FindVar("tf_avoidteammates_pushaway");
 	if (Vars::Misc::NoPush.m_Var) {
-		if (noPush->GetInt() == 1) noPush->SetValue(0);
+		noPush->SetValue(0);
 	}
 	else {
-		if (noPush->GetInt() == 0) noPush->SetValue(1);
+		noPush->SetValue(1);
 	}
 }
 
@@ -190,7 +179,7 @@ void CMisc::VoteRevealer(CGameEvent& pEvent) noexcept
 		PlayerInfo_t pi;
 		g_Interfaces.Engine->GetPlayerInfo(entity->GetIndex(), &pi);
 		char szBuff[255];
-		sprintf(szBuff, _("\x4[deathpole] \x3%s voted %s"), pi.name, votedYes ? "F1" : "F2");
+		sprintf(szBuff, _("[dp] %s voted %s"), pi.name, votedYes ? "\x4yes" : "\x5no");
 		if (Vars::Misc::VotesInChat.m_Var) {
 			const char* sayCmd = "say_party ";
 			char buffer[256];
@@ -229,10 +218,6 @@ bJumpState = true;
 	}
 }
 /*
-void CMisc::AutoStrafe(CUserCmd* pCmd)
-{
-
-}
 void CMisc::AutoStrafe(CUserCmd* pCmd)
 {
 	if (Vars::Misc::AutoStrafe.m_Var)
@@ -279,8 +264,8 @@ void CMisc::AutoStrafe(CUserCmd* pCmd)
 			pCmd->viewangles = vAngle;
 		}
 	}
-}*/
-
+}
+*/
 float fclamp(float d, float min, float max) {
 	const float t = d < min ? min : d;
 	return t > max ? max : t;
@@ -308,6 +293,7 @@ static float angleDiffRad(float a1, float a2) noexcept
 	return delta;
 }
 
+/*
 void CMisc::CathookIdentify() {
 	auto CathookMessage = []() -> void
 	{
@@ -340,8 +326,9 @@ void CMisc::CathookIdentify() {
 		g_Interfaces.Engine->ServerCmdKeyValues(CathookMessage);
 	};
 }
+*/ //patched
 
-
+//why r these here
 bool pda = false;
 bool pda2 = false;
 bool pda3 = false;
@@ -358,7 +345,7 @@ void CMisc::StopFast(CUserCmd* pCmd) {
 			float speed = pLocal->GetVelocity().Lenght2D();
 
 
-			if (g_GlobalInfo.fast_stop == true && GetAsyncKeyState(Vars::Misc::CL_Move::DoubletapKey.m_Var)) {
+			if (g_GlobalInfo.fast_stop == true && GetAsyncKeyState(Vars::Misc::CL_Move::DoubletapKey.m_Var)) { //This is awful
 				if(speed > 1.f) {
 					if (!pda) {
 						g_Interfaces.Engine->ClientCmd_Unrestricted("cyoa_pda_open 1");

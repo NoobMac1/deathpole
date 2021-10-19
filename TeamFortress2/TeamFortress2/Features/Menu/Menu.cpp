@@ -969,7 +969,7 @@ void CMenu::Run()
 			enum struct EAimTabs { TAB_AIMBOT, TAB_OTHER };
 			enum struct ETriggerTabs { TAB_MAIN };
 			enum struct EVisualsTabs { TAB_ESP, TAB_RADAR, TAB_CHAMS, TAB_GLOW, TAB_OTHER, TAB_SKINS, TAB_COLORS };
-			enum struct EMiscTabs { TAB_TELEPORT, TAB_RECHARGE, TAB_DOUBLETAP, TAB_HVH, TAB_MAIN };
+			enum struct EMiscTabs { TAB_TELEPORT, TAB_RECHARGE, TAB_DOUBLETAP, TAB_HVH, TAB_MAIN, TAB_DEVELOPER };
 
 			m_LastWidget = { Vars::Menu::Position.x + Vars::Menu::SpacingX, Vars::Menu::Position.y, 0, 0 };
 
@@ -1049,7 +1049,7 @@ void CMenu::Run()
 					{
 						CheckBox(Vars::Aimbot::Hitscan::Active, _(L"Hitscan master switch"));
 						ComboBox(Vars::Aimbot::Hitscan::SortMethod, { { 0, _(L"FOV") }, { 1, _(L"Distance") } });
-						ComboBox(Vars::Aimbot::Hitscan::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Smooth") }, { 2, _(L"Silent") } });
+						ComboBox(Vars::Aimbot::Hitscan::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Smooth") }, { 2, _(L"Silent") }, { 3, _(L"Fucked")} });	
 						ComboBox(Vars::Aimbot::Hitscan::AimHitbox, { { 0, _(L"Head") }, { 1, _(L"Body") }, { 2, _(L"Auto") } });
 						InputFloat(Vars::Aimbot::Hitscan::AimFOV, 1.0f, 180.0f, 1.0f, L"%.0f");
 						InputFloat(Vars::Aimbot::Hitscan::SmoothingAmount, 1.0f, 10.0f, 1.0f, L"%.0f");
@@ -1689,23 +1689,11 @@ void CMenu::Run()
 					if (Button(_(L"HvH"), Tab == EMiscTabs::TAB_HVH, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
 						Tab = EMiscTabs::TAB_HVH;
 
-					/*checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX;
+					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX;
 					m_LastWidget = checkpoint_move;
 
-					if (Button(_(L"Recharge Key"), Tab == EMiscTabs::TAB_RECHARGE, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
-						Tab = EMiscTabs::TAB_RECHARGE;
-
-					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX + 30;
-					m_LastWidget = checkpoint_move;
-
-					if (Button(_(L"Doubletap Key"), Tab == EMiscTabs::TAB_DOUBLETAP, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
-						Tab = EMiscTabs::TAB_DOUBLETAP;
-
-					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX + 30;
-					m_LastWidget = checkpoint_move;
-
-					if (Button(_(L"Teleport Key"), Tab == EMiscTabs::TAB_TELEPORT, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
-						Tab = EMiscTabs::TAB_TELEPORT;*/
+					if (Button(_(L"Developer"), Tab == EMiscTabs::TAB_DEVELOPER, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+						Tab = EMiscTabs::TAB_DEVELOPER;
 
 					m_LastWidget = checkpoint_line;
 					g_Draw.Line(checkpoint_line.x, checkpoint_line.y, Vars::Menu::Position.x + Vars::Menu::Position.w - 1, checkpoint_line.y, Vars::Menu::Colors::OutlineMenu);
@@ -1744,9 +1732,9 @@ void CMenu::Run()
 					{
 
 						CheckBox(Vars::Misc::CL_Move::Enabled, _(L"Master switch to enable / disable all tickbase exploits."));
-						InputKey(Vars::Misc::CL_Move::RechargeKey, false);
-						InputKey(Vars::Misc::CL_Move::DoubletapKey, false);
-						InputKey(Vars::Misc::CL_Move::TeleportKey, false);
+						InputKey(Vars::Misc::CL_Move::RechargeKey, true);
+						InputKey(Vars::Misc::CL_Move::DoubletapKey, true);
+						InputKey(Vars::Misc::CL_Move::TeleportKey, true);
 						CheckBox(Vars::Misc::CL_Move::WaitForDT, _(L"Wait for DT."));
 						CheckBox(Vars::Misc::CL_Move::NotInAir, _(L"Doesn't DT in air."));
 						//CheckBox(Vars::Misc::CL_Move::showhitboxes, _(L"Shows Hitboxes."));
@@ -1801,6 +1789,18 @@ void CMenu::Run()
 
 						break;
 					}
+
+				case EMiscTabs::TAB_DEVELOPER:
+				{
+					GroupBoxStart();
+					{
+						InputInt(Vars::Misc::CL_Move::DTBarX, -g_ScreenSize.w, g_ScreenSize.w / 2);
+						InputInt(Vars::Misc::CL_Move::DTBarY, -g_ScreenSize.h / 2, g_ScreenSize.h / 2);
+						InputInt(Vars::Misc::CL_Move::DTBarScaleX, 1, g_ScreenSize.w, 2);
+						InputInt(Vars::Misc::CL_Move::DTBarScaleY, 1, g_ScreenSize.h, 2);
+					}
+					GroupBoxEnd(_(L"Misc"), 210);
+				}
 
 
 

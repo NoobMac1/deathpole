@@ -468,6 +468,10 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Misc::AutoStrafe);
 			SAVE_VAR(Vars::Misc::Directional);
 			SAVE_VAR(Vars::Misc::EdgeJump);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarX);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarY);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleX);
+			SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleY);
 			// CL_Move
 			{
 				SAVE_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
@@ -913,6 +917,10 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Misc::EdgeJump);
 			LOAD_VAR(Vars::Misc::AutoStrafe);
 			LOAD_VAR(Vars::Misc::Directional);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarX);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarY);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleX);
+			LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleY);
 
 			// CL_Move
 			{
