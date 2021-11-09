@@ -10,7 +10,7 @@ void CMisc::Run(CUserCmd* pCmd)
 	StopFast(pCmd);
 	Interp();
 	NoPush();
-	SpeedHack();
+	//SpeedHack();
 	//CathookIdentify();
 }
 
@@ -57,21 +57,6 @@ void CMisc::Interp()
 		interpRatio->SetValue(1);
 		interpAmount->SetValue(0);
 		interp->SetValue(1);
-	}
-}
-
-void CMisc::SpeedHack()
-{
-	ConVar* h_timescale = g_Interfaces.CVars->FindVar(_("host_timescale"));
-	ConVar* cheats = g_Interfaces.CVars->FindVar(_("sv_cheats"));
-	if (Vars::Misc::CL_Move::SEnabled.m_Var)
-	{
-		cheats->SetValue(1);
-		h_timescale->SetValue(Vars::Misc::CL_Move::SFactor.m_Var);
-	}
-	else
-	{
-		h_timescale->SetValue(1);
 	}
 }
 

@@ -10,7 +10,16 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 {
 	if (Vars::Misc::CL_Move::SEnabled.m_Var)
 	{
-		Func.Original<fn>()(accumulated_extra_samples, false);
+		int SpeedTicks{0};
+		int SpeedTicksDesired = Vars::Misc::CL_Move::SFactor.m_Var;
+
+		g_GlobalInfo.fast_stop = false;
+		while (SpeedTicks < SpeedTicksDesired)
+		{
+			SpeedTicks++;
+			Func.Original<fn>()(accumulated_extra_samples, (SpeedTicks == (SpeedTicksDesired)));
+		}
+		
 	}
 
 	if (Vars::Misc::CL_Move::Enabled.m_Var)

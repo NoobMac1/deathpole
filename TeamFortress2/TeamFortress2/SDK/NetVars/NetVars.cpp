@@ -21,7 +21,7 @@ void CNetVars::populate_nodes(RecvTable *recv_table, map_type *map)
 {
 	for (auto i = 0; i < recv_table->GetNumProps(); i++)
 	{
-		const auto *prop = recv_table->GetPropW(i);
+		const RecvProp *prop = recv_table->GetPropA(i);
 		const auto prop_info = std::make_shared<node>(prop->GetOffset());
 
 		if (prop->GetType() == DPT_DataTable)

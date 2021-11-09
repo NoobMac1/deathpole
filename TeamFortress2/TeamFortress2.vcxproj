@@ -37,7 +37,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -153,11 +153,16 @@
     <ClCompile Include="TeamFortress2\Features\Aimbot\AimbotMelee\AimbotMelee.cpp" />
     <ClCompile Include="TeamFortress2\Features\Aimbot\AimbotProjectile\AimbotProjectile.cpp" />
     <ClCompile Include="TeamFortress2\Features\AntiHack\AntiAim.cpp" />
+    <ClCompile Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Auto\Auto.cpp" />
     <ClCompile Include="TeamFortress2\Features\Auto\AutoBlast\AutoBlast.cpp" />
     <ClCompile Include="TeamFortress2\Features\Auto\AutoDetonate\AutoDetonate.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Auto\AutoShoot\AutoShoot.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Auto\AutoStab\AutoStab.cpp" />
     <ClCompile Include="TeamFortress2\Features\Auto\AutoUber\AutoUber.cpp" />
-    <ClCompile Include="TeamFortress2\Features\ChatInfo\ChatInfo.cpp" />
     <ClCompile Include="TeamFortress2\Features\Chams\DMEChams.cpp" />
+    <ClCompile Include="TeamFortress2\Features\ChatInfo\ChatInfo.cpp" />
     <ClCompile Include="TeamFortress2\Features\Console\Console.cpp" />
     <ClCompile Include="TeamFortress2\Features\ESP\ESP.cpp" />
     <ClCompile Include="TeamFortress2\Features\Glow\Glow.cpp" />
@@ -171,13 +176,8 @@
     <ClCompile Include="TeamFortress2\Features\PlayerList\PlayerList.cpp" />
     <ClCompile Include="TeamFortress2\Features\Prediction\Prediction.cpp" />
     <ClCompile Include="TeamFortress2\Features\Radar\Radar.cpp" />
-    <ClCompile Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpectatorList\SpectatorList.cpp" />
     <ClCompile Include="TeamFortress2\Features\SpyWarning\SpyWarning.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Auto\AutoShoot\AutoShoot.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Auto\AutoStab\AutoStab.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Auto\Auto.cpp" />
     <ClCompile Include="TeamFortress2\Features\Visuals\Visuals.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\ClientHook\ClientHook.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\ClientModeHook\ClientModeHook.cpp" />
@@ -221,11 +221,16 @@
     <ClInclude Include="TeamFortress2\Features\Aimbot\AimbotMelee\AimbotMelee.h" />
     <ClInclude Include="TeamFortress2\Features\Aimbot\AimbotProjectile\AimbotProjectile.h" />
     <ClInclude Include="TeamFortress2\Features\AntiHack\AntiAim.h" />
+    <ClInclude Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.h" />
+    <ClInclude Include="TeamFortress2\Features\Auto\Auto.h" />
     <ClInclude Include="TeamFortress2\Features\Auto\AutoBlast\AutoBlast.h" />
     <ClInclude Include="TeamFortress2\Features\Auto\AutoDetonate\AutoDetonate.h" />
+    <ClInclude Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.h" />
+    <ClInclude Include="TeamFortress2\Features\Auto\AutoShoot\AutoShoot.h" />
+    <ClInclude Include="TeamFortress2\Features\Auto\AutoStab\AutoStab.h" />
     <ClInclude Include="TeamFortress2\Features\Auto\AutoUber\AutoUber.h" />
-    <ClInclude Include="TeamFortress2\Features\ChatInfo\ChatInfo.h" />
     <ClInclude Include="TeamFortress2\Features\Chams\DMEChams.h" />
+    <ClInclude Include="TeamFortress2\Features\ChatInfo\ChatInfo.h" />
     <ClInclude Include="TeamFortress2\Features\Console\Console.h" />
     <ClInclude Include="TeamFortress2\Features\ESP\ESP.h" />
     <ClInclude Include="TeamFortress2\Features\Glow\Glow.h" />
@@ -239,13 +244,8 @@
     <ClInclude Include="TeamFortress2\Features\PlayerList\PlayerList.h" />
     <ClInclude Include="TeamFortress2\Features\Prediction\Prediction.h" />
     <ClInclude Include="TeamFortress2\Features\Radar\Radar.h" />
-    <ClInclude Include="TeamFortress2\Features\AttributeChanger\AttributeChanger.h" />
     <ClInclude Include="TeamFortress2\Features\SpectatorList\SpectatorList.h" />
     <ClInclude Include="TeamFortress2\Features\SpyWarning\SpyWarning.h" />
-    <ClInclude Include="TeamFortress2\Features\Auto\AutoGlobal\AutoGlobal.h" />
-    <ClInclude Include="TeamFortress2\Features\Auto\AutoShoot\AutoShoot.h" />
-    <ClInclude Include="TeamFortress2\Features\Auto\AutoStab\AutoStab.h" />
-    <ClInclude Include="TeamFortress2\Features\Auto\Auto.h" />
     <ClInclude Include="TeamFortress2\Features\Vars.h" />
     <ClInclude Include="TeamFortress2\Features\Visuals\Visuals.h" />
     <ClInclude Include="TeamFortress2\Hooks\ClientHook\ClientHook.h" />
@@ -587,6 +587,9 @@
     <ClInclude Include="TeamFortress2\Utils\VFunc\VFunc.h" />
     <ClInclude Include="TeamFortress2\Utils\WinAPI\WinAPI.h" />
     <ClInclude Include="TeamFortress2\Utils\XorStr\XorStr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
