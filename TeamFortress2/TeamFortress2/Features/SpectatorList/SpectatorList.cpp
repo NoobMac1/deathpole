@@ -3,22 +3,22 @@
 #include "../Vars.h"
 #include "../Menu/Menu.h"
 
-bool CSpectatorList::GetSpectators(CBaseEntity *pLocal)
+bool CSpectatorList::GetSpectators(CBaseEntity* pLocal)
 {
 	m_vecSpectators.clear();
 
-	for (const auto &pTeammate : g_EntityCache.GetGroup(EGroupType::PLAYERS_TEAMMATES))
+	for (const auto& pTeammate : g_EntityCache.GetGroup(EGroupType::PLAYERS_TEAMMATES))
 	{
-		CBaseEntity *pObservedPlayer = g_Interfaces.EntityList->GetClientEntityFromHandle(pTeammate->GetObserverTarget());
+		CBaseEntity* pObservedPlayer = g_Interfaces.EntityList->GetClientEntityFromHandle(pTeammate->GetObserverTarget());
 
 		if (pTeammate && !pTeammate->IsAlive() && pObservedPlayer == pLocal)
 		{
 			std::wstring szMode = L"";
 
 			switch (pTeammate->GetObserverMode()) {
-				case OBS_MODE_FIRSTPERSON: { szMode = _(L"1st"); break; }
-				case OBS_MODE_THIRDPERSON: { szMode = _(L"3rd"); break; }
-				default: continue;
+			case OBS_MODE_FIRSTPERSON: { szMode = _(L"1st"); break; }
+			case OBS_MODE_THIRDPERSON: { szMode = _(L"3rd"); break; }
+			default: continue;
 			}
 
 			PlayerInfo_t PlayerInfo;
@@ -130,7 +130,7 @@ void CSpectatorList::DrawDefault()
 
 void CSpectatorList::DrawClassic()
 {
-	if (const auto &pLocal = g_EntityCache.m_pLocal)
+	if (const auto& pLocal = g_EntityCache.m_pLocal)
 	{
 		if (!pLocal->IsAlive() || !GetSpectators(pLocal))
 			return;
@@ -174,7 +174,7 @@ void CSpectatorList::DrawClassic()
 			g_Draw.String(
 				FONT_ESP_NAME_OUTLINED,
 				nDrawX, nDrawY,
-				Spectator.m_bIsFriend ? Colors::Friend : Utils::GetTeamColor(Spectator.m_nTeam),
+				Spectator.m_bIsFriend ? Colors::Friend : Utils::GetTeamColor(Spectator.m_nTeam, Vars::ESP::Main::EnableTeamEnemyColors.m_Var),
 				ALIGN_CENTERHORIZONTAL,
 				L"[%ls] %ls", Spectator.m_sMode.data(), Spectator.m_sName.data());
 

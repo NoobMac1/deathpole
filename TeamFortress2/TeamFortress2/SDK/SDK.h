@@ -1,5 +1,47 @@
 #pragma once
 
+#define VK_0              0x30
+#define VK_1              0x31
+#define VK_2              0x32
+#define VK_3              0x33
+#define VK_4              0x34
+#define VK_5              0x35
+#define VK_6              0x36
+#define VK_7              0x37
+#define VK_8              0x38
+#define VK_9              0x39
+
+#define VK_A              0x41
+#define VK_B              0x42
+#define VK_C              0x43
+#define VK_D              0x44
+#define VK_E              0x45
+#define VK_F              0x46
+#define VK_G              0x47
+#define VK_H              0x48
+#define VK_J              0x49
+#define VK_I              0x4A
+#define VK_K              0x4B
+#define VK_L              0x4C
+#define VK_M              0x4D
+#define VK_N              0x4E
+#define VK_O              0x4F
+#define VK_P              0x50
+#define VK_Q              0x51
+#define VK_R              0x52
+#define VK_S              0x53
+#define VK_T              0x54
+#define VK_U              0x55
+#define VK_V              0x56
+#define VK_W              0x57
+#define VK_X              0x58
+#define VK_Y              0x59
+#define VK_Z              0x5A
+
+#define TEAM_NONE		  1
+#define TEAM_RED		  2
+#define TEAM_BLU		  3
+
 #include "Main/BaseEntity/BaseEntity.h"
 #include "Main/BaseCombatWeapon/BaseCombatWeapon.h"
 #include "Main/BaseObject/BaseObject.h"
@@ -9,11 +51,14 @@
 #include "Main/ConVars/ConVars.h"
 #include "Main/KeyValues/KeyValues.h"
 #include "Main/TraceFilters/TraceFilters.h"
+#include "DirectX/DirectX.h"
+#include "../Features/Vars.h"
 
 #define TICK_INTERVAL		( g_Interfaces.GlobalVars->interval_per_tick )
 #define TIME_TO_TICKS( dt )	( static_cast<int>( 0.5f + static_cast<float>(dt) / TICK_INTERVAL ) )
 #define TICKS_TO_TIME( t )	( TICK_INTERVAL * ( t ) )
 #define GetKey(vKey) (Utils::IsGameWindowInFocus() && GetAsyncKeyState(vKey))
+#define Q_ARRAYSIZE(A) (sizeof(A)/sizeof((A)[0]))
 
 //I for some reason have to include this here, if I don't then one steam header goes apeshit full of errors
 #include "../Utils/CRC/CRC.h"
@@ -74,6 +119,8 @@ namespace Colors
 	inline Color_t UberColor =				{ 224, 86, 253, 255 };
 	inline Color_t TeamRed =				{ 255, 100, 87, 255 };
 	inline Color_t TeamBlu =				{ 30, 144, 255, 255 };
+	inline Color_t Enemy =					{ 255, 100, 87, 255 };
+	inline Color_t Team =					{ 30, 144, 255, 255 };
 	inline Color_t Hands =					{ 30, 144, 255, 255 };
 	inline Color_t HandsOverlay =			{ 255, 127, 0, 255 };
 	inline Color_t Weapon =					{ 30, 144, 255, 255 };
@@ -83,13 +130,23 @@ namespace Colors
 	inline Color_t StaticPropModulation =	{ 255, 255, 255, 255 };
 	inline Color_t FOVCircle =				{ 255, 255, 255, 255 };
 	inline Color_t Bones =					{ 255, 255, 255, 255 };
-	inline Color_t BulletTracer =			{ 84, 160, 255, 255 };
-	inline Color_t TicksOutline =			{ 255, 255, 255, 255 };
+	inline Color_t BulletTracer =			{ 255, 255, 255, 255 };
+	inline Color_t FresnelBase =			{ 0,0,0,255 };
+	inline Color_t FresnelTop = 			{ 0,255,0,255 };
+	inline Color_t AimSquareCol = 			{ 0,255,0,255 };
+	inline Color_t DtChargingLeft =			{ 255, 192, 81, 180};
+	inline Color_t DtChargingRight =		{ 255, 134, 81, 180};
+	inline Color_t DtChargedLeft =			{ 106, 255, 131, 180};
+	inline Color_t DtChargedRight =			{ 106, 255, 250, 180 };
+	inline Color_t DtOutline =				{ 30, 30, 30, 180 };
+	inline Color_t DmgLoggerBackground =	{ 30, 30, 30, 255 };
+	inline Color_t DmgLoggerOutline =		{ 30, 30, 255, 255};
+	inline Color_t DmgLoggerText =			{ 255, 255, 255, 255 };
 }
 
 namespace Utils
 {
-	__inline IMaterial *CreateMaterial(const char *szVars)
+	__inline IMaterial* CreateMaterial(const char* szVars)
 	{
 		static int nCreatedMats = 0;
 		char szOut[512];
@@ -98,24 +155,32 @@ namespace Utils
 		char szMaterial[512];
 		sprintf_s(szMaterial, sizeof(szMaterial), szVars);
 
-		KeyValues *pVals = new KeyValues;
-		g_KeyValUtils.Initialize(pVals, (char *)szOut);
+		KeyValues* pVals = new KeyValues(_("matvalsxd"));
+		g_KeyValUtils.Initialize(pVals, (char*)szOut);
 		g_KeyValUtils.LoadFromBuffer(pVals, szOut, szMaterial);
 
-		IMaterial *pCreated = g_Interfaces.MatSystem->Create(szOut, pVals);
+		IMaterial* pCreated = g_Interfaces.MatSystem->Create(szOut, pVals);
 		pCreated->IncrementReferenceCount();
 
 		return pCreated;
 	}
 
-	__inline void *CreateKeyVals(const char *szVars)
+	static std::random_device RandomDevice;
+	static std::mt19937 Engine{ RandomDevice() };
+	__inline float RandFloatRange(float min, float max)
+	{
+		std::uniform_real_distribution<float> Random(min, max);
+		return Random(Engine);
+	}
+
+	__inline void* CreateKeyVals(const char* szVars)
 	{
 		static int nCreatedKeyVals = 0;
 		char szOut[512];
 		sprintf_s(szOut, sizeof(szOut), _("SEO_keyvals%i.vmt"), nCreatedKeyVals++);
 
-		KeyValues *pVals = new KeyValues;
-		g_KeyValUtils.Initialize(pVals, (char *)szOut);
+		KeyValues* pVals = new KeyValues(_("keyvalssmh"));
+		g_KeyValUtils.Initialize(pVals, (char*)szOut);
 		g_KeyValUtils.LoadFromBuffer(pVals, szOut, szVars);
 
 		return pVals;
@@ -183,19 +248,33 @@ namespace Utils
 		return InitKeyValues(32);
 	}
 
-	__inline Color_t GetTeamColor(int nTeamNum)
+	__inline Color_t GetTeamColor(int nTeamNum, bool otherColors)
 	{
-		switch (nTeamNum)
-		{
+		if (otherColors) {
+			if (const auto& pLocal = g_EntityCache.m_pLocal) {
+				// Enemy/Team based colors
+				auto lPlayerTeam = pLocal->GetTeamNum();
+				if (lPlayerTeam == 2 && nTeamNum == 2) return Colors::Team;
+				else if (lPlayerTeam == 3 && nTeamNum == 3) return Colors::Team;
+				else if (lPlayerTeam == 2 && nTeamNum == 3) return Colors::Enemy;
+				else if (lPlayerTeam == 3 && nTeamNum == 2) return Colors::Enemy;
+				else return Colors::White;
+			}
+		}
+		else {
+			switch (nTeamNum)
+			{
 			case 2: return Colors::TeamRed;
 			case 3: return Colors::TeamBlu;
 			default: return Colors::White;
+			}
 		}
+		return Colors::White;
 	}
 
-	__inline Color_t GetEntityDrawColor(CBaseEntity* pEntity)
+	__inline Color_t GetEntityDrawColor(CBaseEntity* pEntity, bool enableOtherColors)
 	{
-		Color_t out = GetTeamColor(pEntity->GetTeamNum());
+		Color_t out = GetTeamColor(pEntity->GetTeamNum(), enableOtherColors);
 
 		if (pEntity->IsPlayer())
 		{
@@ -298,6 +377,20 @@ namespace Utils
 
 		pCmd->forwardmove = (cos(fYaw) * fSpeed);
 		pCmd->sidemove = (sin(fYaw) * fSpeed);
+	}
+
+	__inline int UnicodeToUTF8(const wchar_t* unicode, char* ansi, int ansiBufferSize)
+	{
+		int result = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, ansi, ansiBufferSize, NULL, NULL);
+		ansi[ansiBufferSize - 1] = 0;
+		return result;
+	}
+
+	__inline int UTF8ToUnicode(const char* ansi, wchar_t* unicode, int unicodeBufferSizeInBytes)
+	{
+		int chars = MultiByteToWideChar(CP_UTF8, 0, ansi, -1, unicode, unicodeBufferSizeInBytes / sizeof(wchar_t));
+		unicode[(unicodeBufferSizeInBytes / sizeof(wchar_t)) - 1] = 0;
+		return chars;
 	}
 
 	__inline std::wstring ConvertUtf8ToWide(const std::string_view& str)

@@ -4,11 +4,16 @@
 #include "../../Features/Menu/Menu.h"
 #include "../../Features/SpectatorList/SpectatorList.h"
 #include "../../Features/SpyWarning/SpyWarning.h"
+#include "../../Features/PlayerArrows/PlayerArrows.h"
 #include "../../Features/ESP/ESP.h"
 #include "../../Features/Misc/Misc.h"
 #include "../../Features/Radar/Radar.h"
+#include "../../Features/Keybinds/Keybinds.h"
 #include "../../Features/Aimbot/AimbotMelee/AimbotMelee.h"
+#include "../../Features/Visuals/Visuals.h"
+#include "../../Features/Crits/Crits.h"
 #include "../../Features/Aimbot/AimbotProjectile/AimbotProjectile.h"
+#include "../../Features/Crits/Crits.h"
 
 void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 {
@@ -55,85 +60,75 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				if (g_Interfaces.EngineVGui->IsGameUIVisible())
 					return;
 
-				//Projectile Aim's Predicted Position
+				//Proj aim line
+				//This could use alot of improvement, but still subjectively better than a flying rec
+				//Credits to JAGNEmk aka me x)
+				// Fuck you.
 				if (!g_GlobalInfo.m_vPredictedPos.IsZero())
 				{
-					{
-						static const int size = 10;
-						Vec3 vecScreen = Vec3();
-						Vec3 vecStart = Vec3();
-						Utils::W2S(g_GlobalInfo.m_vPredictedPos, vecStart);
-						if (Utils::W2S(g_GlobalInfo.m_vPosition, vecScreen))
-						{
-							g_Draw.Line(
-								static_cast<int>(vecScreen.x),
-								static_cast<int>(vecScreen.y),
-								static_cast<int>(vecStart.x),
-								static_cast<int>(vecStart.y),
-								{ 255, 255, 255, 255 });
+					if (Vars::Visuals::AimPosSquare.m_Var) {
+						Vec3 vProjAimStart, vProjAimEnd = Vec3(g_ScreenSize.c, g_ScreenSize.h, 0.0f);
 
-							g_Draw.OutlinedRect(
-								static_cast<int>(vecStart.x - (size / 2)),
-								static_cast<int>(vecStart.y - (size / 2)),
-								size, size,
-								{ 255, 113, 35, 255 });
-						}
+						Utils::W2S(g_GlobalInfo.m_vClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguin, vProjAimStart);
+						Utils::W2S(g_GlobalInfo.m_vPredictedPos, vProjAimEnd);
+						g_Draw.Line(
+							vProjAimStart.x,
+							vProjAimStart.y,
+							vProjAimEnd.x,
+							vProjAimEnd.y,
+							{ 255, 255, 255, 255 } //Set this to a var if u wantto idc
+						);
 					}
 				}
 
-				//watermark
-				auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
-				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole"));
-				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 17, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"ping: %d"), ping);
+				// for damage logger. 
+				// you can use it for more, i'm sure. - myzarfin
+				g_notify.Think();
 
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
 					const auto& pLocal = g_EntityCache.m_pLocal;
 					const auto& pWeapon = g_EntityCache.m_pLocalWeapon;
+
 					if (pLocal && pWeapon)
 					{
 						if (pLocal->GetLifeState() == LIFE_ALIVE)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 
-							int MAXNEW = MAX_NEW_COMMANDS;
-							int nClass = pLocal->GetClassNum();
-							if (nClass == CLASS_HEAVY) {
-								MAXNEW = MAX_NEW_COMMANDS_HEAVY;
+							static Color_t color1, color2;
+
+							if (g_GlobalInfo.m_nWaitForShift) {
+								color1 = Colors::DtChargingLeft;
+								color2 = Colors::DtChargingRight;
+							}
+							else {
+								color1 = Colors::DtChargedLeft;
+								color2 = Colors::DtChargedRight;
 							}
 
-							float charged = (MAXNEW - g_GlobalInfo.m_nShifted);
-							float ratio = (charged / MAXNEW);
-							if (ratio > 1) { ratio = 1; }
-							if (ratio < 0) { ratio = 0; } //player is playing as heavy, charges, changes to scout, maxnew changes to a value lower than heavies maxnew, becomes negative, slightly annoying
+							static int tickWidth = Vars::Misc::CL_Move::DtbarOutlineWidth.m_Var;
+							int barWidth = (tickWidth * g_GlobalInfo.dtTicks) + 2;
+							if (Vars::Misc::CL_Move::DTBarStyle.m_Var == 1) {
+								g_Draw.OutlinedRect(
+									g_ScreenSize.c - (barWidth / 2),
+									nY + 80,
+									barWidth,
+									Vars::Misc::CL_Move::DtbarOutlineHeight.m_Var,
+									Colors::DtOutline
+								);
+								g_Draw.GradientRect(
+									g_ScreenSize.c - (barWidth / 2) + 1,
+									nY + 81,
+									(g_ScreenSize.c - (barWidth / 2) + 1) + tickWidth * g_GlobalInfo.m_nShifted,
+									nY + 81 + Vars::Misc::CL_Move::DtbarOutlineHeight.m_Var - 2,
+									color1,
+									color2,
+									true
+								);
+							}
 
-							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
-							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
-							int xscale = (Vars::Misc::CL_Move::DTBarScaleX.m_Var);
-							int yscale = (Vars::Misc::CL_Move::DTBarScaleY.m_Var);
-
-							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), Colors::TicksOutline);
-							g_Draw.GradientRect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), (nY - (xscale / 2) + yoff + xscale), { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
-							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) - 10 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
-							if (ratio == 0)
-							{
-								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 55, 40, 255 }, ALIGN_REVERSE, _(L"FLAT"));
-								g_Draw.Rect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, yscale, xscale, { 17, 24, 26, 255 });
-							}
-							else if (ratio != 1)
-							{
-								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 126, 0, 255 }, ALIGN_REVERSE, _(L"CHARGING"));
-								g_Draw.Rect(g_ScreenSize.c - (yscale/2) + (yscale * ratio) + xoff, nY - (xscale/2) + yoff, yscale - (yscale * ratio), xscale, { 17, 24, 26, 255 });				
-							}
-							else if (!g_GlobalInfo.m_nWaitForShift)
-							{
-								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 66, 255, 0, 255 }, ALIGN_REVERSE, _(L"DT READY"));
-							}
-							else
-							{
-								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 46, 46, 255 }, ALIGN_REVERSE, _(L"DT IMPOSSIBLE"));
-							}
 						}
 					}
 				}
@@ -147,23 +142,18 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 						float flR = tanf(DEG2RAD(g_GlobalInfo.m_flCurAimFOV) / 2.0f)
 							/ tanf(DEG2RAD((pLocal->IsScoped() && !Vars::Visuals::RemoveZoom.m_Var) ? 30.0f : flFOV) / 2.0f) * g_ScreenSize.w;
 						Color_t clr = Colors::FOVCircle;
-						clr.a = static_cast<byte>(Vars::Visuals::AimFOVAlpha.m_Var);
 						g_Draw.OutlinedCircle(g_ScreenSize.w / 2, g_ScreenSize.h / 2, flR, 68, clr);
 					}
 				}
 			};
 			OtherDraws();
-
-			//Debug
-			{
-
-			}
-
 			g_Misc.BypassPure();
 			g_ESP.Run();
 			g_SpyWarning.Run();
+			g_PlayerArrows.Run();
 			g_SpectatorList.Run();
 			g_Radar.Run();
+			g_Crits.Frame();
 			g_Menu.Run();
 		}
 		FinishDrawing(g_Interfaces.Surface);

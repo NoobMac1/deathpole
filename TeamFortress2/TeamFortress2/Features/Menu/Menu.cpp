@@ -10,16 +10,7 @@
 #include <string>
 #include <sstream>
 
-int StringToWString2(std::wstring& ws, const std::string& s)
-{
-	std::wstring wsTmp(s.begin(), s.end());
-
-	ws = wsTmp;
-
-	return 0;
-}
-
-void CMenu::DrawTooltip() 
+void CMenu::DrawTooltip()
 {
 	if (m_szCurTip.empty() || !Vars::Visuals::ToolTips.m_Var)
 		return;
@@ -47,7 +38,7 @@ void CMenu::Separator()
 	m_LastWidget.h = h;
 }
 
-bool CMenu::CheckBox(CVar<bool> &Var, const wchar_t* const szToolTip)
+bool CMenu::CheckBox(CVar<bool>& Var, const wchar_t* const szToolTip)
 {
 	bool callback = false;
 
@@ -123,11 +114,11 @@ bool CMenu::Button(const wchar_t* Label, bool Active, int WidthOverride, int Hei
 	return callback;
 }
 
-bool CMenu::ComboBox(CVar<int> &Var, const std::vector<CVar<int>> &List)
+bool CMenu::ComboBox(CVar<int>& Var, const std::vector<CVar<int>>& List)
 {
 	auto FindCurItemName = [&]() -> const wchar_t*
 	{
-		for (const auto &Item : List)
+		for (const auto& Item : List)
 		{
 			if (Item.m_Var == Var.m_Var)
 				return Item.m_szDisplayName;
@@ -154,8 +145,8 @@ bool CMenu::ComboBox(CVar<int> &Var, const std::vector<CVar<int>> &List)
 	int w = Vars::Menu::ComboBoxW;
 	int h = Vars::Menu::ComboBoxH;
 
-	static std::map<CVar<int> *, int> indexes = {};
-	static std::map<CVar<int> *, bool> inits = {};
+	static std::map<CVar<int>*, int> indexes = {};
+	static std::map<CVar<int>*, bool> inits = {};
 
 	if (!inits[&Var] || m_bReopened) {
 		indexes[&Var] = FindCurItemIndex();
@@ -200,7 +191,7 @@ bool CMenu::ComboBox(CVar<int> &Var, const std::vector<CVar<int>> &List)
 	return callback;
 }
 
-bool CMenu::InputFloat(CVar<float> &Var, float Min, float Max, float Step, const wchar_t* Fmt)
+bool CMenu::InputFloat(CVar<float>& Var, float Min, float Max, float Step, const wchar_t* Fmt)
 {
 	bool callback = false;
 
@@ -249,7 +240,7 @@ bool CMenu::InputFloat(CVar<float> &Var, float Min, float Max, float Step, const
 	return callback;
 }
 
-bool CMenu::InputInt(CVar<int> &Var, int Min, int Max, int Step)
+bool CMenu::InputInt(CVar<int>& Var, int Min, int Max, int Step)
 {
 	bool callback = false;
 
@@ -298,7 +289,7 @@ bool CMenu::InputInt(CVar<int> &Var, int Min, int Max, int Step)
 	return callback;
 }
 
-bool CMenu::InputColor(Color_t &Var, const wchar_t *Label)
+bool CMenu::InputColor(Color_t& Var, const wchar_t* Label)
 {
 	bool callback = false;
 
@@ -463,7 +454,7 @@ bool CMenu::InputColor(Color_t &Var, const wchar_t *Label)
 	return callback;
 }
 
-bool CMenu::InputString(const wchar_t *Label, std::wstring &output)
+bool CMenu::InputString(const wchar_t* Label, std::wstring& output)
 {
 	bool callback = false;
 
@@ -537,222 +528,18 @@ bool CMenu::InputString(const wchar_t *Label, std::wstring &output)
 	return callback;
 }
 
-std::wstring widen(const std::string& str)
-{
-	std::wostringstream wstm;
-	const std::ctype<wchar_t>& ctfacet =
-		std::use_facet< std::ctype<wchar_t> >(wstm.getloc());
-	for (size_t i = 0; i < str.size(); ++i)
-		wstm << ctfacet.widen(str[i]);
-	return wstm.str();
-}
-
-std::string narrow(const std::wstring& str)
-{
-	std::ostringstream stm;
-	const std::ctype<char>& ctfacet =
-		std::use_facet< std::ctype<char> >(stm.getloc());
-	for (size_t i = 0; i < str.size(); ++i)
-		stm << ctfacet.narrow(str[i], 0);
-	return stm.str();
-}
-
-bool CMenu::InputConstChar(const wchar_t* Label, std::string &output)
-{
-	bool callback = false;
-
-	int x = m_LastWidget.x;
-	int y = m_LastWidget.y + m_LastWidget.h + Vars::Menu::SpacingY;
-	int w = Vars::Menu::InputBoxW * 2;
-	int h = Vars::Menu::ButtonH;
-
-	static bool active = false;
-	static std::string active_str = {};
-
-	if (g_InputHelper.IsPressed(VK_LBUTTON))
-	{
-		if (g_InputHelper.m_nMouseX > x && g_InputHelper.m_nMouseX < x + w && g_InputHelper.m_nMouseY > y && g_InputHelper.m_nMouseY < y + h)
-			active = !active;
-
-		else active = false;
-	}
-
-	if (active)
-	{
-		m_bTyping = true;
-
-		if (g_InputHelper.IsPressed(VK_HOME)) {
-			active = false;
-			return false;
-		}
-
-		if (active_str.length() < 50)
-		{
-			if (g_InputHelper.IsPressed(VK_SPACE))
-				active_str += char('_');
-
-			for (int16_t key = L'0'; key < L'9' + 1; key++)
-			{
-				if (g_InputHelper.IsPressed(key))
-					active_str += wchar_t(key);
-			}
-
-			if (GetAsyncKeyState(VK_LSHIFT || VK_RSHIFT) || GetAsyncKeyState(VK_CAPITAL)) {
-				for (int16_t key = L'A'; key < L'Z' + 1; key++)
-				{
-					if (g_InputHelper.IsPressed(key))
-					{
-						active_str += wchar_t(key);
-					}
-				}
-			}
-			else {
-				for (int16_t key = L'A'; key < L'Z' + 1; key++)
-				{
-					if (g_InputHelper.IsPressed(key))
-					{
-						active_str += wchar_t(key + 32);
-					}
-				}
-			}
-		}
-
-		if (g_InputHelper.IsPressedAndHeld(VK_BACK) && !active_str.empty())
-			active_str.erase(active_str.end() - 1);
-
-		if (g_InputHelper.IsPressed(VK_RETURN))
-		{
-			active = false;
-
-			if (!active_str.empty())
-			{
-				output = active_str;
-				callback = true;
-			}
-		}
-
-		const wchar_t* wcstr = widen(active_str).c_str();
-		g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, "%ws", active_str.empty() ? _(L"Enter a Name") : wcstr);
-	}
-
-	else
-	{
-		active_str = {};
-		g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, "%ws", Label);
-	}
-
-	g_Draw.OutlinedRect(x, y, w, h, Vars::Menu::Colors::OutlineMenu);
-
-	m_LastWidget.x = x;
-	m_LastWidget.y = y;
-	m_LastWidget.w = w;
-	m_LastWidget.h = h;
-
-	return callback;
-}
-
-#pragma warning(disable : 4996)
-std::string ws2s(const std::wstring& wstr)
-{
-	using convert_typeX = std::codecvt_utf8<wchar_t>;
-	std::wstring_convert<convert_typeX, wchar_t> converterX;
-
-	return converterX.to_bytes(wstr);
-}
-
-bool CMenu::InputCString(const wchar_t* Label, std::string& output)
-{
-	bool callback = false;
-
-	int x = m_LastWidget.x;
-	int y = m_LastWidget.y + m_LastWidget.h + Vars::Menu::SpacingY;
-	int w = Vars::Menu::InputBoxW * 2;
-	int h = Vars::Menu::ButtonH;
-
-	static bool active = false;
-	static std::wstring active_str = {};
-
-	if (g_InputHelper.IsPressed(VK_LBUTTON))
-	{
-		if (g_InputHelper.m_nMouseX > x && g_InputHelper.m_nMouseX < x + w && g_InputHelper.m_nMouseY > y && g_InputHelper.m_nMouseY < y + h)
-			active = !active;
-
-		else active = false;
-	}
-
-	if (active)
-	{
-		m_bTyping = true;
-
-		if (g_InputHelper.IsPressed(VK_HOME)) {
-			active = false;
-			return false;
-		}
-
-		if (active_str.length() < 21)
-		{
-			if (g_InputHelper.IsPressed(VK_SPACE))
-				active_str += char(L'_');
-
-			for (int16_t key = L'A'; key < L'Z' + 1; key++)
-			{
-				if (g_InputHelper.IsPressed(key))
-					active_str += wchar_t(key);
-			}
-
-			for (int16_t key = L'0'; key < L'9' + 1; key++)
-			{
-				if (g_InputHelper.IsPressed(key))
-					active_str += wchar_t(key);
-			}
-		}
-
-		if (g_InputHelper.IsPressedAndHeld(VK_BACK) && !active_str.empty())
-			active_str.erase(active_str.end() - 1);
-
-		if (g_InputHelper.IsPressed(VK_RETURN))
-		{
-			active = false;
-
-			if (!active_str.empty())
-			{
-				//StringToWString2(active_str, output);
-				output = ws2s(active_str);
-				callback = true;
-			}
-		}
-
-		g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, "%ws", active_str.empty() ? _(L"Enter a Name") : active_str.c_str());
-	}
-
-	else
-	{
-		active_str = {};
-		g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, "%ws", Label);
-	}
-
-	g_Draw.OutlinedRect(x, y, w, h, Vars::Menu::Colors::OutlineMenu);
-
-	m_LastWidget.x = x;
-	m_LastWidget.y = y;
-	m_LastWidget.w = w;
-	m_LastWidget.h = h;
-
-	return callback;
-}
-
-bool CMenu::InputKey(CVar<int> &output, bool bAllowNone)
+bool CMenu::InputKey(CVar<int>& output, bool bAllowNone)
 {
 	auto VK2STR = [&](const short key) -> std::wstring {
 		switch (key) {
-			case VK_LBUTTON: return _(L"LButton");
-			case VK_RBUTTON: return _(L"RButton");
-			case VK_MBUTTON: return _(L"MButton");
-			case VK_XBUTTON1: return _(L"XButton1");
-			case VK_XBUTTON2: return _(L"XButton2");
-			case VK_SPACE: return _(L"Space");
-			case 0x0: return _(L"None");
-			default: break;
+		case VK_LBUTTON: return _(L"LButton");
+		case VK_RBUTTON: return _(L"RButton");
+		case VK_MBUTTON: return _(L"MButton");
+		case VK_XBUTTON1: return _(L"XButton1");
+		case VK_XBUTTON2: return _(L"XButton2");
+		case VK_SPACE: return _(L"Space");
+		case 0x0: return _(L"None");
+		default: break;
 		}
 
 		WCHAR output[16] = { L"\0" };
@@ -770,11 +557,6 @@ bool CMenu::InputKey(CVar<int> &output, bool bAllowNone)
 	int w = Vars::Menu::InputBoxW;
 	int h = Vars::Menu::InputBoxH;
 
-	/*static bool active = false, old_active = active;
-	static float time = g_Interfaces.Engine->Time();
-	float elapsed = g_Interfaces.Engine->Time() - time;
-
-	if (old_active != active) {*/
 	static float time = g_Interfaces.Engine->Time();
 	float elapsed = g_Interfaces.Engine->Time() - time;
 	static CVar<int>* curr = nullptr, * prevv = curr;
@@ -783,13 +565,8 @@ bool CMenu::InputKey(CVar<int> &output, bool bAllowNone)
 		prevv = curr;
 	}
 
-	//if (!active && elapsed > 0.1f && g_InputHelper.IsPressed(VK_LBUTTON))
 	if (curr == nullptr && elapsed > 0.1f && g_InputHelper.IsPressed(VK_LBUTTON))
 	{
-		/*if (g_InputHelper.m_nMouseX > x && g_InputHelper.m_nMouseX < x + w && g_InputHelper.m_nMouseY > y && g_InputHelper.m_nMouseY < y + h) {
-			active = true;
-			g_InputHelper.NullKey(VK_LBUTTON);
-		}*/
 		if (g_InputHelper.m_nMouseX > x && g_InputHelper.m_nMouseX < x + w && g_InputHelper.m_nMouseY > y && g_InputHelper.m_nMouseY < y + h) {
 			curr = &output;
 			g_InputHelper.NullKey(VK_LBUTTON);
@@ -807,7 +584,7 @@ bool CMenu::InputKey(CVar<int> &output, bool bAllowNone)
 				if ((n > 0x0 && n < 0x7) || (n > L'A' - 1 && n < L'Z' + 1) || (n > L'0' - 1 && n < L'9' + 1) || n == VK_LSHIFT || n == VK_RSHIFT || n == VK_SHIFT || n == VK_ESCAPE || n == VK_HOME) {
 					if (g_InputHelper.IsPressed(n))
 					{
-						if (n == VK_INSERT) {
+						if (n == VK_HOME) {
 							curr = nullptr;
 							break;
 						}
@@ -830,9 +607,8 @@ bool CMenu::InputKey(CVar<int> &output, bool bAllowNone)
 
 	else
 	{
-		//time_notactive = g_Interfaces.Engine->Time();
-		if (curr==nullptr)
-		time_notactive = g_Interfaces.Engine->Time(); 
+		if (curr == nullptr)
+			time_notactive = g_Interfaces.Engine->Time();
 		g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, "%ws", VK2STR(output.m_Var).c_str());
 	}
 
@@ -856,7 +632,7 @@ void CMenu::GroupBoxStart()
 	m_LastWidget.y += Vars::Menu::SpacingY * 2;
 }
 
-void CMenu::GroupBoxEnd(const wchar_t *Label, int Width)
+void CMenu::GroupBoxEnd(const wchar_t* Label, int Width)
 {
 	int h = m_LastWidget.y - m_LastGroupBox.y + m_LastWidget.h + Vars::Menu::SpacingY;
 
@@ -877,10 +653,10 @@ void CMenu::GroupBoxEnd(const wchar_t *Label, int Width)
 	m_LastWidget.x -= Vars::Menu::SpacingX;
 	m_LastWidget.y += Vars::Menu::SpacingY * 2;
 	m_LastGroupBox.h = h;
-} 
+}
 
 void CMenu::Run()
-{ 
+{
 	m_bReopened = false;
 	m_bTyping = false;
 
@@ -894,18 +670,21 @@ void CMenu::Run()
 			m_bReopened = true;
 	}
 
+	/*
 	if (g_Interfaces.Engine->IsDrawingLoadingImage()) {
 		m_bOpen = false;
 		return;
-	}
+	}*/
 
-	static float flTimeOnChange = 0.0f;
+	flTimeOnChange = 0.0f;
 
-	if (Utils::IsGameWindowInFocus() && (GetAsyncKeyState(VK_INSERT) & 1)) {
-		g_Interfaces.Surface->SetCursorAlwaysVisible(m_bOpen = !m_bOpen);
+
+
+	if (Utils::IsGameWindowInFocus() && (GetAsyncKeyState(VK_HOME) & 1)) {
+		//
+		//g_Interfaces.Surface->SetCursorAlwaysVisible(m_bOpen = !m_bOpen);
 		flTimeOnChange = g_Interfaces.Engine->Time();
 	}
-
 	m_flFadeElapsed = g_Interfaces.Engine->Time() - flTimeOnChange;
 
 	if (m_flFadeElapsed < m_flFadeDuration) {
@@ -913,19 +692,21 @@ void CMenu::Run()
 		g_Interfaces.Surface->DrawSetAlphaMultiplier(m_flFadeAlpha);
 	}
 
-	if (m_bOpen || m_flFadeElapsed < m_flFadeDuration)
+	if (1 == 2 || (m_bOpen && Vars::Menu::LegacyMenu.m_Var))
 	{
-		m_szCurTip = L"";
-		g_InputHelper.Update();
+
 		/*g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
 		g_Draw.Rect(0, 0, g_ScreenSize.w, g_ScreenSize.h, { 0, 0, 0, 200});
 		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);*/
-	
+
+		m_szCurTip = L"";
+		g_InputHelper.Update();
+
 		//Do the Watermark
 		{
-			//g_Draw.Rect(g_ScreenSize.w - 220, 25, 220, 5, Vars::Menu::Colors::TitleBar);
-		//	g_Draw.Rect(g_ScreenSize.w - 220, 30, 220, (g_Draw.m_vecFonts[FONT_MENU].nTall * 1) + 5, Vars::Menu::Colors::WindowBackground);
-			//g_Draw.String(FONT_MENU, g_ScreenSize.w - 220, 32, Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("66.solutions | (" __DATE__ ")"));
+			g_Draw.Rect(g_ScreenSize.w - 220, 25, 220, 5, Vars::Menu::Colors::TitleBar);
+			g_Draw.Rect(g_ScreenSize.w - 220, 30, 220, (g_Draw.m_vecFonts[FONT_MENU].nTall * 1) + 5, Vars::Menu::Colors::WindowBackground);
+			g_Draw.String(FONT_MENU, g_ScreenSize.w - 220, 32, Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("deathpole (" __DATE__ ")"));
 			//g_Draw.String(FONT_MENU, g_ScreenSize.w - 300, 32 + g_Draw.m_vecFonts[FONT_MENU].nTall, Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("Build: " __DATE__));
 			//g_Draw.String(FONT_MENU, g_ScreenSize.w - 300, 32 + g_Draw.m_vecFonts[FONT_MENU].nTall, Vars::Menu::Colors::Text, ALIGN_DEFAULT, _("Developers: M-FeD, spook953, Lak3"));
 		}
@@ -960,7 +741,7 @@ void CMenu::Run()
 				Vars::Menu::Position.y - (Vars::Menu::TitleBarH / 2),
 				Vars::Menu::Colors::Text,
 				ALIGN_CENTER,
-				"%ls", _(L"DeathPole [DEV]"));
+				"%ls", _(L"deathpole | debug | logged in as admin"));
 		}
 
 		//Do the Widgets
@@ -969,7 +750,7 @@ void CMenu::Run()
 			enum struct EAimTabs { TAB_AIMBOT, TAB_OTHER };
 			enum struct ETriggerTabs { TAB_MAIN };
 			enum struct EVisualsTabs { TAB_ESP, TAB_RADAR, TAB_CHAMS, TAB_GLOW, TAB_OTHER, TAB_SKINS, TAB_COLORS };
-			enum struct EMiscTabs { TAB_TELEPORT, TAB_RECHARGE, TAB_DOUBLETAP, TAB_HVH, TAB_MAIN, TAB_DEVELOPER };
+			enum struct EMiscTabs { TAB_TELEPORT, TAB_RECHARGE, TAB_DOUBLETAP, TAB_HVH, TAB_MAIN };
 
 			m_LastWidget = { Vars::Menu::Position.x + Vars::Menu::SpacingX, Vars::Menu::Position.y, 0, 0 };
 
@@ -1047,11 +828,11 @@ void CMenu::Run()
 
 					GroupBoxStart();
 					{
-						CheckBox(Vars::Aimbot::Hitscan::Active, _(L"Hitscan master switch"));
+
 						ComboBox(Vars::Aimbot::Hitscan::SortMethod, { { 0, _(L"FOV") }, { 1, _(L"Distance") } });
-						ComboBox(Vars::Aimbot::Hitscan::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Smooth") }, { 2, _(L"Silent") }, { 3, _(L"Fucked")} });	
+						ComboBox(Vars::Aimbot::Hitscan::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Smooth") }, { 2, _(L"Silent") } });
 						ComboBox(Vars::Aimbot::Hitscan::AimHitbox, { { 0, _(L"Head") }, { 1, _(L"Body") }, { 2, _(L"Auto") } });
-						InputFloat(Vars::Aimbot::Hitscan::AimFOV, 1.0f, 180.0f, 1.0f, L"%.0f");
+
 						InputFloat(Vars::Aimbot::Hitscan::SmoothingAmount, 1.0f, 10.0f, 1.0f, L"%.0f");
 						ComboBox(Vars::Aimbot::Hitscan::TapFire, { { 0, _(L"Off") } , { 1, _(L"Distance") }, { 2, _(L"Always") } });
 						CheckBox(Vars::Aimbot::Hitscan::AutoRev, _(L"Automatically rev minigun when aimbot active"));
@@ -1072,22 +853,21 @@ void CMenu::Run()
 
 					GroupBoxStart();
 					{
-						CheckBox(Vars::Aimbot::Projectile::Active, _(L"Projectile master switch"));
+
 						CheckBox(Vars::Aimbot::Projectile::PerformanceMode, _(L"Only target enemy closest to crosshair"));
 						ComboBox(Vars::Aimbot::Projectile::SortMethod, { { 0, _(L"FOV") }, { 1, _(L"Distance") } });
 						ComboBox(Vars::Aimbot::Projectile::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Silent") } });
 						ComboBox(Vars::Aimbot::Projectile::AimPosition, { { 0, _(L"Body") }, { 1, _(L"Feet") }, { 2, _(L"Auto") } });
-						InputFloat(Vars::Aimbot::Projectile::AimFOV, 1.0f, 180.0f, 1.0f, L"%.0f");
-						CheckBox(Vars::Misc::CL_Move::DoubletapProj, _(L"Shift tickbase with projectiles"));
+
 					}
 					GroupBoxEnd(_(L"Projectile"), 215);
 
 					GroupBoxStart();
 					{
-						CheckBox(Vars::Aimbot::Melee::Active, _(L"Melee master switch"));
+
 						ComboBox(Vars::Aimbot::Melee::SortMethod, { { 0, _(L"FOV") }, { 1, _(L"Distance") } });
 						ComboBox(Vars::Aimbot::Melee::AimMethod, { { 0, _(L"Normal") }, { 1, _(L"Smooth") }, { 2, _(L"Silent") } });
-						InputFloat(Vars::Aimbot::Melee::AimFOV, 1.0f, 180.0f, 1.0f, L"%.0f");
+
 						InputFloat(Vars::Aimbot::Melee::SmoothingAmount, 1.0f, 10.0f, 0.5f, L"%.0f");
 						CheckBox(Vars::Aimbot::Melee::RangeCheck, _(L"Only aim when target in range"));
 						CheckBox(Vars::Aimbot::Melee::PredictSwing, _(L"Predict melee attack"));
@@ -1401,7 +1181,7 @@ void CMenu::Run()
 						ComboBox(Vars::Chams::Players::IgnoreTeammates, { { 0, _(L"Off") }, { 1,_(L"All") }, { 2, _(L"Keep Friends") } });
 						CheckBox(Vars::Chams::Players::Wearables, _(L"Draw chams on hats etc."));
 						CheckBox(Vars::Chams::Players::Weapons, _(L"Draw chams on weapons"));
-						ComboBox(Vars::Chams::Players::Material, { { 0, _(L"None") }, { 1, _(L"Shaded") }, { 2, _(L"Shiny") }, { 3, _(L"Flat") }, { 4, _(L"Bubble") }, { 5, _(L"Fresnel") } });
+						ComboBox(Vars::Chams::Players::Material, { { 0, _(L"None") }, { 1, _(L"Shaded") }, { 2, _(L"Shiny") }, { 3, _(L"Flat") }, { 4, _(L"Brick") }, { 5, _(L"Fresnel") } });
 						CheckBox(Vars::Chams::Players::IgnoreZ, _(L"Chams visible trough walls"));
 						CheckBox(Vars::Chams::Players::GlowOverlay, _(L"Glow chams"));
 						InputFloat(Vars::Chams::Players::Alpha, 0.0f, 1.0f, 0.05f, L"%.2f");
@@ -1412,7 +1192,7 @@ void CMenu::Run()
 					{
 						CheckBox(Vars::Chams::Buildings::Active, _(L"Building master switch"));
 						CheckBox(Vars::Chams::Buildings::IgnoreTeammates, _(L"Ignore team's buildings"));
-						ComboBox(Vars::Chams::Buildings::Material, { { 0, _(L"None") }, { 1, _(L"Shaded") }, { 2, _(L"Shiny") }, { 3, _(L"Flat") }, { 4, _(L"Bubble") }, { 5, _(L"Fresnel") } });
+						ComboBox(Vars::Chams::Buildings::Material, { { 0, _(L"None") }, { 1, _(L"Shaded") }, { 2, _(L"Shiny") }, { 3, _(L"Flat") }, { 4, _(L"Brick") }, { 5, _(L"Fresnel") } });
 						CheckBox(Vars::Chams::Buildings::IgnoreZ, _(L"Chams visible trough walls"));
 						InputFloat(Vars::Chams::Buildings::Alpha, 0.0f, 1.0f, 0.05f, L"%.2f");
 					}
@@ -1444,8 +1224,8 @@ void CMenu::Run()
 							{ 4, _(L"WF-Shaded") },
 							{ 5, _(L"WF-Shiny") },
 							{ 6, _(L"WF-Flat") },
-							{ 7, _(L"Fresnel") },
-							{ 8, _(L"Bubble") } });
+							{ 7, _(L"Shiny2") },
+							{ 8, _(L"Brick") } });
 						InputFloat(Vars::Chams::DME::HandsAlpha, 0.0f, 1.0f, 0.05f, L"%.2f");
 
 						CheckBox(Vars::Chams::DME::HandsGlowOverlay, _(L"Hands glow overlay"));
@@ -1457,9 +1237,8 @@ void CMenu::Run()
 							{ 4, _(L"WF-Shaded") },
 							{ 5, _(L"WF-Shiny") },
 							{ 6, _(L"WF-Flat") },
-							{ 7, _(L"Fresnel") },
-							{ 8, _(L"Bubble") } });
-
+							{ 7, _(L"Shiny2") },
+							{ 8, _(L"Brick") } });
 						InputFloat(Vars::Chams::DME::WeaponAlpha, 0.0f, 1.0f, 0.05f, L"%.2f");
 						CheckBox(Vars::Chams::DME::WeaponGlowOverlay, _(L"Weapon glow overlay"));
 						InputInt(Vars::Chams::DME::WeaponRimMultiplier, 1, 100);
@@ -1568,14 +1347,13 @@ void CMenu::Run()
 						CheckBox(Vars::Visuals::BulletTracerRainbow, _(L"Bullet tracers have rainbow colour"));
 						CheckBox(Vars::Visuals::OutOfFOVArrows, _(L"Show arrows to players outside of FOV"));
 						//InputCString(_(L"Skybox name"), XorStr(Vars::Skybox::SkyboxName));
-						InputConstChar(_(L"Skybox name"), Vars::Skybox::SkyboxName);
+						//InputConstChar(_(L"Skybox name"), Vars::Skybox::SkyboxName);
 					}
 					GroupBoxEnd(_(L"Other"), 200);
 
 #ifdef DEVELOPER_BUILD
 					GroupBoxStart();
 					{
-						CheckBox(Vars::Visuals::Skins::Enabled, _(L"Skins master switch"));
 						ComboBox(Vars::Visuals::Skins::Effect, {
 							{ 0  , L"None" },
 							{ 701, L"Hot" },
@@ -1599,6 +1377,7 @@ void CMenu::Run()
 							{ 7, L"Hot Rod" } });
 						CheckBox(Vars::Visuals::Skins::Acient, _(L"Acient"));
 						CheckBox(Vars::Visuals::Skins::Override, _(L"Override"));
+						CheckBox(Vars::Visuals::Skins::Australium, _(L"Aussie"));
 
 						if (Button(L"Set Current"))
 							g_AttributeChanger.m_bSet = true;
@@ -1689,11 +1468,23 @@ void CMenu::Run()
 					if (Button(_(L"HvH"), Tab == EMiscTabs::TAB_HVH, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
 						Tab = EMiscTabs::TAB_HVH;
 
-					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX;
+					/*checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX;
 					m_LastWidget = checkpoint_move;
 
-					if (Button(_(L"Developer"), Tab == EMiscTabs::TAB_DEVELOPER, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
-						Tab = EMiscTabs::TAB_DEVELOPER;
+					if (Button(_(L"Recharge Key"), Tab == EMiscTabs::TAB_RECHARGE, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
+						Tab = EMiscTabs::TAB_RECHARGE;
+
+					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX + 30;
+					m_LastWidget = checkpoint_move;
+
+					if (Button(_(L"Doubletap Key"), Tab == EMiscTabs::TAB_DOUBLETAP, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
+						Tab = EMiscTabs::TAB_DOUBLETAP;
+
+					checkpoint_move.x += Vars::Menu::ButtonWSmall + Vars::Menu::SpacingX + 30;
+					m_LastWidget = checkpoint_move;
+
+					if (Button(_(L"Teleport Key"), Tab == EMiscTabs::TAB_TELEPORT, Vars::Menu::ButtonWSmall + 30, Vars::Menu::ButtonHSmall))
+						Tab = EMiscTabs::TAB_TELEPORT;*/
 
 					m_LastWidget = checkpoint_line;
 					g_Draw.Line(checkpoint_line.x, checkpoint_line.y, Vars::Menu::Position.x + Vars::Menu::Position.w - 1, checkpoint_line.y, Vars::Menu::Colors::OutlineMenu);
@@ -1709,8 +1500,8 @@ void CMenu::Run()
 					GroupBoxStart();
 					{
 						CheckBox(Vars::Misc::AutoJump, _(L"Automatically bunnyhop"));
-						CheckBox(Vars::Misc::AutoStrafe, _(L"Automatically strafe"));
-						CheckBox(Vars::Misc::Directional, _(L"Directionally autostrafe"));
+						//CheckBox(Vars::Misc::AutoStrafe, _(L"Automatically strafe"));
+						//CheckBox(Vars::Misc::Directional, _(L"Directionally autostrafe"));
 						CheckBox(Vars::Misc::EdgeJump, _(L"Jump before falling from an edge"));
 						CheckBox(Vars::Misc::TauntSlide, _(L"Allow user input during taunts"));
 						CheckBox(Vars::Misc::TauntControl, _(L"Gives better control with taunt slide"));
@@ -1721,10 +1512,7 @@ void CMenu::Run()
 						CheckBox(Vars::Misc::ChatSpam, _(L"Advertise a free cheat, will ya? x)"));
 						CheckBox(Vars::Misc::NoPush, _(L"Prevent players from pushing you"));
 						ComboBox(Vars::Misc::Roll, { {0,L"Off"} ,{1,L"Normal"} ,{2,L"Fake Forward"} });
-						CheckBox(Vars::Misc::DisableInterpolation, _(L"Remove interpolation"));
-						CheckBox(Vars::Visuals::RemoveDisguises, _(L"Remove disguises from spies"));
-						CheckBox(Vars::Visuals::RemoveTaunts, _(L"Remove taunts from enemy players"));
-
+						CheckBox(Vars::Misc::BeCat, _(L"Be marked by catbots."));
 					}
 					GroupBoxEnd(_(L"Main"), 210);
 
@@ -1732,13 +1520,13 @@ void CMenu::Run()
 					{
 
 						CheckBox(Vars::Misc::CL_Move::Enabled, _(L"Master switch to enable / disable all tickbase exploits."));
-						InputKey(Vars::Misc::CL_Move::RechargeKey, true);
-						InputKey(Vars::Misc::CL_Move::DoubletapKey, true);
-						InputKey(Vars::Misc::CL_Move::TeleportKey, true);
+						InputKey(Vars::Misc::CL_Move::RechargeKey, false);
+						CheckBox(Vars::Misc::CL_Move::RechargeWhileDead, _(L"Recharge your DoubleTap bar while you're dead"));
+						CheckBox(Vars::Misc::CL_Move::AutoRecharge, _(L"Recharge your DoubleTap bar if you are doing nothing"));
+						InputKey(Vars::Misc::CL_Move::DoubletapKey, false);
+						InputKey(Vars::Misc::CL_Move::TeleportKey, false);
 						CheckBox(Vars::Misc::CL_Move::WaitForDT, _(L"Wait for DT."));
 						CheckBox(Vars::Misc::CL_Move::NotInAir, _(L"Doesn't DT in air."));
-						//CheckBox(Vars::Misc::CL_Move::showhitboxes, _(L"Shows Hitboxes."));
-
 					}
 					GroupBoxEnd(_(L"Tickbase exploits"), 210);
 
@@ -1750,89 +1538,53 @@ void CMenu::Run()
 					GroupBoxStart();
 					{
 						CheckBox(Vars::AntiHack::AntiAim::Active, _(L"Anti-Aim master switch"));
-						ComboBox(Vars::AntiHack::AntiAim::Pitch, { { 0, _(L"None") }, { 1, _(L"Up") }, { 2, _(L"Down") }, { 3, _(L"Fake Up") }, { 4, _(L"Fake Down") }, { 5, _(L"Custom") } });
-						if (Vars::AntiHack::AntiAim::Pitch.m_Var == 5)
-						{
-							CMenu::InputInt(Vars::AntiHack::AntiAim::PitchOffset, -180, 180);
-						}
-						ComboBox(Vars::AntiHack::AntiAim::YawReal, { { 0, _(L"None") }, { 1, _(L"Left") }, { 2, _(L"Right") }, { 3, _(L"Backwards") }, { 4, _(L"Custom") } });
-						if (Vars::AntiHack::AntiAim::YawReal.m_Var == 4)
-						{
-							CMenu::InputInt(Vars::AntiHack::AntiAim::YawRealOffset, -180, 180);
-						};
-						ComboBox(Vars::AntiHack::AntiAim::YawFake, { { 0, _(L"None") }, { 1, _(L"Left") }, { 2, _(L"Right") }, { 3, _(L"Backwards") }, { 4, _(L"Custom") } });
-						if (Vars::AntiHack::AntiAim::YawFake.m_Var == 4)
-						{
-							CMenu::InputInt(Vars::AntiHack::AntiAim::YawFakeOffset, -180, 180);
-						};
-						if (Vars::AntiHack::AntiAim::YawReal.m_Var == 1 || Vars::AntiHack::AntiAim::YawReal.m_Var == 2 || Vars::AntiHack::AntiAim::YawFake.m_Var == 1 || Vars::AntiHack::AntiAim::YawFake.m_Var == 2)
-						{
-							InputKey(Vars::AntiHack::AntiAim::InvertKey);
-						};
+						ComboBox(Vars::AntiHack::AntiAim::Pitch, { { 0, _(L"None") }, { 1, _(L"Up") }, { 2, _(L"Down") }, { 3, _(L"Fake Up") }, { 4, _(L"Fake Down") } });
+						ComboBox(Vars::AntiHack::AntiAim::YawReal, { { 0, _(L"None") }, { 1, _(L"Left") }, { 2, _(L"Right") }, { 3, _(L"Backwards") } });
+						ComboBox(Vars::AntiHack::AntiAim::YawFake, { { 0, _(L"None") }, { 1, _(L"Left") }, { 2, _(L"Right") }, { 3, _(L"Backwards") } });
 					}
 					GroupBoxEnd(_(L"AntiAim"), 180);
-						GroupBoxStart();
-						{
-
-							CheckBox(Vars::Misc::CL_Move::Fakelag, _(L"Fakelag"));
-							CheckBox(Vars::Misc::CL_Move::FakelagOnKey, _(L"Fakelag on key"));
-							InputKey(Vars::Misc::CL_Move::FakelagKey, _(L"Fakelag key"));
-							InputInt(Vars::Misc::CL_Move::FakelagValue, 1, 14);
-						}
-						GroupBoxEnd(_(L"Fakelag"), 210);
-						GroupBoxStart();
-						{
-							CheckBox(Vars::Misc::CL_Move::SEnabled, _(L"Master switch to enable crimwalk."));
-							InputInt(Vars::Misc::CL_Move::SFactor, 1, 66);
-						}
-						GroupBoxEnd(_(L"crimwalk (requires server allowance)"), 210);
-
-						break;
-					}
-
-				case EMiscTabs::TAB_DEVELOPER:
-				{
 					GroupBoxStart();
 					{
-						InputInt(Vars::Misc::CL_Move::DTBarX, -g_ScreenSize.w, g_ScreenSize.w / 2);
-						InputInt(Vars::Misc::CL_Move::DTBarY, -g_ScreenSize.h / 2, g_ScreenSize.h / 2);
-						InputInt(Vars::Misc::CL_Move::DTBarScaleX, 1, g_ScreenSize.w, 2);
-						InputInt(Vars::Misc::CL_Move::DTBarScaleY, 1, g_ScreenSize.h, 2);
+
+						CheckBox(Vars::Misc::CL_Move::Fakelag, _(L"Fakelag"));
+						CheckBox(Vars::Misc::CL_Move::FakelagOnKey, _(L"Fakelag on key"));
+						InputKey(Vars::Misc::CL_Move::FakelagKey, _(L"Fakelag key"));
+						InputInt(Vars::Misc::CL_Move::FakelagValue, 1, 14);
 					}
-					GroupBoxEnd(_(L"Misc"), 210);
+					GroupBoxEnd(_(L"Fakelag"), 210);
+
+					break;
 				}
 
+				/*
+				case EMiscTabs::TAB_RECHARGE:
+					GroupBoxStart();
+					{
 
+					}
+					GroupBoxEnd(_(L"Recharge Key"), 210);
+					break;
 
-					/*
-					case EMiscTabs::TAB_RECHARGE:
-						GroupBoxStart();
-						{
+				case EMiscTabs::TAB_DOUBLETAP:
+					GroupBoxStart();
+					{
 
-						}
-						GroupBoxEnd(_(L"Recharge Key"), 210);
-						break;
+					}
+					GroupBoxEnd(_(L"Recharge Key"), 210);
+					break;
 
-					case EMiscTabs::TAB_DOUBLETAP:
-						GroupBoxStart();
-						{
+				case EMiscTabs::TAB_TELEPORT:
+					GroupBoxStart();
+					{
 
-						}
-						GroupBoxEnd(_(L"Recharge Key"), 210);
-						break;
-
-					case EMiscTabs::TAB_TELEPORT:
-						GroupBoxStart();
-						{
-
-						}
-						GroupBoxEnd(_(L"Recharge Key"), 210);
-						break;
-						*/
+					}
+					GroupBoxEnd(_(L"Recharge Key"), 210);
+					break;
+					*/
 				}
 
 				break;
-				}
+			}
 
 			case EMainTabs::TAB_CONFIGS:
 			{
@@ -1842,7 +1594,7 @@ void CMenu::Run()
 
 				for (const auto& entry : std::filesystem::directory_iterator(g_CFG.m_sConfigPath))
 				{
-					if (std::string(std::filesystem::path(entry).filename().string()).find(_(".dpc")) == std::string_view::npos)
+					if (std::string(std::filesystem::path(entry).filename().string()).find(_(".seo")) == std::string_view::npos)
 						continue;
 
 					config_count++;
@@ -1879,8 +1631,8 @@ void CMenu::Run()
 						}
 					}
 				}
-				GroupBoxEnd(selected.empty() ? _(L"Manage (not selected)")
-					: std::wstring(_(L"Manage (") + selected + _(L")")).c_str(), (Vars::Menu::InputBoxW * 2) + (Vars::Menu::SpacingX * 2));
+				GroupBoxEnd(selected.empty() ? _(L"Manage(not selected)")
+					: std::wstring(_(L"Manage(") + selected + _(L")")).c_str(), (Vars::Menu::InputBoxW * 2) + (Vars::Menu::SpacingX * 2));
 
 				m_LastWidget.y += Vars::Menu::SpacingY;
 				checkpoint.x += (Vars::Menu::InputBoxW * 2) + (Vars::Menu::SpacingX * 3);
@@ -1890,7 +1642,7 @@ void CMenu::Run()
 				{
 					for (const auto& entry : std::filesystem::directory_iterator(g_CFG.m_sConfigPath))
 					{
-						if (std::string(std::filesystem::path(entry).filename().string()).find(_(".dpc")) == std::string_view::npos)
+						if (std::string(std::filesystem::path(entry).filename().string()).find(_(".seo")) == std::string_view::npos)
 							continue;
 
 						std::wstring s = entry.path().filename().wstring();
@@ -1938,7 +1690,7 @@ void CMenu::Run()
 				Init = true;
 			}
 
-			for (auto &Flake : SnowFlakes)
+			for (auto& Flake : SnowFlakes)
 			{
 				Flake.x += ((sinf(g_Interfaces.GlobalVars->curtime) * Flake.drift) * g_Interfaces.GlobalVars->interval_per_tick);
 				Flake.y += (Flake.fall * g_Interfaces.GlobalVars->interval_per_tick);
@@ -1962,7 +1714,9 @@ void CMenu::Run()
 
 	g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
 
-	if (m_bOpen) {
+	//WTF IS THIS
+
+	/*if (m_bOpen) {
 		//g_Draw.CornerRect(g_InputHelper.m_nMouseX, g_InputHelper.m_nMouseY, 5, 5, 1, 1, { 0, 0, 0, 255 });
 
 		//Filling
@@ -1991,8 +1745,7 @@ void CMenu::Run()
 		g_Draw.Line(g_InputHelper.m_nMouseX + 9, g_InputHelper.m_nMouseY + 17, g_InputHelper.m_nMouseX + 9, g_InputHelper.m_nMouseY + 18, { 255, 255, 255, 255 });
 		g_Draw.Line(g_InputHelper.m_nMouseX + 7, g_InputHelper.m_nMouseY + 19, g_InputHelper.m_nMouseX + 9, g_InputHelper.m_nMouseY + 19, { 255, 255, 255, 255 });
 		g_Draw.Line(g_InputHelper.m_nMouseX + 6, g_InputHelper.m_nMouseY + 10, g_InputHelper.m_nMouseX + 11, g_InputHelper.m_nMouseY + 10, { 255, 255, 255, 255 });
-		g_Draw.Line(g_InputHelper.m_nMouseX + 6, g_InputHelper.m_nMouseY + 10, g_InputHelper.m_nMouseX + 11, g_InputHelper.m_nMouseY + 10, { 255, 255, 255, 255 });
-	}
+	}*/
 }
 
 
@@ -2075,4 +1828,4 @@ void CMenu::Run()
 
 
 
-
+//Long live public free cheats!

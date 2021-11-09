@@ -52,6 +52,14 @@ namespace Vars
 			inline Color_t FeatureBackground	= { 255, 255, 255, 0 };
 			inline Color_t FeatureOutline		= { 255, 255, 255, 0 };
 		}
+
+		inline CVar<bool> LegacyMenu{ false, L"Legacy menu" };
+	}
+
+	namespace Crits
+	{
+		inline CVar<bool> Active				{ false, L"Active" };
+		inline CVar<int> CritKey				{ VK_SHIFT, L"Crit Key" };
 	}
 
 	namespace Aimbot
@@ -59,23 +67,24 @@ namespace Vars
 		namespace Global
 		{
 			inline CVar<bool> Active				{ true, L"Active" };
-			inline CVar<int> AimKey					{ VK_LSHIFT, L"Aim Key" };
-			inline CVar<bool> AutoShoot				{ true, L"Auto Shoot" };
-			inline CVar<bool> AimPlayers			{ true, L"Aim Players" };
-			inline CVar<bool> AimBuildings			{ true, L"Aim Buildings" };
-			inline CVar<bool> IgnoreInvlunerable	{ true, L"Ignore Invulnerable" };
-			inline CVar<bool> IgnoreCloaked			{ false, L"Ignore Cloaked" };
-			inline CVar<bool> IgnoreFriends			{ true, L"Ignore Friends" };
-			inline CVar<bool> IgnoreTaunting		{ true, L"Ignore Taunting" };
+			inline CVar<int> AimKey				{ VK_LSHIFT, L"Aim Key" };
+			inline CVar<float> AimFOV{ 15.0f, L"Aim FOV" };
+			inline CVar<bool> AutoShoot			{ true, L"Auto Shoot" };
+			inline CVar<bool> AimPlayers		{ true, L"Aim Players" };
+			inline CVar<bool> AimBuildings		{ true, L"Aim Buildings" };
+			inline CVar<bool> IgnoreInvlunerable{ true, L"Ignore Invulnerable" };
+			inline CVar<bool> IgnoreCloaked		{ false, L"Ignore Cloaked" };
+			inline CVar<bool> IgnoreFriends		{ true, L"Ignore Friends" };
+			inline CVar<bool> IgnoreTaunting	{ true, L"Ignore Taunting" };
+			inline CVar<bool> BAimLethal{ false, L"Body aim if lethal" }; // This is in global cause i remmebered hunterman exists
 		}
 
 		namespace Hitscan
 		{
-			inline CVar<bool> Active			{ true, L"Active" };
+			//inline CVar<bool> Active			{ true, L"Active" };
 			inline CVar<int> SortMethod			{ 0, L"Sort Method" };	//0 - FOV,		1 - Distance
 			inline CVar<int> AimMethod			{ 1, L"Aim Method" };	//0 - Normal,	1 - Smooth, 2 - Silent
 			inline CVar<int> AimHitbox			{ 2, L"Aim Hitbox" };	//0 - Head,		1 - Body,	2 - Auto
-			inline CVar<float> AimFOV			{ 15.0f, L"Aim FOV" };
 			inline CVar<float> SmoothingAmount	{ 4.0f, L"Smoothing Amount" };
 			inline CVar<int> TapFire			{ 1, L"Tap Fire" };	//0 - Off, 1 - Distance, 2 - Always
 			inline CVar<bool> ScanHitboxes		{ true, L"Scan Body" };
@@ -87,24 +96,28 @@ namespace Vars
 			inline CVar<bool> ScopedOnly		{ false, L"Scoped Only" };
 			inline CVar<bool> AutoScope			{ false, L"Auto Scope" };
 			inline CVar<bool> AutoRev			{ false, L"Auto Rev" };
+			
 		}
 
 		namespace Projectile
 		{
-			inline CVar<bool> Active			{ true, L"Active" };
+			//inline CVar<bool> Active			{ true, L"Active" };
 			inline CVar<bool> PerformanceMode	{ true, L"Performance Mode" };
 			inline CVar<int> SortMethod			{ 0, L"Sort Method" };	//0 - FOV,		1 - Distance
 			inline CVar<int> AimMethod			{ 1, L"Aim Method" };	//0 - Normal,	1 - Silent
 			inline CVar<int> AimPosition		{ 2, L"Aim Position" };	//0 - Body,		1 - Feet,	2 - Auto
-			inline CVar<float> AimFOV			{ 25.0f, L"Aim FOV" };
+			//inline CVar<float> AimFOV			{ 25.0f, L"Aim FOV" };
+			inline CVar<bool> FeetAimIfOnGround	{ false, L"Aim at feet if target is on the ground." };
+			inline CVar<bool> ManualZAdjust		{ true, L"Toggle for manual z adjust on projectile prediction." };
+			inline CVar<float> ZAdjustAmount	{ 5.5f, L"Z Adjust factor." };
 		}
 
 		namespace Melee
 		{
-			inline CVar<bool> Active			{ true, L"Active" };
+			//inline CVar<bool> Active			{ true, L"Active" };
 			inline CVar<int> SortMethod			{ 1, L"Sort Method" };	//0 - FOV,		1 - Distance
 			inline CVar<int> AimMethod			{ 1, L"Aim Method" };	//0 - Normal,	1 - Smooth, 2 - Silent
-			inline CVar<float> AimFOV			{ 45.0f, L"Aim FOV" };
+			//inline CVar<float> AimFOV			{ 45.0f, L"Aim FOV" };
 			inline CVar<float> SmoothingAmount	{ 8.0f, L"Smoothing Amount" };
 			inline CVar<bool> RangeCheck		{ true, L"Range Check" };
 			inline CVar<bool> PredictSwing		{ true, L"Predict Swing" };
@@ -174,7 +187,10 @@ namespace Vars
 		{
 			inline CVar<bool> Active	{ true, L"Active" };
 			inline CVar<int> Outline	{ 2, L"Outline" }; //0 - OFF, 1 - Text Only, 2 - All
+			inline CVar<bool> EnableTeamEnemyColors	{ false, L"Enable team/enemy colors"};
 		}
+
+		
 
 		namespace Players
 		{
@@ -196,6 +212,10 @@ namespace Vars
 			inline CVar<bool> Dlights			{ false, L"Dlights" };
 			inline CVar<float> DlightRadius		{ 200.0f, L"DLight Radius" };
 			inline CVar<float> Alpha			{ 1.0f, L"Alpha" };
+			inline CVar<bool> Funnybodypartslol{ false, L"nigger" };
+			inline CVar<float> Headscale		{ 1.0f, L"Alpha" };
+			inline CVar<float> Torsoscale		{ 1.0f, L"Alpha" };
+			inline CVar<float> Handscale		{ 1.0f, L"Alpha" };
 		}
 
 		namespace Buildings
@@ -293,6 +313,7 @@ namespace Vars
 		{
 			inline CVar<bool> Active{ true, L"Active" };
 			inline CVar<bool> ShowLocal{ true, L"Show Local" };
+			inline CVar<bool> LocalRainbow{ true, L"Local player is rainbow" };
 			inline CVar<int> IgnoreTeammates{ 2, L"Ignore Teammates" };	//0 - OFF, 1 - All, 2 - Keep Friends
 			inline CVar<bool> Wearables{ true, L"Render Wearables" };
 			inline CVar<bool> Weapons{ true, L"Render Weapons" };
@@ -324,6 +345,7 @@ namespace Vars
 		{
 			inline CVar<bool> Active{ true, L"Active" };
 			inline CVar<int>  BackAlpha{ 128, L"Back Alpha" };
+			inline CVar<int>  LineAlpha{ 255, L"Line Alpha" };
 			inline CVar<int>  Size{ 100, L"Size" };
 			inline CVar<int>  Range{ 1500, L"Range" };
 		}
@@ -389,9 +411,19 @@ namespace Vars
 		inline CVar<bool> WorldModulation			{ false, L"World Modulation" };
 		inline CVar<bool> OverrideWorldTextures		{ false, L"World Texture Override" };
 		inline CVar<bool> SkyboxChanger				{ true, L"Skybox changer" };
+		inline CVar<bool> SkyModulation				{ true, L"Skybox modulation" };
 		inline CVar<bool> BulletTracer				{ true, L"Bullet tracers" };
-		inline CVar<bool> BulletTracerRainbow		{ false, L"Rainbow tracers" };
+		inline CVar<bool> BulletTracerRainbow		{ true, L"Rainbow tracers" };
+		inline CVar<bool> AimPosSquare{ true, L"Aim position square" };
 		inline CVar<bool> OutOfFOVArrows			{ true, L"Out of FOV arrows" };
+		inline CVar<float> ArrowLength{ 20.f, L"Out of FOV arrow length" };
+		inline CVar<float> ArrowAngle{ 60.f, L"Out of FOV arrow angle" };
+		inline CVar<float> MaxDist{ 1000.f, L"How far until the arrows are no longer visible" };
+		inline CVar<float> MinDist{ 200.f, L"How many units till the arrows are fully opaque" };
+
+		inline CVar<float> despawnTime{ 5.f, L"How many ticks to despawn a damage log event" };
+		inline CVar<int> damageLogger{ 0, L"Enable damage logger" };
+
 
 		namespace Skins
 		{
@@ -401,52 +433,70 @@ namespace Vars
 			inline CVar<int> Particle				{ 0, L"Particle" };
 			inline CVar<bool> Acient				{ false, L"Ancient" };
 			inline CVar<bool> Override				{ false, L"Style Override" };
+			inline CVar<bool> Australium				{ false, L"Australium" };
 		}
 	}
 
 	namespace Misc
 	{
 		inline CVar<bool> AutoJump				{ true, L"Auto Jump" };
-		inline CVar<bool> AutoStrafe			{ false, L"Auto Strafe" };
+		inline CVar<int> AutoStrafe				{ 0, L"Auto Strafe" };
 		inline CVar<bool> Directional			{ false, L"Directional" };
-		inline CVar<bool> DisableInterpolation{ true, L"Disable Interpolation" };
 		inline CVar<bool> TauntSlide			{ false, L"Taunt Slide" };
 		inline CVar<bool> TauntControl			{ false, L"Taunt Control" };
-		inline CVar<bool> BypassPure            { false, L"Bypass Pure" };
+		inline CVar<bool> BypassPure            { true, L"Bypass Pure" };
 		inline CVar<bool> NoisemakerSpam        { false, L"Noisemaker Spam" };
+		inline CVar<bool> DisableInterpolation	{ true, L"Disable Interpolation" };
 		inline CVar<bool> MedalFlip				{ true, L"Medal Flip" };
 		inline CVar<bool> AutoRocketJump		{ false, L"Auto RocketJump" };
 		inline CVar<bool> ChatSpam              { false, L"Chat Spam" };
 		inline CVar<bool> NoPush				{ false, L"No Push" };
 		inline CVar<bool> EdgeJump				{ false, L"Edge Jump" };
-		inline CVar<bool> VoteRevealer{ true, L"Reveal votes" }; //Auto-enabled wtf
-		inline CVar<bool> VotesInChat{ false, L"Reveal votes to party" };
-		inline CVar<int> Roll					{ false, L"Duck speed" };
-		inline CVar<int> mvmrespawn{ false, L"MvM Instant respawn" };
-
+		inline CVar<int> EdgeJumpKey			{ VK_MENU, L"Edge Jump key"};
+		inline CVar<bool> AntiAFK				{ false, L"Anti AFK" };
+		inline CVar<bool> VoteRevealer			{ false, L"Reveal votes" };
+		inline CVar<bool> VotesInChat			{ false, L"Reveal votes to party" };
+		inline CVar<bool> CheatsBypass			{ false, L"Force sv_cheats to 1 (clientside only)" };
+		inline CVar<int> Roll					{ false, L"Super Crouch Speed" };
+		inline CVar<bool> BeCat					{ false, L"CatReply" };
 		namespace CL_Move
 		{
 			inline CVar<bool> Enabled       { true, L"Enabled" };
 			inline CVar<bool> Doubletap		{ true, L"Doubletap" };
-			inline CVar<bool> DoubletapProj	{ true, L"Doubletap" };
 			inline CVar<bool> NotInAir		{ true, L"Dont DT in air" };
 			inline CVar<int> TeleportKey	{ 0x52, L"Teleport Key" }; //R
 			inline CVar<int> RechargeKey	{ 0x48, L"Recharge Key" }; //H
 			inline CVar<int> DoubletapKey	{ 0x56, L"Doubletap Key" }; //V
-			inline CVar<bool> SEnabled		{ false, L"Speedhack Enabled" };
-			inline CVar<int> SFactor		{ 1, L"Speedhack Factor" };
-			inline CVar<int> DTBarX			{ 0, L"DT Bar Offset X" };
-			inline CVar<int> DTBarY			{ 0, L"DT Bar Offset Y" };
-			inline CVar<int> DTBarScaleX	{ 14, L"DT Bar Scale X" };
-			inline CVar<int> DTBarScaleY	{ 104, L"DT Bar Scale Y" };
+			inline CVar<int> DTBarStyle     { 0, L"Doubletap bar style" };
+			inline CVar<bool> RechargeWhileDead	{ false, L"Recharge While Dead" };
+			inline CVar<bool> AutoRecharge	{ false, L"AutoRecharge" }; //H
+			inline CVar<int> DTMode		    { 0, L"DT Mode" }; // 0 - On Key, 1 - Always DT, 2 - Disable on key, 3 - Disabled
+			inline CVar<int> DtbarOutlineHeight	{ 12, L"Dt default bar height" };
+			inline CVar<int> DtbarOutlineWidth	{ 8, L"Dt default bar width" };
+			inline CVar<bool> WaitForDT     { true, L"Wait for DT" };
+			inline CVar<bool> Fakelag       { true, L"Fakelag" };
+			inline CVar<bool> FakelagOnKey  { true, L"Fakelag On Key" };
+			inline CVar<int> FakelagKey	    { 0x54, L"Fakelag Key" }; //T
+			inline CVar<int> FakelagValue   { 1, L"Fakelag value" };
+		}
+		
+		namespace Discord
+		{
+			inline CVar<bool>EnableRPC				{ true, L"Enable Discord RPC" };
+			inline CVar<bool>IncludeClass			{ true, L"Include class" };
+			inline CVar<bool>IncludeMap				{ true, L"Include map name" };
+			inline CVar<bool>IncludeTimestamp		{ true, L"Include timestamp" };
+			inline CVar<int>WhatImagesShouldBeUsed	{ 0, L"Image Options" }; // 0 - Big fedora, small TF2 logo; 1 - Big TF2 logo, small fedora
+		}
 
-
-			inline CVar<bool> WaitForDT		{ true, L"Wait for DT" };
-			inline CVar<bool> showhitboxes	{ 1, L"Show Hitboxes" };
-			inline CVar<bool> Fakelag		{ true, L"Fakelag" };
-			inline CVar<bool> FakelagOnKey	{ true, L"Fakelag On Key" };
-			inline CVar<int> FakelagKey		{ 0x54, L"Fakelag Key" }; //T
-			inline CVar<int> FakelagValue	{ 1, L"Fakelag value" };
+		namespace Steam
+		{
+			inline CVar<bool>EnableRPC{ true, L"Enable Steam RPC" };
+			inline CVar<int>MatchGroup{ 0, L"Match group" }; // 0 - Special Event; 1 - MvM Mann Up; 2 - Competitive; 3 - Casual; 4 - MvM Boot Camp;
+			inline CVar<bool>OverrideMenu{ false, L"Override when in main menu" }; // Override matchgroup when in main menu
+			inline CVar<int>MapText{ 0, L"Match group" }; // 0 - Fedoraware; 1 - CUM.clab; 2 - Meowhook.club; 3 - rathook.cc; 4 - NNitro.tf; 5 - custom;
+			inline CVar<int>GroupSize{ 1337, L"Player group size" };
+			inline std::string CustomText = "deathpole best";
 		}
 	}
 
@@ -456,18 +506,18 @@ namespace Vars
 		{
 			inline CVar<bool> Active	{ false, L"Active" };
 			inline CVar<int> Pitch		{ 0, L"Pitch" };		//0 - None, 1 - Up, 2 - Down, 3 - Fake Up, 4 - Fake Down
-			inline CVar<int> PitchOffset{ 0, L"Pitch Offset" };
-			inline CVar<int> YawReal{ 0, L"Yaw Real" };	//none, l, r, backwards, custom
-			inline CVar<int> YawFake{ 0, L"Yaw Fake" };	//none, l, r, backwards, custom
-			inline CVar<int> YawRealOffset{ -180, L"Real Offset" };
-			inline CVar<int> YawFakeOffset{ 180, L"Fake Offset" };
-			inline CVar<int> InvertKey{ 0x46, L"Invert Key" }; //F
+			inline CVar<int> YawReal	{ 0, L"Yaw Real" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
+			inline CVar<int> YawFake	{ 0, L"Yaw Fake" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
+		}
+		namespace Resolver
+		{
+			inline CVar<bool> PitchResolver			{ false, L"Pitch Resolver" };
 		}
 	}
 
 	namespace Skybox
 	{
-		
+		inline int skyboxnum = 0;
 		inline std::string SkyboxName = "mr_04";
 	}
 }

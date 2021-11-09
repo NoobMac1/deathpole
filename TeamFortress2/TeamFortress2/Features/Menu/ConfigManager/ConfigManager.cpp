@@ -1,4 +1,5 @@
 #include "ConfigManager.h"
+#include "ConfigManager.h"
 
 #include <string>
 
@@ -6,12 +7,13 @@
 #include "../../../SDK/SDK.h"
 #include "../../Radar/Radar.h"
 #include "../../SpectatorList/SpectatorList.h"
-#include "../../PlayerList/PlayerList.h"
-#include "../../Console/Console.h"
 #include "../../Keybinds/Keybinds.h"
 
 #define SAVE_VAR(x) Save(_(L#x), x.m_Var)
 #define LOAD_VAR(x) Load(_(L#x), x.m_Var)
+
+#define SAVE_STRING(x) Save(_(L#x), x)
+#define LOAD_STRING(x) Load(_(L#x), x)
 
 #define SAVE_OTHER(x) Save(_(L#x), x)
 #define LOAD_OTHER(x) Load(_(L#x), x)
@@ -35,10 +37,19 @@ bool CConfigManager::Find(const wchar_t *name, std::wstring &output)
 	return false;
 }
 
+//int cum = XorStr("hello").Encrypt();
+
 void CConfigManager::Save(const wchar_t *name, bool val)
 {
 	char buffer[64];
 	sprintf_s(buffer, "%ls: %d", name, val);
+	m_Write << buffer << "\n";
+}
+
+void CConfigManager::Save(const wchar_t* name, std::string val)
+{
+	char buffer[128];
+	sprintf_s(buffer, "%ls: %s", name, val.c_str());
 	m_Write << buffer << "\n";
 }
 
@@ -61,6 +72,19 @@ void CConfigManager::Save(const wchar_t *name, Color_t val)
 	char buffer[64];
 	sprintf_s(buffer, "%ls: %d %d %d %d", name, val.r, val.g, val.b, val.a);
 	m_Write << buffer << "\n";
+}
+
+void CConfigManager::Load(const wchar_t* name, std::string& val)
+{
+	std::wstring line = {};
+
+	if (Find(name, line)) {
+		//swscanf_s(line.c_str(), L"%*ls:");
+		std::wstring delimiter = L": ";
+		std::wstring svalue = line.substr(line.find(L": ") + 2, sizeof(line));
+		std::string stringvalue(svalue.begin(), svalue.end());
+		val = stringvalue;
+	}
 }
 
 void CConfigManager::Load(const wchar_t *name, bool &val)
@@ -100,20 +124,20 @@ void CConfigManager::Load(const wchar_t *name, Color_t &val)
 
 CConfigManager::CConfigManager()
 {
-	m_sConfigPath = std::filesystem::current_path().wstring() + _(L"\\DeathPollConfigs");
+	m_sConfigPath = std::filesystem::current_path().wstring() + _(L"\\SEOConfigs");
 
 
 
 	if (!std::filesystem::exists(m_sConfigPath))
 		std::filesystem::create_directory(m_sConfigPath);
 
-	if (!std::filesystem::exists(m_sConfigPath + _(L"\\DeathCore")))
-		std::filesystem::create_directory(m_sConfigPath + _(L"\\DeathCore"));
+	if (!std::filesystem::exists(m_sConfigPath + _(L"\\SEOCore")))
+		std::filesystem::create_directory(m_sConfigPath + _(L"\\SEOCore"));
 }
 
 void CConfigManager::Save(const wchar_t *name)
 {
-	m_Write = std::wofstream(m_sConfigPath + L"\\" + name + _(L".dpc"));
+	m_Write = std::wofstream(m_sConfigPath + L"\\" + name + _(L".seo"));
 
 	if (m_Write.is_open())
 	{
@@ -123,6 +147,7 @@ void CConfigManager::Save(const wchar_t *name)
 			{
 				SAVE_VAR(Vars::Aimbot::Global::Active);
 				SAVE_VAR(Vars::Aimbot::Global::AimKey);
+				SAVE_VAR(Vars::Aimbot::Global::AimFOV);
 				SAVE_VAR(Vars::Aimbot::Global::AutoShoot);
 				SAVE_VAR(Vars::Aimbot::Global::AimPlayers);
 				SAVE_VAR(Vars::Aimbot::Global::AimBuildings);
@@ -130,15 +155,21 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::Aimbot::Global::IgnoreCloaked);
 				SAVE_VAR(Vars::Aimbot::Global::IgnoreFriends);
 				SAVE_VAR(Vars::Aimbot::Global::IgnoreTaunting);
+				SAVE_VAR(Vars::Aimbot::Global::BAimLethal);
+			}
+
+			{
+				SAVE_VAR(Vars::Crits::Active);
+				SAVE_VAR(Vars::Crits::CritKey);
 			}
 
 			//Hitscan
 			{
-				SAVE_VAR(Vars::Aimbot::Hitscan::Active);
+				//SAVE_VAR(Vars::Aimbot::Hitscan::Active);
 				SAVE_VAR(Vars::Aimbot::Hitscan::SortMethod);
 				SAVE_VAR(Vars::Aimbot::Hitscan::AimMethod);
 				SAVE_VAR(Vars::Aimbot::Hitscan::AimHitbox);
-				SAVE_VAR(Vars::Aimbot::Hitscan::AimFOV);
+				//SAVE_VAR(Vars::Aimbot::Hitscan::AimFOV);
 				SAVE_VAR(Vars::Aimbot::Hitscan::SmoothingAmount);
 				SAVE_VAR(Vars::Aimbot::Hitscan::TapFire);
 				SAVE_VAR(Vars::Aimbot::Hitscan::ScanHitboxes);
@@ -150,24 +181,28 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::Aimbot::Hitscan::ScopedOnly);
 				SAVE_VAR(Vars::Aimbot::Hitscan::AutoScope);
 				SAVE_VAR(Vars::Aimbot::Hitscan::AutoRev);
+				
 			}
 
 			//Projectile
 			{
-				SAVE_VAR(Vars::Aimbot::Projectile::Active);
+				//SAVE_VAR(Vars::Aimbot::Projectile::Active);
 				SAVE_VAR(Vars::Aimbot::Projectile::PerformanceMode);
 				SAVE_VAR(Vars::Aimbot::Projectile::SortMethod);
 				SAVE_VAR(Vars::Aimbot::Projectile::AimMethod);
 				SAVE_VAR(Vars::Aimbot::Projectile::AimPosition);
-				SAVE_VAR(Vars::Aimbot::Projectile::AimFOV);
+				SAVE_VAR(Vars::Aimbot::Projectile::FeetAimIfOnGround);
+				SAVE_VAR(Vars::Aimbot::Projectile::ManualZAdjust);
+				SAVE_VAR(Vars::Aimbot::Projectile::ZAdjustAmount);
+				//SAVE_VAR(Vars::Aimbot::Projectile::AimFOV);
 			}
 
 			//Melee
 			{
-				SAVE_VAR(Vars::Aimbot::Melee::Active);
+				//SAVE_VAR(Vars::Aimbot::Melee::Active);
 				SAVE_VAR(Vars::Aimbot::Melee::SortMethod);
 				SAVE_VAR(Vars::Aimbot::Melee::AimMethod);
-				SAVE_VAR(Vars::Aimbot::Melee::AimFOV);
+				//SAVE_VAR(Vars::Aimbot::Melee::AimFOV);
 				SAVE_VAR(Vars::Aimbot::Melee::SmoothingAmount);
 				SAVE_VAR(Vars::Aimbot::Melee::RangeCheck);
 				SAVE_VAR(Vars::Aimbot::Melee::PredictSwing);
@@ -236,6 +271,7 @@ void CConfigManager::Save(const wchar_t *name)
 			{
 				SAVE_VAR(Vars::ESP::Main::Active);
 				SAVE_VAR(Vars::ESP::Main::Outline);
+				SAVE_VAR(Vars::ESP::Main::EnableTeamEnemyColors);
 			}
 
 			//Players
@@ -258,6 +294,9 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::ESP::Players::Bones);
 				SAVE_VAR(Vars::ESP::Players::Dlights);
 				SAVE_VAR(Vars::ESP::Players::DlightRadius);
+				SAVE_VAR(Vars::ESP::Players::Headscale);
+				SAVE_VAR(Vars::ESP::Players::Torsoscale);
+				SAVE_VAR(Vars::ESP::Players::Handscale);
 			}
 
 			//Buildings
@@ -352,6 +391,7 @@ void CConfigManager::Save(const wchar_t *name)
 			{
 				SAVE_VAR(Vars::Glow::Players::Active);
 				SAVE_VAR(Vars::Glow::Players::ShowLocal);
+				SAVE_VAR(Vars::Glow::Players::LocalRainbow);
 				SAVE_VAR(Vars::Glow::Players::IgnoreTeammates);
 				SAVE_VAR(Vars::Glow::Players::Wearables);
 				SAVE_VAR(Vars::Glow::Players::Weapons);
@@ -383,6 +423,7 @@ void CConfigManager::Save(const wchar_t *name)
 			{
 				SAVE_VAR(Vars::Radar::Main::Active);
 				SAVE_VAR(Vars::Radar::Main::BackAlpha);
+				SAVE_VAR(Vars::Radar::Main::LineAlpha);
 				SAVE_VAR(Vars::Radar::Main::Size);
 				SAVE_VAR(Vars::Radar::Main::Range);
 			}
@@ -446,11 +487,20 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Visuals::BulletTracer);
 			SAVE_VAR(Vars::Visuals::BulletTracerRainbow);
 			SAVE_VAR(Vars::Visuals::OutOfFOVArrows);
-			
+			SAVE_VAR(Vars::Visuals::ArrowLength);
+			SAVE_VAR(Vars::Visuals::ArrowAngle);
+			SAVE_VAR(Vars::Visuals::MaxDist);
+			SAVE_VAR(Vars::Visuals::MinDist);
+			SAVE_VAR(Vars::Visuals::AimPosSquare);
+				
+			SAVE_VAR(Vars::Visuals::despawnTime);
+			SAVE_VAR(Vars::Visuals::damageLogger);
 
-#ifdef DEVELOPER_BUILD
-			SAVE_VAR(Vars::Visuals::Skins::Enabled);
-#endif
+				
+				
+
+
+
 		}
 
 		//Misc
@@ -468,28 +518,40 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Misc::AutoStrafe);
 			SAVE_VAR(Vars::Misc::Directional);
 			SAVE_VAR(Vars::Misc::EdgeJump);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarX);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarY);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleX);
-			SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleY);
+			SAVE_VAR(Vars::Misc::EdgeJumpKey);
+			SAVE_VAR(Vars::Misc::AntiAFK);
+			SAVE_VAR(Vars::Misc::CheatsBypass);
+			SAVE_VAR(Vars::Misc::BeCat);
+			SAVE_VAR(Vars::Misc::VoteRevealer);
+			SAVE_VAR(Vars::Misc::VotesInChat);
+			SAVE_VAR(Vars::Menu::LegacyMenu);
 			// CL_Move
 			{
 				SAVE_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
 				SAVE_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
-				SAVE_VAR(Vars::Misc::CL_Move::DoubletapProj);
 				SAVE_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
-				SAVE_VAR(Vars::Misc::CL_Move::showhitboxes);// { true, L"Show hitboxes" };
 				SAVE_VAR(Vars::Misc::CL_Move::DoubletapKey);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::TeleportKey);// { 0x46, L"Teleport Key" }; //F
 				SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);// { 0x52, L"Recharge Key" }; //R
-				SAVE_VAR(Vars::Misc::CL_Move::DoubletapKey);// { 0x52, L"Recharge Key" }; //R
-				SAVE_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
-				SAVE_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::RechargeWhileDead);
+				SAVE_VAR(Vars::Misc::CL_Move::AutoRecharge);
+				SAVE_VAR(Vars::Misc::CL_Move::DTBarStyle);
+				SAVE_VAR(Vars::Misc::CL_Move::DTMode);
+				SAVE_VAR(Vars::Misc::CL_Move::DtbarOutlineHeight);
+				SAVE_VAR(Vars::Misc::CL_Move::DtbarOutlineWidth);
 				SAVE_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
+				SAVE_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //
+				SAVE_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
 				SAVE_VAR(Vars::Misc::CL_Move::FakelagValue);// { 0x52, L"Recharge Key" }; //R
-				SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
-				SAVE_VAR(Vars::Misc::CL_Move::SFactor);
+			}
+			//Discord
+			{
+				SAVE_VAR(Vars::Misc::Discord::EnableRPC);
+				SAVE_VAR(Vars::Misc::Discord::IncludeMap);
+				SAVE_VAR(Vars::Misc::Discord::IncludeClass);
+				SAVE_VAR(Vars::Misc::Discord::IncludeTimestamp);
+				SAVE_VAR(Vars::Misc::Discord::WhatImagesShouldBeUsed);
 			}
 		}
 
@@ -501,10 +563,10 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::AntiHack::AntiAim::Pitch);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawReal);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawFake);
-				SAVE_VAR(Vars::AntiHack::AntiAim::YawFakeOffset);
-				SAVE_VAR(Vars::AntiHack::AntiAim::YawRealOffset);
-				SAVE_VAR(Vars::AntiHack::AntiAim::PitchOffset);
-				SAVE_VAR(Vars::AntiHack::AntiAim::InvertKey);
+			}
+			//Resolver
+			{
+				SAVE_VAR(Vars::AntiHack::Resolver::PitchResolver);
 			}
 		}
 
@@ -533,6 +595,8 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Colors::UberColor);
 			SAVE_OTHER(Colors::TeamRed);
 			SAVE_OTHER(Colors::TeamBlu);
+			SAVE_OTHER(Colors::Enemy);
+			SAVE_OTHER(Colors::Team);
 			SAVE_OTHER(Colors::Hands);
 			SAVE_OTHER(Colors::Weapon);
 			SAVE_OTHER(Colors::HandsOverlay);
@@ -541,19 +605,29 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Colors::SkyModulation);
 			SAVE_OTHER(Colors::StaticPropModulation);
 			SAVE_OTHER(Colors::FOVCircle);
+			SAVE_OTHER(Colors::Bones);
 			SAVE_OTHER(Colors::BulletTracer);
+			SAVE_OTHER(Colors::FresnelBase);
+			SAVE_OTHER(Colors::FresnelTop);
+			SAVE_OTHER(Colors::AimSquareCol);
+			SAVE_OTHER(Colors::DtChargingLeft);
+			SAVE_OTHER(Colors::DtChargingRight);
+			SAVE_OTHER(Colors::DtChargedLeft);
+			SAVE_OTHER(Colors::DtChargedRight);
+			SAVE_OTHER(Colors::DtOutline);
+			SAVE_OTHER(Colors::DmgLoggerBackground);
+			SAVE_OTHER(Colors::DmgLoggerOutline);
+			SAVE_OTHER(Colors::DmgLoggerText);
+
 
 			SAVE_OTHER(g_Radar.m_nRadarX);
 			SAVE_OTHER(g_Radar.m_nRadarY);
 
 			SAVE_OTHER(g_SpectatorList.m_nSpecListX);
 			SAVE_OTHER(g_SpectatorList.m_nSpecListY);
-			SAVE_OTHER(g_PlayerList.m_nNewWindowX);
-			SAVE_OTHER(g_PlayerList.m_nNewWindowY);
-			SAVE_OTHER(g_Console.m_nConsoleX);
-			SAVE_OTHER(g_Console.m_nConsoleY);
 			SAVE_OTHER(g_Keybinds.m_nKeybindsX);
 			SAVE_OTHER(g_Keybinds.m_nKeybindsY);
+			SAVE_STRING(Vars::Skybox::SkyboxName);
 		}
 
 		m_Write.close();
@@ -562,7 +636,7 @@ void CConfigManager::Save(const wchar_t *name)
 
 void CConfigManager::Load(const wchar_t *name)
 {
-	m_Read = std::wifstream(m_sConfigPath + L"\\" + name + _(L".dpc"));
+	m_Read = std::wifstream(m_sConfigPath + L"\\" + name + _(L".seo"));
 
 	if (m_Read.is_open())
 	{
@@ -572,6 +646,7 @@ void CConfigManager::Load(const wchar_t *name)
 			{
 				LOAD_VAR(Vars::Aimbot::Global::Active);
 				LOAD_VAR(Vars::Aimbot::Global::AimKey);
+				LOAD_VAR(Vars::Aimbot::Global::AimFOV);
 				LOAD_VAR(Vars::Aimbot::Global::AutoShoot);
 				LOAD_VAR(Vars::Aimbot::Global::AimPlayers);
 				LOAD_VAR(Vars::Aimbot::Global::AimBuildings);
@@ -579,15 +654,21 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Aimbot::Global::IgnoreCloaked);
 				LOAD_VAR(Vars::Aimbot::Global::IgnoreFriends);
 				LOAD_VAR(Vars::Aimbot::Global::IgnoreTaunting);
+				LOAD_VAR(Vars::Aimbot::Global::BAimLethal);
+			}
+
+			{
+				LOAD_VAR(Vars::Crits::Active);
+				LOAD_VAR(Vars::Crits::CritKey);
 			}
 
 			//Hitscan
 			{
-				LOAD_VAR(Vars::Aimbot::Hitscan::Active);
+				//LOAD_VAR(Vars::Aimbot::Hitscan::Active);
 				LOAD_VAR(Vars::Aimbot::Hitscan::SortMethod);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AimMethod);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AimHitbox);
-				LOAD_VAR(Vars::Aimbot::Hitscan::AimFOV);
+				//LOAD_VAR(Vars::Aimbot::Hitscan::AimFOV);
 				LOAD_VAR(Vars::Aimbot::Hitscan::SmoothingAmount);
 				LOAD_VAR(Vars::Aimbot::Hitscan::TapFire);
 				LOAD_VAR(Vars::Aimbot::Hitscan::ScanHitboxes);
@@ -599,24 +680,28 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Aimbot::Hitscan::ScopedOnly);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AutoScope);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AutoRev);
+				
 			}
 
 			//Projectile
 			{
-				LOAD_VAR(Vars::Aimbot::Projectile::Active);
+				//LOAD_VAR(Vars::Aimbot::Projectile::Active);
 				LOAD_VAR(Vars::Aimbot::Projectile::PerformanceMode);
 				LOAD_VAR(Vars::Aimbot::Projectile::SortMethod);
 				LOAD_VAR(Vars::Aimbot::Projectile::AimMethod);
 				LOAD_VAR(Vars::Aimbot::Projectile::AimPosition);
-				LOAD_VAR(Vars::Aimbot::Projectile::AimFOV);
+				LOAD_VAR(Vars::Aimbot::Projectile::FeetAimIfOnGround);
+				LOAD_VAR(Vars::Aimbot::Projectile::ManualZAdjust);
+				LOAD_VAR(Vars::Aimbot::Projectile::ZAdjustAmount);
+				//LOAD_VAR(Vars::Aimbot::Projectile::AimFOV);
 			}
 
 			//Melee
 			{
-				LOAD_VAR(Vars::Aimbot::Melee::Active);
+				//LOAD_VAR(Vars::Aimbot::Melee::Active);
 				LOAD_VAR(Vars::Aimbot::Melee::SortMethod);
 				LOAD_VAR(Vars::Aimbot::Melee::AimMethod);
-				LOAD_VAR(Vars::Aimbot::Melee::AimFOV);
+				//LOAD_VAR(Vars::Aimbot::Melee::AimFOV);
 				LOAD_VAR(Vars::Aimbot::Melee::SmoothingAmount);
 				LOAD_VAR(Vars::Aimbot::Melee::RangeCheck);
 				LOAD_VAR(Vars::Aimbot::Melee::PredictSwing);
@@ -685,6 +770,7 @@ void CConfigManager::Load(const wchar_t *name)
 			{
 				LOAD_VAR(Vars::ESP::Main::Active);
 				LOAD_VAR(Vars::ESP::Main::Outline);
+				LOAD_VAR(Vars::ESP::Main::EnableTeamEnemyColors);
 			}
 
 			//Players
@@ -800,6 +886,7 @@ void CConfigManager::Load(const wchar_t *name)
 			{
 				LOAD_VAR(Vars::Glow::Players::Active);
 				LOAD_VAR(Vars::Glow::Players::ShowLocal);
+				LOAD_VAR(Vars::Glow::Players::LocalRainbow);
 				LOAD_VAR(Vars::Glow::Players::IgnoreTeammates);
 				LOAD_VAR(Vars::Glow::Players::Wearables);
 				LOAD_VAR(Vars::Glow::Players::Weapons);
@@ -831,6 +918,7 @@ void CConfigManager::Load(const wchar_t *name)
 			{
 				LOAD_VAR(Vars::Radar::Main::Active);
 				LOAD_VAR(Vars::Radar::Main::BackAlpha);
+				LOAD_VAR(Vars::Radar::Main::LineAlpha);
 				LOAD_VAR(Vars::Radar::Main::Size);
 				LOAD_VAR(Vars::Radar::Main::Range);
 			}
@@ -896,10 +984,15 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::BulletTracer);
 			LOAD_VAR(Vars::Visuals::BulletTracerRainbow);
 			LOAD_VAR(Vars::Visuals::OutOfFOVArrows);
+			LOAD_VAR(Vars::Visuals::ArrowLength);
+			LOAD_VAR(Vars::Visuals::ArrowAngle);
+			LOAD_VAR(Vars::Visuals::MaxDist);
+			LOAD_VAR(Vars::Visuals::MinDist);
+			LOAD_VAR(Vars::Visuals::AimPosSquare);
+			LOAD_VAR(Vars::Menu::LegacyMenu);
+			LOAD_VAR(Vars::Visuals::despawnTime);
+			LOAD_VAR(Vars::Visuals::damageLogger);
 			
-#ifdef DEVELOPER_BUILD
-			LOAD_VAR(Vars::Visuals::Skins::Enabled);
-#endif
 		}
 
 		//Misc
@@ -915,29 +1008,41 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Misc::ChatSpam);
 			LOAD_VAR(Vars::Misc::NoPush);
 			LOAD_VAR(Vars::Misc::EdgeJump);
+			LOAD_VAR(Vars::Misc::EdgeJumpKey);
 			LOAD_VAR(Vars::Misc::AutoStrafe);
 			LOAD_VAR(Vars::Misc::Directional);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarX);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarY);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleX);
-			LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleY);
-
+			LOAD_VAR(Vars::Misc::AntiAFK);
+			LOAD_VAR(Vars::Misc::CheatsBypass);
+			LOAD_VAR(Vars::Misc::BeCat);
+			LOAD_VAR(Vars::Misc::VoteRevealer);
+			LOAD_VAR(Vars::Misc::VotesInChat);
 			// CL_Move
 			{
 				LOAD_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
 				LOAD_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
-				LOAD_VAR(Vars::Misc::CL_Move::DoubletapProj);
 				LOAD_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
-				LOAD_VAR(Vars::Misc::CL_Move::showhitboxes);// { true, L"Show hitboxes" };
-				LOAD_VAR(Vars::Misc::CL_Move::DoubletapKey);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::TeleportKey);// { 0x46, L"Teleport Key" }; //F
 				LOAD_VAR(Vars::Misc::CL_Move::RechargeKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::RechargeWhileDead);
+				LOAD_VAR(Vars::Misc::CL_Move::AutoRecharge);
 				LOAD_VAR(Vars::Misc::CL_Move::DoubletapKey);// { 0x52, L"Recharge Key" }; //R
-				LOAD_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
-				LOAD_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::DTBarStyle);
+				LOAD_VAR(Vars::Misc::CL_Move::DTMode);
+				LOAD_VAR(Vars::Misc::CL_Move::DtbarOutlineHeight);
+				LOAD_VAR(Vars::Misc::CL_Move::DtbarOutlineWidth);
 				LOAD_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
+				LOAD_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
 				LOAD_VAR(Vars::Misc::CL_Move::FakelagValue);// { 0x52, L"Recharge Key" }; //R
+			}
+			//Discord
+			{
+				LOAD_VAR(Vars::Misc::Discord::EnableRPC);
+				LOAD_VAR(Vars::Misc::Discord::IncludeMap);
+				LOAD_VAR(Vars::Misc::Discord::IncludeClass);
+				LOAD_VAR(Vars::Misc::Discord::IncludeTimestamp);
+				LOAD_VAR(Vars::Misc::Discord::WhatImagesShouldBeUsed);
 			}
 		}
 
@@ -949,10 +1054,10 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::AntiHack::AntiAim::Pitch);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawReal);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawFake);
-				LOAD_VAR(Vars::AntiHack::AntiAim::YawFakeOffset);
-				LOAD_VAR(Vars::AntiHack::AntiAim::YawRealOffset);
-				LOAD_VAR(Vars::AntiHack::AntiAim::PitchOffset);
-				LOAD_VAR(Vars::AntiHack::AntiAim::InvertKey);
+			}
+			//Resolver
+			{
+				LOAD_VAR(Vars::AntiHack::Resolver::PitchResolver);
 			}
 		}
 
@@ -982,6 +1087,8 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Colors::UberColor);
 			LOAD_OTHER(Colors::TeamRed);
 			LOAD_OTHER(Colors::TeamBlu);
+			LOAD_OTHER(Colors::Enemy);
+			LOAD_OTHER(Colors::Team);
 			LOAD_OTHER(Colors::Hands);
 			LOAD_OTHER(Colors::HandsOverlay);
 			LOAD_OTHER(Colors::Weapon);
@@ -992,8 +1099,17 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Colors::FOVCircle);
 			LOAD_OTHER(Colors::Bones);
 			LOAD_OTHER(Colors::BulletTracer);
-
-
+			LOAD_OTHER(Colors::FresnelBase);
+			LOAD_OTHER(Colors::FresnelTop);
+			LOAD_OTHER(Colors::AimSquareCol);
+			LOAD_OTHER(Colors::DtChargingLeft);
+			LOAD_OTHER(Colors::DtChargingRight);
+			LOAD_OTHER(Colors::DtChargedLeft);
+			LOAD_OTHER(Colors::DtChargedRight);
+			LOAD_OTHER(Colors::DtOutline);
+			LOAD_OTHER(Colors::DmgLoggerBackground);
+			LOAD_OTHER(Colors::DmgLoggerOutline);
+			LOAD_OTHER(Colors::DmgLoggerText);
 
 			LOAD_OTHER(g_Radar.m_nRadarX);
 			LOAD_OTHER(g_Radar.m_nRadarY);
@@ -1001,14 +1117,10 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(g_SpectatorList.m_nSpecListX);
 			LOAD_OTHER(g_SpectatorList.m_nSpecListY);
 
-			LOAD_OTHER(g_PlayerList.m_nNewWindowX);
-			LOAD_OTHER(g_PlayerList.m_nNewWindowY);
-
-			LOAD_OTHER(g_Console.m_nConsoleX);
-			LOAD_OTHER(g_Console.m_nConsoleY);
 
 			LOAD_OTHER(g_Keybinds.m_nKeybindsX);
 			LOAD_OTHER(g_Keybinds.m_nKeybindsY);
+			LOAD_STRING(Vars::Skybox::SkyboxName);
 		}
 
 		m_Read.close();
@@ -1017,5 +1129,5 @@ void CConfigManager::Load(const wchar_t *name)
 
 void CConfigManager::Remove(const wchar_t *name)
 {
-	std::filesystem::remove(m_sConfigPath + L"\\" + name + _(L".dpc"));
+	std::filesystem::remove(m_sConfigPath + L"\\" + name + _(L".seo"));
 }

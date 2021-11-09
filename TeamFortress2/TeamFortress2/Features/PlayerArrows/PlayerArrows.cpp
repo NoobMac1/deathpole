@@ -1,7 +1,7 @@
 #include "PlayerArrows.h"
 #include "../Vars.h"
 
-bool CPlayerArrows::ShouldRun(CBaseEntity *pLocal)
+bool CPlayerArrows::ShouldRun(CBaseEntity* pLocal)
 {
 	if (!Vars::Visuals::OutOfFOVArrows.m_Var || g_Interfaces.EngineVGui->IsGameUIVisible())
 		return false;
@@ -15,10 +15,10 @@ bool CPlayerArrows::ShouldRun(CBaseEntity *pLocal)
 	return true;
 }
 
-void CPlayerArrows::DrawArrowTo(const Vec3 &vecFromPos, const Vec3 &vecToPos, Color_t color)
+void CPlayerArrows::DrawArrowTo(const Vec3& vecFromPos, const Vec3& vecToPos, Color_t color)
 {
 	color.a = 150;
-	auto GetClockwiseAngle = [&](const Vec3 &vecViewAngle, const Vec3 &vecAimAngle) -> float
+	auto GetClockwiseAngle = [&](const Vec3& vecViewAngle, const Vec3& vecAimAngle) -> float
 	{
 		Vec3 vecAngle = Vec3();
 		Math::AngleVectors(vecViewAngle, &vecAngle);
@@ -45,8 +45,10 @@ void CPlayerArrows::DrawArrowTo(const Vec3 &vecFromPos, const Vec3 &vecToPos, Co
 	const float x2 = ((g_ScreenSize.w * 0.15) + 15.0f) * xrot;
 	const float y2 = ((g_ScreenSize.w * 0.15) + 15.0f) * yrot;
 
-	constexpr float arrow_angle = DEG2RAD(60.0f);
-	constexpr float arrow_lenght = 20.0f;
+	//constexpr float arrow_angle = DEG2RAD(60.0f);
+	float arrow_angle = DEG2RAD(Vars::Visuals::ArrowAngle.m_Var);
+	//constexpr float arrow_lenght = 20.0f;
+	float arrow_lenght = Vars::Visuals::ArrowLength.m_Var;
 
 	const Vec3 line{ x2 - x1, y2 - y1, 0.0f };
 	const float length = line.Lenght();
@@ -63,12 +65,15 @@ void CPlayerArrows::DrawArrowTo(const Vec3 &vecFromPos, const Vec3 &vecToPos, Co
 	float cx = static_cast<float>(g_ScreenSize.w / 2);
 	float cy = static_cast<float>(g_ScreenSize.h / 2);
 
-	float fMap = std::clamp(MapFloat(vecFromPos.DistTo(vecToPos), 400.0f, 200.0f, 0.0f, 1.0f), 0.0f, 1.0f);
-	Color_t HeatColor = { 255, 0, 0, static_cast<byte>(fMap * 255.0f) };
+	//float fMap = std::clamp(MapFloat(vecFromPos.DistTo(vecToPos), 1000.0f, 100.0f, 0.0f, 1.0f), 0.0f, 1.0f);
+	float fMap = std::clamp(MapFloat(vecFromPos.DistTo(vecToPos), Vars::Visuals::MaxDist.m_Var, Vars::Visuals::MinDist.m_Var, 0.0f, 1.0f), 0.0f, 1.0f);
+	Color_t HeatColor = color;
+	HeatColor.a = static_cast<byte>(fMap * 255.0f);
 
-	g_Draw.Line(cx + x2, cy + y2, cx + left.x, cy + left.y, color);
-	g_Draw.Line(cx + x2, cy + y2, cx + right.x, cy + right.y, color);
-	g_Draw.Line(cx + left.x, cy + left.y, cx + right.x, cy + right.y, color);
+	g_Draw.Line(cx + x2, cy + y2, cx + left.x, cy + left.y, HeatColor);
+	g_Draw.Line(cx + x2, cy + y2, cx + right.x, cy + right.y, HeatColor);
+	g_Draw.Line(cx + left.x, cy + left.y, cx + right.x, cy + right.y, HeatColor);
+	//g_Draw.
 }
 
 void CPlayerArrows::Run()
@@ -97,12 +102,23 @@ void CPlayerArrows::Run()
 				continue;*/
 
 			Vec3 vAngleToEnemy = Math::CalcAngle(vLocalPos, vEnemyPos);
-			float fFovToEnemy = Math::CalcFov(pLocal->GetEyeAngles(), vAngleToEnemy);
+			Vec3 viewangless = g_Interfaces.Engine->GetViewAngles();
+			viewangless.x = 0;
+			float fFovToEnemy = Math::CalcFov(viewangless, vAngleToEnemy);
+
+			/*
+			Vec3 vEntForward = {};
+			Math::AngleVectors(pEnemy->GetEyeAngles(), &vEntForward);
+			Vec3 vToEnt = pEnemy->GetAbsOrigin() - pLocal->GetAbsOrigin();
+			vToEnt.NormalizeInPlace();
+
+			if (vEntForward.Dot(vToEnt) < 0.5071f)
+				continue;*/
 
 			if (fFovToEnemy < Vars::Visuals::FieldOfView.m_Var)
 				continue;
 
-			if (Vars::Visuals::SpyWarningVisibleOnly.m_Var)
+			/*if (Vars::Visuals::SpyWarningVisibleOnly.m_Var)
 			{
 				CGameTrace Trace = {};
 				CTraceFilterWorldAndPropsOnly Filter = {};
@@ -111,7 +127,7 @@ void CPlayerArrows::Run()
 
 				if (Trace.flFraction < 1.0f)
 					continue;
-			}
+			}*/
 
 			m_vecPlayers.push_back(vEnemyPos);
 		}
@@ -120,11 +136,16 @@ void CPlayerArrows::Run()
 
 		for (const auto& Player : m_vecPlayers) {
 			Color_t teamColor;
-			if (pLocal->GetTeamNum() == 2) {
-				teamColor = Colors::TeamBlu;
+			if (!Vars::ESP::Main::EnableTeamEnemyColors.m_Var) {
+				if (pLocal->GetTeamNum() == 2) {
+					teamColor = Colors::TeamBlu;
+				}
+				else {
+					teamColor = Colors::TeamRed;
+				}
 			}
 			else {
-				teamColor = Colors::TeamRed;
+				teamColor = Colors::Enemy;
 			}
 			DrawArrowTo(vLocalPos, Player, teamColor);
 		}

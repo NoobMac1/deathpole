@@ -15,8 +15,13 @@
 #include "InCondHook/InCondHook.h"
 #include "DrawStaticPropsHook/DrawStaticPropsHook.h"
 #include "EngineHook/EngineHook.h"
-
-
+#include "EndSceneHook/EndSceneHook.h"
+#include "Reset/Reset.h"
+#include "Scoreboard/Scoreboard.h"
+#include "InputHook/InputHook.h"
+#include "GameMovementHook/GameMovementHook.h"
+#include "FireBullets/FireBullets.h"
+#include "Viewmodel/Viewmodel.h"
 class CHooks
 {
 private:

@@ -5,27 +5,89 @@
 typedef bool(_cdecl* LoadNamedSkysFn)(const char*);
 static LoadNamedSkysFn LoadSkys = (LoadNamedSkysFn)g_Pattern.Find(_(L"engine.dll"), _(L"55 8B EC 81 EC ? ? ? ? 8B 0D ? ? ? ? 53 56 57 8B 01 C7 45"));
 
+void CVisuals::TransparentProps()
+{
+	std::vector<IMaterial*> /*world, */props;
+
+	for (uint16_t h{ g_Interfaces.MatSystem->First() }; h != g_Interfaces.MatSystem->Invalid(); h = g_Interfaces.MatSystem->Next(h)) {
+		IMaterial* mat = g_Interfaces.MatSystem->Get(h);
+		if (!mat)
+			continue;
+
+		/*if (mat->GetTextureGroupName() == "World textures") {
+			world.push_back(mat);
+		}*/
+
+		else if (mat->GetTextureGroupName() == "StaticProp textures")
+			props.push_back(mat);
+	}
+
+	if (g_Interfaces.CVars->FindVar(_("r_DrawSpecificStaticProp"))->GetInt() != 0) {
+		g_Interfaces.CVars->FindVar(_("r_DrawSpecificStaticProp"))->SetValue(0);
+	}
+
+	for (const auto& p : props) {
+		p->AlphaModulate(0.85f);
+	}
+}
+
 void CVisuals::SkyboxChanger() {
+	const char* skybNames[] = {
+		"Custom",
+		"sky_tf2_04",
+		"sky_upward",
+		"sky_dustbowl_01",
+		"sky_goldrush_01",
+		"sky_granary_01",
+		"sky_well_01",
+		"sky_gravel_01",
+		"sky_badlands_01",
+		"sky_hydro_01",
+		"sky_night_01",
+		"sky_nightfall_01",
+		"sky_trainyard_01",
+		"sky_stormfront_01",
+		"sky_morningsnow_01",
+		"sky_alpinestorm_01",
+		"sky_harvest_01",
+		"sky_harvest_night_01",
+		"sky_halloween",
+		"sky_halloween_night_01",
+		"sky_halloween_night2014_01",
+		"sky_island_01",
+		"sky_rainbow_01"
+	};
 	if (Vars::Visuals::SkyboxChanger.m_Var) {
-		LoadSkys(Vars::Skybox::SkyboxName.c_str());
+		if (Vars::Skybox::skyboxnum == 0) {
+			if (Vars::Misc::BypassPure.m_Var) {
+				LoadSkys(Vars::Skybox::SkyboxName.c_str());
+			}
+			else {
+				LoadSkys(g_Interfaces.CVars->FindVar("sv_skyname")->GetString());
+			}
+		}
+		else {
+			LoadSkys(skybNames[Vars::Skybox::skyboxnum]);
+		}
 	}
 	else {
 		LoadSkys(g_Interfaces.CVars->FindVar("sv_skyname")->GetString());
 	}
 }
 
-void CVisuals::Init() {
-
-}
-
-/*
-CVisualsm_pMatDev = Utils::CreateMaterial({
-	_("\"LightmappedGeneric\"\
-			\n{\
-			\n\t\"$basetexture\" \"dev/dev_measuregeneric01b\"\
-			\n}\n")
+void CVisuals::BigHeads(float headSize, float torsoSize, float handSize)
+{
+	if (Vars::ESP::Players::Funnybodypartslol.m_Var) {
+		for (auto& Player : g_EntityCache.GetGroup(EGroupType::PLAYERS_ALL)) {
+			float* headScale = Player->GetHeadScale();
+			float* torsoScale = Player->GetTorsoScale();
+			float* handScale = Player->GetHandScale();
+			*headScale = headSize;
+			*torsoScale = torsoSize;
+			*handScale = handSize;
+		}
 	}
-);*/
+}
 
 bool CVisuals::RemoveScope(int nPanel)
 {
@@ -54,7 +116,7 @@ void CVisuals::FOV(CViewSetup *pView)
 
 void CVisuals::ThirdPerson()
 {
-	if (const auto& pLocal = g_EntityCache.m_pLocal)
+	if (const auto &pLocal = g_EntityCache.m_pLocal)
 	{
 		if (Vars::Visuals::ThirdPersonKey.m_Var)
 		{
@@ -142,7 +204,7 @@ void ApplyModulation(const Color_t &clr)
 
 			std::string_view group(pMaterial->GetTextureGroupName());
 
-			if (group.find(_(TEXTURE_GROUP_WORLD)) != group.npos /*|| group.find(_(TEXTURE_GROUP_SKYBOX)) != group.npos*/)
+			if (group.find(_(TEXTURE_GROUP_WORLD)) != group.npos/* || group.find(_(TEXTURE_GROUP_SKYBOX)) != group.npos*/)
 			{
 				bool bFound = false;
 				IMaterialVar *pVar = pMaterial->FindVar(_("$color2"), &bFound);
@@ -164,26 +226,16 @@ void ApplySkyboxModulation(const Color_t& clr)
 {
 	for (MaterialHandle_t h = g_Interfaces.MatSystem->First(); h != g_Interfaces.MatSystem->Invalid(); h = g_Interfaces.MatSystem->Next(h))
 	{
-		if (const auto& pMaterial = g_Interfaces.MatSystem->Get(h))
+		const auto& pMaterial = g_Interfaces.MatSystem->Get(h);
+
+		if (pMaterial->IsErrorMaterial() || !pMaterial->IsPrecached())
+			continue;
+
+		std::string_view group(pMaterial->GetTextureGroupName());
+
+		if (group._Starts_with("SkyBox"))
 		{
-			//bool bFound2 = false;
-			//IMaterialVar* rain = pMaterial->FindVar(_("env_global"), &bFound2);
-
-			if (pMaterial->IsErrorMaterial() || !pMaterial->IsPrecached())
-				continue;
-
-			std::string_view group(pMaterial->GetTextureGroupName());
-
-			if (/*group.find(_(TEXTURE_GROUP_WORLD)) != group.npos ||*/ group.find(_(TEXTURE_GROUP_SKYBOX)) != group.npos)
-			{
-				bool bFound = false;
-				IMaterialVar* pVar = pMaterial->FindVar(_("$color2"), &bFound);
-
-				if (bFound && pVar)
-					pVar->SetVecValue(Color::TOFLOAT(clr.r), Color::TOFLOAT(clr.g), Color::TOFLOAT(clr.b));
-
-				else pMaterial->ColorModulate(Color::TOFLOAT(clr.r), Color::TOFLOAT(clr.g), Color::TOFLOAT(clr.b));
-			}
+			pMaterial->ColorModulate(Color::TOFLOAT(clr.r), Color::TOFLOAT(clr.g), Color::TOFLOAT(clr.b));
 		}
 	}
 	bSkyIsModulated = true;
@@ -195,9 +247,6 @@ void CVisuals::ModulateWorld()
 	if (!Vars::Visuals::WorldModulation.m_Var)
 		return;
 
-	ConVar* sv_cheats = g_Interfaces.CVars->FindVar("sv_cheats");
-	if (sv_cheats->GetInt() == 0) sv_cheats->SetValue(1);
-
 	ApplyModulation(Colors::WorldModulation);
 	ApplySkyboxModulation(Colors::SkyModulation);
 }
@@ -206,38 +255,36 @@ void CVisuals::ModulateWorld()
 
 void CVisuals::OverrideWorldTextures()
 {
-	void* kv = nullptr;
-	if (!kv) {
-		kv = Utils::CreateKeyVals({
-		_("\"LightmappedGeneric\"\
-			\n{\
-			\n\t\"$basetexture\" \"dev/dev_measuregeneric01b\"\
-			\n}\n") 
-		});
-	}
-
-	if (Vars::Visuals::OverrideWorldTextures.m_Var) {
-		for (auto h = g_Interfaces.MatSystem->First(); h != g_Interfaces.MatSystem->Invalid(); h = g_Interfaces.MatSystem->Next(h)) {
-			IMaterial* pMaterial = g_Interfaces.MatSystem->Get(h);
-
-			if (pMaterial->IsErrorMaterial() || !pMaterial->IsPrecached()
-				|| pMaterial->IsTranslucent() || pMaterial->IsSpriteCard()
-				|| std::string_view(pMaterial->GetTextureGroupName()).find("World") == std::string_view::npos)
-				continue;
-
-			std::string_view sName = std::string_view(pMaterial->GetName());
-
-			if (sName.find("water") != std::string_view::npos || sName.find("glass") != std::string_view::npos
-				|| sName.find("door") != std::string_view::npos || sName.find("tools") != std::string_view::npos
-				|| sName.find("player") != std::string_view::npos || sName.find("chicken") != std::string_view::npos
-				|| sName.find("wall28") != std::string_view::npos || sName.find("wall26") != std::string_view::npos
-				|| sName.find("decal") != std::string_view::npos || sName.find("overlay") != std::string_view::npos
-				|| sName.find("hay") != std::string_view::npos)
-				continue;
-
-			pMaterial->SetShaderAndParams(kv);
+		static KeyValues *kv = nullptr;
+		if (!kv) {
+			kv = new KeyValues("LightmappedGeneric");
+			//kv->SetString("$basetexture", "dev/dev_measuregeneric01b"); //Nitro (dev texture)
+			kv->SetString("$basetexture", "vgui/white_additive"); //flat 
+			kv->SetString("$color2", "[0.12 0.12 0.15]"); //grey
 		}
-	}
+
+		if (Vars::Visuals::OverrideWorldTextures.m_Var) {
+			for (auto h = g_Interfaces.MatSystem->First(); h != g_Interfaces.MatSystem->Invalid(); h = g_Interfaces.MatSystem->Next(h)) {
+				IMaterial* pMaterial = g_Interfaces.MatSystem->Get(h);
+
+				if (pMaterial->IsErrorMaterial() || !pMaterial->IsPrecached()
+					|| pMaterial->IsTranslucent() || pMaterial->IsSpriteCard()
+					|| std::string_view(pMaterial->GetTextureGroupName()).find("World") == std::string_view::npos)
+					continue;
+
+				std::string_view sName = std::string_view(pMaterial->GetName());
+
+				if (sName.find("water") != std::string_view::npos || sName.find("glass") != std::string_view::npos
+					|| sName.find("door") != std::string_view::npos || sName.find("tools") != std::string_view::npos
+					|| sName.find("player") != std::string_view::npos || sName.find("chicken") != std::string_view::npos
+					|| sName.find("wall28") != std::string_view::npos || sName.find("wall26") != std::string_view::npos
+					|| sName.find("decal") != std::string_view::npos || sName.find("overlay") != std::string_view::npos
+					|| sName.find("hay") != std::string_view::npos)
+					continue;
+
+				pMaterial->SetShaderAndParams(kv);
+			}
+		}
 }
 
 void CVisuals::UpdateWorldModulation()
@@ -262,6 +309,30 @@ void CVisuals::UpdateWorldModulation()
 
 	if (!bWorldIsModulated || ColorChanged())
 		ApplyModulation(Colors::WorldModulation);
+}
+
+void CVisuals::UpdateSkyModulation()
+{
+	if (!Vars::Visuals::SkyModulation.m_Var) {
+		RestoreWorldModulation();
+		return;
+	}
+
+	auto ColorChanged = [&]() -> bool
+	{
+		static Color_t old = Colors::SkyModulation;
+		Color_t cur = Colors::SkyModulation;
+
+		if (cur.r != old.r || cur.g != old.g || cur.b != old.b) {
+			old = cur;
+			return true;
+		}
+
+		return false;
+	};
+
+	if (!bWorldIsModulated || ColorChanged())
+		ApplySkyboxModulation(Colors::SkyModulation);
 }
 
 void CVisuals::RestoreWorldModulation()

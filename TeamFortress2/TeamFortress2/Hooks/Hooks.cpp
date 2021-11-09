@@ -7,9 +7,13 @@ inline uintptr_t GetVFuncPtr(void *pBaseClass, unsigned int nIndex) {
 
 void CHooks::Init()
 {
-	if ( MH_Initialize() != MH_STATUS::MH_OK) {
-		WinAPI::MessageBoxW(0, _(L"MH failed to initialize!"), _(L"ERROR!"), MB_ICONERROR);
-		return;
+	MH_Initialize();
+	{
+		EndSceneHook::Init();
+		Scoreboard::IsPlayerDominated::Init();
+		//ResetHook::Init();
+		FireBullets::Init();
+		//Viewmodel::Init();
 	}
 
 	if (g_Interfaces.Client)
@@ -33,6 +37,19 @@ void CHooks::Init()
 		Table.Hook(CreateMove::index, &CreateMove::Hook);
 		Table.Hook(DoPostScreenSpaceEffects::index, &DoPostScreenSpaceEffects::Hook);
 	}
+
+	if (g_Interfaces.Input) {
+		using namespace InputHook;
+		Table.Init(g_Interfaces.Input);
+		Table.Hook(GetUserCmd::index, &GetUserCmd::Hook);
+	}
+
+	/*if (g_Interfaces.GameMovement)
+	{
+		using namespace GameMovement;
+		Table.Init(g_Interfaces.GameMovement);
+		Table.Hook(ProcessMovement::index, &ProcessMovement::Hook);
+	}*/
 
 	if (g_Interfaces.Prediction)
 	{
@@ -117,6 +134,8 @@ void CHooks::Init()
 		}
 	}
 
+	//EndSceneHook::Init();
+
 	//GetDrawPosition
 	{
 		using namespace GetDrawPositionHook;
@@ -158,6 +177,16 @@ void CHooks::Init()
 			g_Pattern.Find(_(L"engine.dll"), _(L"55 8B EC 83 EC 10 8B 15 ? ? ? ? 53 56 57 33 F6 89 4D FC 33 FF 89 75 F0 89 7D F4 8B 42 08")));
 
 		Func.Hook(reinterpret_cast<void *>(DrawStaticProps), reinterpret_cast<void *>(Hook));
+	}
+
+	//Firebullets
+	{
+		using namespace FireBullets;
+
+		static DWORD dwAddr = g_Pattern.Find(_(L"client.dll"), _(L"E8 ? ? ? ? 8B 45 20 47")) + 0x1;
+		fn FireBulletsHook = reinterpret_cast<fn>(((*(PDWORD)(dwAddr)) + dwAddr + 0x4));
+
+		Func.Hook(reinterpret_cast<void*>(FireBulletsHook), reinterpret_cast<void*>(Hook));
 	}
 
 	//SetColorModulation

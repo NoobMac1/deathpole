@@ -5,15 +5,22 @@
 #include "Features/Chams/DMEChams.h"
 #include "Features/ChatInfo/ChatInfo.h"
 #include "Features/Visuals/Visuals.h"
+#include "Features/Misc/Misc.h"
 #include "Features/Vars.h"
 
 #include "Features/Menu/Menu.h"
+#include "Features/What/What.h"
 
 #include "Features/Menu/InputHelper/InputHelper.h"
 #include "Features/Menu/ConfigManager/ConfigManager.h"
 #include "Features/Menu/../AttributeChanger/AttributeChanger.h"
 
 #include "SDK/Includes/Enums.h"
+
+#include "Utils/Events/Events.h"
+
+#include "SDK/Discord/include/discord_rpc.h"
+#include "Features/Discord/Discord.h"
 
 int StringToWString(std::wstring& ws, const std::string& s)
 {
@@ -24,13 +31,21 @@ int StringToWString(std::wstring& ws, const std::string& s)
 	return 0;
 }
 
+inline void SetupDiscord()
+{
+	DiscordEventHandlers handlers;
+	memset(&handlers, 0, sizeof(handlers));
+	Discord_Initialize("889495873183154226", &handlers, 0, "");
+}
+
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
 	//"mss32.dll" being one of the last modules to be loaded
 	//So wait for that before proceeding, after it's up everything else should be too
 	//Allows us to correctly use autoinject and just start the game.
-	while (!WinAPI::GetModuleHandleW(_(L"mss32.dll")))
+	while (!WinAPI::GetModuleHandleW(_(L"mss32.dll")) || !WinAPI::GetModuleHandleW(_(L"ntdll.dll")) || !WinAPI::GetModuleHandleW(_(L"stdshader_dx9.dll"))) {
 		std::this_thread::sleep_for(std::chrono::seconds(5));
+	}
 
 	g_SteamInterfaces.Init();
 	g_Interfaces.Init();
@@ -38,10 +53,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	g_Glow.Init();
 	g_Chams.Init();
 	g_DMEChams.Init();
-	g_Visuals.Init();
 	g_Hooks.Init();
 	g_ConVars.Init();
-	g_ChatInfo.AddListeners();
 	g_Draw.InitFonts
 	({
 		//FONT_ESP
@@ -72,35 +85,49 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 		//FONT_DEBUG
 		{ 0x0, _("Arial"), 16, 0, FONTFLAG_OUTLINE },
 
-		//FONT_FEATURE
-		{ 0x0, _("Verdana"), 16, 800, FONTFLAG_OUTLINE }
+		//FONT_INDICATORS
+		{ 0x0, _("Tahoma"), 13, 0, FONTFLAG_OUTLINE }
 		});
 
+	SetupDiscord();
+	Discord_ClearPresence();
+	g_Events.Setup({ "vote_cast", "player_changeclass", "player_connect", "player_hurt", "achievement_earned"});
+
 	g_Interfaces.CVars->ConsoleColorPrintf({ 255, 193, 75, 255 }, _("deathpole loaded!\n"));
+	g_Interfaces.Engine->ClientCmd_Unrestricted("play vo/items/wheatley_sapper/wheatley_sapper_attached14.mp3");
 
-
-	//ConVar* skybox_set = new ConVar("skybox_set", "mr_04");
-	ConCommandBase* skybox_set = new ConVar("skybox_set", "mr_04", (int)EConVarFlags::FCVAR_NOTIFY);
-	g_Interfaces.CVars->RegisterConCommand(skybox_set);
-	ConVar_Register(0);
-
-	std::wstring figgy = L"default";
-	if (!std::filesystem::exists(g_CFG.m_sConfigPath + L"\\" + figgy)) {
+	std::wstring defaultConfig = L"default";
+	if (!std::filesystem::exists(g_CFG.m_sConfigPath + L"\\" + defaultConfig)) {
 
 		std::wstring s;
 		StringToWString(s, "default");
 		g_CFG.Load(s.c_str());
 	}
 
-	while (!GetAsyncKeyState(VK_F11))
-		std::this_thread::sleep_for(std::chrono::milliseconds(420));
-	Vars::Visuals::SkyboxChanger.m_Var = false;
-	g_ChatInfo.RemoveListeners();
+	while (!GetAsyncKeyState(VK_F11)) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		g_DiscordRPC.vFunc();
+		g_Misc.SteamRPC();
+	}
+
+	g_Interfaces.Engine->ClientCmd_Unrestricted("play vo/items/wheatley_sapper/wheatley_sapper_hacked02.mp3");
+	g_GlobalInfo.unloadWndProcHook = true;
 	g_Menu.m_bOpen = false;
-	g_Interfaces.CVars->ConsoleColorPrintf({ 255, 255, 0, 255 }, _("deathpole unloaded!\n"));
-	g_Visuals.RestoreWorldModulation(); //needs to do this after hooks are released cuz UpdateWorldMod in FSN will override it
+	g_What.menuOpen = false;
+	Vars::Visuals::SkyboxChanger.m_Var = false;
+	Vars::Visuals::ThirdPerson.m_Var = false;
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	
+	g_Events.Destroy();
 	g_Hooks.Release();
+	Discord_ClearPresence();
+	Discord_Shutdown();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
 	g_Visuals.RestoreWorldModulation(); //needs to do this after hooks are released cuz UpdateWorldMod in FSN will override it
+	g_Interfaces.CVars->ConsoleColorPrintf({ 255, 255, 0, 255 }, _("deathpole unloaded!\n"));
 
 	WinAPI::FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS);
 	return EXIT_SUCCESS;
@@ -109,9 +136,13 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
-	{
-		Utils::RemovePEH(hinstDLL);
+	{	
 
+#ifdef DEBUG
+		WinAPI::CreateThread(0, 0, MainThread, hinstDLL, 0, 0);
+#endif
+
+		Utils::RemovePEH(hinstDLL);
 		if (auto hMainThread = WinAPI::CreateThread(0, 0, MainThread, hinstDLL, 0, 0))
 			WinAPI::CloseHandle(hMainThread);
 	}

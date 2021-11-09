@@ -2,9 +2,7 @@
 #include "../Vars.h"
 #include "../Menu/Menu.h"
 
-// Credits to OxyGodmode
-
-/*
+// Credits to oxyGodmode
 
 constexpr Color_t clrBlack = { 0, 0, 0, 255 };
 constexpr Color_t clrWhite = { 255, 255, 255, 255 };
@@ -12,10 +10,10 @@ constexpr Color_t clrWhite = { 255, 255, 255, 255 };
 
 void CConsole::Run()
 {
-	if (!ShouldRun())
-		return;
+	/*if (!ShouldRun())
+		return;*/
 
-	// Set window size, could maybe use a variable for this wink wink
+		// Set window size, could maybe use a variable for this wink wink
 
 	m_nConsoleSize = 150;
 
@@ -65,24 +63,6 @@ bool ButtonPressed = false;
 
 void CConsole::DrawPlayerNames()
 {
-	if (DrawKickButton(_(L"CL_FullUpdate"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 10, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("cl_fullupdate");
-	}
-	if (DrawKickButton(_(L"SND_Restart"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 30, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("snd_restart");
-	}
-	if (DrawKickButton(_(L"StopSound"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 50, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("stopsound");
-	}
-	if (DrawKickButton(_(L"Status"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 70, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("status");
-	}
-	if (DrawKickButton(_(L"Ping"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 90, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("ping");
-	}
-	if (DrawKickButton(_(L"Retry"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 110, 100, 20)) {
-		g_Interfaces.Engine->ClientCmd_Unrestricted("retry");
-	}
 
 	if (DrawKickButton(_(L"CL_FullUpdate"), m_nConsoleX - m_nConsoleSize + 25, m_nConsoleY - m_nConsoleSize + 10, 100, 20) && !ButtonPressed) {
 		ButtonPressed = true;
@@ -122,16 +102,16 @@ void CConsole::DrawNewWindow()
 	{
 		DragNewWindow();
 
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
+		//g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
 		g_Draw.Rect(m_nConsoleX - m_nConsoleSize, m_nConsoleY - m_nConsoleSize - 20, m_nConsoleSize, 20, Vars::Menu::Colors::TitleBar);
 		g_Draw.String(FONT_MENU, m_nConsoleX - (m_nConsoleSize / 2), m_nConsoleY - m_nConsoleSize - 10, { 255, 255, 255, 255 }, ALIGN_CENTER, "Settings");
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
+		//g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
 
 		//Build the bg color
 		Color_t clrBack = Vars::Menu::Colors::WindowBackground;
 
 		//Background
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
+		//g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
 		if (playerIndex > 280) {
 			g_Draw.Rect(m_nConsoleX - m_nConsoleSize, m_nConsoleY - m_nConsoleSize, m_nConsoleSize, playerIndex + margin, clrBack);
 		}
@@ -148,8 +128,8 @@ void CConsole::DrawNewWindow()
 			g_Draw.OutlinedRect(m_nConsoleX - m_nConsoleSize, m_nConsoleY - m_nConsoleSize, m_nConsoleSize, m_nConsoleSize, clrBack);
 
 		}
-		g_Draw.OutlinedRect(m_nConsoleX - m_nConsoleSize, m_nConsoleY - m_nConsoleSize, m_nConsoleSize, m_nConsoleSize, Vars::Menu::Colors::OutlineMenu);
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
+		//g_Draw.OutlinedRect(m_nConsoleX - m_nConsoleSize, m_nConsoleY - m_nConsoleSize, m_nConsoleSize, m_nConsoleSize, Vars::Menu::Colors::OutlineMenu);
+		//g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
 
 
 
@@ -158,14 +138,14 @@ void CConsole::DrawNewWindow()
 	}
 }
 
-bool CConsole::ShouldRun()
+/*bool CConsole::ShouldRun()
 {
 	//If in game
 	if (g_Interfaces.EngineVGui->IsGameUIVisible())
 		return false;
 
 	return true;
-}
+}*/
 
 void CConsole::DragNewWindow()
 {
@@ -204,6 +184,3 @@ void CConsole::DragNewWindow()
 		m_bMove = false;
 	}
 }
-*/
-
-//badly pasted junk +doesn't work

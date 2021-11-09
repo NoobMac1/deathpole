@@ -1,7 +1,7 @@
 #include "AntiAim.h"
 #include "../Vars.h"
 
-void CAntiAim::FixMovement(CUserCmd *pCmd, Vec3 vOldAngles, float fOldSideMove, float fOldForwardMove)
+void CAntiAim::FixMovement(CUserCmd* pCmd, Vec3 vOldAngles, float fOldSideMove, float fOldForwardMove)
 {
 	Vec3 curAngs = pCmd->viewangles;
 
@@ -29,7 +29,7 @@ void CAntiAim::FixMovement(CUserCmd *pCmd, Vec3 vOldAngles, float fOldSideMove, 
 	pCmd->sidemove = sin(DEG2RAD(fDelta)) * fOldForwardMove + sin(DEG2RAD(fDelta + 90.0f)) * fOldSideMove;
 }
 
-void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
+void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 {
 	g_GlobalInfo.m_bAAActive = false;
 	g_GlobalInfo.m_vRealViewAngles = g_GlobalInfo.m_vViewAngles;
@@ -38,7 +38,7 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 	if (!Vars::AntiHack::AntiAim::Active.m_Var)
 		return;
 
-	if (const auto &pLocal = g_EntityCache.m_pLocal)
+	if (const auto& pLocal = g_EntityCache.m_pLocal)
 	{
 		if (!pLocal->IsAlive()
 			|| pLocal->IsTaunting()
@@ -51,7 +51,7 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 
 		else
 		{
-			if (const auto &pWeapon = g_EntityCache.m_pLocalWeapon) {
+			if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon) {
 				if (Utils::IsAttacking(pCmd, pWeapon))
 					return;
 			}
@@ -67,35 +67,11 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 		Vec3 vAngles = pCmd->viewangles;
 
 		switch (Vars::AntiHack::AntiAim::Pitch.m_Var) {
-			case 1: { pCmd->viewangles.x = -89.0f; g_GlobalInfo.m_vRealViewAngles.x = -89.0f; break; }
-			case 2: { pCmd->viewangles.x = 89.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }
-			case 3: { pCmd->viewangles.x = -271.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }
-			case 4: { pCmd->viewangles.x = 271.0f; g_GlobalInfo.m_vRealViewAngles.x = -89.0f; break; }
-			case 5: { pCmd->viewangles.x = Vars::AntiHack::AntiAim::PitchOffset.m_Var; g_GlobalInfo.m_vRealViewAngles.x = Vars::AntiHack::AntiAim::PitchOffset.m_Var; break; }
-			default: { bPitchSet = false; break; }
-		}
-
-		static float flPressedTime = g_Interfaces.Engine->Time();
-		float flElapsed = g_Interfaces.Engine->Time() - flPressedTime;
-		if ((GetAsyncKeyState(Vars::AntiHack::AntiAim::InvertKey.m_Var) & 0x8000) && flElapsed > 0.2f)
-		{
-			if (Vars::AntiHack::AntiAim::YawReal.m_Var == 1 || Vars::AntiHack::AntiAim::YawReal.m_Var == 2)
-			{
-				switch (Vars::AntiHack::AntiAim::YawReal.m_Var) {
-				case 1: { Vars::AntiHack::AntiAim::YawReal.m_Var = 2;  break; }
-				case 2: { Vars::AntiHack::AntiAim::YawReal.m_Var = 1;  break; }
-				default: { bYawSet = false; break; }
-				}
-			}
-			if (Vars::AntiHack::AntiAim::YawFake.m_Var == 1 || Vars::AntiHack::AntiAim::YawFake.m_Var == 2)
-			{
-				switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
-				case 1: { Vars::AntiHack::AntiAim::YawFake.m_Var = 2;  break; }
-				case 2: { Vars::AntiHack::AntiAim::YawFake.m_Var = 1;  break; }
-				default: { bYawSet = false; break; }
-				}
-			}
-			flPressedTime = g_Interfaces.Engine->Time();
+		case 1: { pCmd->viewangles.x = -89.0f; g_GlobalInfo.m_vRealViewAngles.x = -89.0f; break; }
+		case 2: { pCmd->viewangles.x = 89.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }
+		case 3: { pCmd->viewangles.x = -271.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }
+		case 4: { pCmd->viewangles.x = 271.0f; g_GlobalInfo.m_vRealViewAngles.x = -89.0f; break; }
+		default: { bPitchSet = false; break; }
 		}
 
 		static bool b = false;
@@ -103,11 +79,10 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 		if (b)
 		{
 			switch (Vars::AntiHack::AntiAim::YawReal.m_Var) {
-				case 1: { pCmd->viewangles.y += 90.0f;  break; }
-				case 2: { pCmd->viewangles.y -= 90.0f; break; }
-				case 3: { pCmd->viewangles.y += 180.0f; break; }
-				case 4: { pCmd->viewangles.y -= Vars::AntiHack::AntiAim::YawRealOffset.m_Var; break; }
-				default: { bYawSet = false; break; }
+			case 1: { pCmd->viewangles.y += 90.0f;  break; }
+			case 2: { pCmd->viewangles.y -= 90.0f; break; }
+			case 3: { pCmd->viewangles.y += 180.0f; break; }
+			default: { bYawSet = false; break; }
 			}
 
 			g_GlobalInfo.m_vRealViewAngles.y = pCmd->viewangles.y;
@@ -115,19 +90,17 @@ void CAntiAim::Run(CUserCmd *pCmd, bool *pSendPacket)
 
 		else
 		{
-			float temp(g_GlobalInfo.m_vFakeViewAngles.y);
 			switch (Vars::AntiHack::AntiAim::YawFake.m_Var) {
-				case 1: { pCmd->viewangles.y += 90.0f; break; }
-				case 2: { pCmd->viewangles.y -= 90.0f; break; }
-				case 3: { pCmd->viewangles.y += 180.0f; break; }
-				case 4: { pCmd->viewangles.y -= Vars::AntiHack::AntiAim::YawFakeOffset.m_Var; break; }
-				default: { bYawSet = false; break; }
+			case 1: { pCmd->viewangles.y += 90.0f; break; }
+			case 2: { pCmd->viewangles.y -= 90.0f; break; }
+			case 3: { pCmd->viewangles.y += 180.0f; break; }
+			default: { bYawSet = false; break; }
 			}
 
 			g_GlobalInfo.m_vFakeViewAngles.y = pCmd->viewangles.y;
 		}
 
-		*pSendPacket = b = !b;	
+		*pSendPacket = b = !b;
 		g_GlobalInfo.m_bAAActive = bPitchSet || bYawSet;
 		FixMovement(pCmd, vOldAngles, fOldSideMove, fOldForwardMove);
 	}
