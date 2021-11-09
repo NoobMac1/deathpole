@@ -376,6 +376,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 		ImGui::End();
 	}*/
 
+	/*
 	if ((!g_Interfaces.EngineVGui->IsGameUIVisible() || g_Menu.m_bOpen) && Vars::Misc::CL_Move::DTBarStyle.m_Var == 2) {
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 0));
@@ -410,6 +411,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 		ImGui::End();
 		ImGui::PopStyleColor(2);
 	}
+	*/
 	if (g_Menu.m_bOpen)
 	{
 		//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.00f));
@@ -969,11 +971,17 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Wait for DT", &Vars::Misc::CL_Move::WaitForDT.m_Var); HelpMarker("While the doubletap key is held and ticks are fully charged, it will wait until doubletap is ready to shoot");
 								ImGui::Checkbox("Don't DT in air", &Vars::Misc::CL_Move::NotInAir.m_Var); HelpMarker("When enabled, doubletap will not work if you are mid-air as to avoid movement being uncontrollable");
 								const char* dtModes[]{ "On key", "Always", "Disable on key", "Disabled" }; ImGui::PushItemWidth(100); ImGui::Combo("DT Mode", &Vars::Misc::CL_Move::DTMode.m_Var, dtModes, IM_ARRAYSIZE(dtModes)); ImGui::PopItemWidth(); HelpMarker("How should DT behave");
-								const char* dtBarStyles[]{ "Off", "Default", "Nitro" }; ImGui::PushItemWidth(100); ImGui::Combo("DT indicator style", &Vars::Misc::CL_Move::DTBarStyle.m_Var, dtBarStyles, IM_ARRAYSIZE(dtBarStyles)); ImGui::PopItemWidth(); HelpMarker("Which style to do the doubletap bar style");
+								//const char* dtBarStyles[]{ "Off", "Default", "Nitro" }; ImGui::PushItemWidth(100); ImGui::Combo("DT indicator style", &Vars::Misc::CL_Move::DTBarStyle.m_Var, dtBarStyles, IM_ARRAYSIZE(dtBarStyles)); ImGui::PopItemWidth(); HelpMarker("Which style to do the doubletap bar style");
+								/*
 								if (Vars::Misc::CL_Move::DTBarStyle.m_Var == 1) {
 									ImGui::SliderInt("Dt bar height", &Vars::Misc::CL_Move::DtbarOutlineHeight.m_Var, 1, 30);
 									ImGui::SliderInt("Dt bar width", &Vars::Misc::CL_Move::DtbarOutlineWidth.m_Var, 1, 30);
 								}
+								*/
+								ImGui::SliderInt("Dt bar width", &Vars::Misc::CL_Move::DTBarScaleY.m_Var, 3, g_ScreenSize.h);
+								ImGui::SliderInt("Dt bar height", &Vars::Misc::CL_Move::DTBarScaleX.m_Var, 12, g_ScreenSize.w * 2);
+								ImGui::SliderInt("Dt bar Y offset", &Vars::Misc::CL_Move::DTBarY.m_Var, -g_ScreenSize.h / 2 + Vars::Misc::CL_Move::DTBarScaleX.m_Var, g_ScreenSize.h / 2 - Vars::Misc::CL_Move::DTBarScaleX.m_Var);
+								ImGui::SliderInt("Dt bar X offset", &Vars::Misc::CL_Move::DTBarX.m_Var, -g_ScreenSize.w / 2 + Vars::Misc::CL_Move::DTBarScaleY.m_Var, g_ScreenSize.w / 2 - Vars::Misc::CL_Move::DTBarScaleY.m_Var);
 
 							}
 							if (ImGui::CollapsingHeader("Attribute changer")) {
@@ -1136,6 +1144,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 						ImGui::Columns(2);
 						{
 							ImGui::TextDisabled("Cheat colours");
+							/*
 							if (Vars::Misc::CL_Move::DTBarStyle.m_Var == 1) {
 								ColorPicker("Dt bar chargin left", Colors::DtChargingLeft);
 								ColorPicker("Dt bar chargin right", Colors::DtChargingRight);
@@ -1143,6 +1152,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ColorPicker("Dt bar charged right", Colors::DtChargedRight);
 								ColorPicker("Dt bar outline", Colors::DtOutline);
 							}
+							*/
 							ColorPicker("Outline ESP", Colors::OutlineESP);
 							ColorPicker("Conditions", Colors::Cond);
 							ColorPicker("Target", Colors::Target);

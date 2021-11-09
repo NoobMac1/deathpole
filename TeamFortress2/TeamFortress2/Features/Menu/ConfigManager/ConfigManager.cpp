@@ -536,10 +536,11 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::Misc::CL_Move::RechargeKey);// { 0x52, L"Recharge Key" }; //R
 				SAVE_VAR(Vars::Misc::CL_Move::RechargeWhileDead);
 				SAVE_VAR(Vars::Misc::CL_Move::AutoRecharge);
-				SAVE_VAR(Vars::Misc::CL_Move::DTBarStyle);
 				SAVE_VAR(Vars::Misc::CL_Move::DTMode);
-				SAVE_VAR(Vars::Misc::CL_Move::DtbarOutlineHeight);
-				SAVE_VAR(Vars::Misc::CL_Move::DtbarOutlineWidth);
+				SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleX);
+				SAVE_VAR(Vars::Misc::CL_Move::DTBarScaleY);
+				SAVE_VAR(Vars::Misc::CL_Move::DTBarX);
+				SAVE_VAR(Vars::Misc::CL_Move::DTBarY);
 				SAVE_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
 				SAVE_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //
 				SAVE_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R
@@ -1027,10 +1028,11 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Misc::CL_Move::RechargeWhileDead);
 				LOAD_VAR(Vars::Misc::CL_Move::AutoRecharge);
 				LOAD_VAR(Vars::Misc::CL_Move::DoubletapKey);// { 0x52, L"Recharge Key" }; //R
-				LOAD_VAR(Vars::Misc::CL_Move::DTBarStyle);
 				LOAD_VAR(Vars::Misc::CL_Move::DTMode);
-				LOAD_VAR(Vars::Misc::CL_Move::DtbarOutlineHeight);
-				LOAD_VAR(Vars::Misc::CL_Move::DtbarOutlineWidth);
+				LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleY);
+				LOAD_VAR(Vars::Misc::CL_Move::DTBarScaleX);
+				LOAD_VAR(Vars::Misc::CL_Move::DTBarX);
+				LOAD_VAR(Vars::Misc::CL_Move::DTBarY);
 				LOAD_VAR(Vars::Misc::CL_Move::Fakelag);// { 0x52, L"Recharge Key" }; //R
 				LOAD_VAR(Vars::Misc::CL_Move::FakelagOnKey);// { 0x52, L"Recharge Key" }; //R
 				LOAD_VAR(Vars::Misc::CL_Move::FakelagKey);// { 0x52, L"Recharge Key" }; //R

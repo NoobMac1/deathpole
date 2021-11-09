@@ -385,7 +385,7 @@ namespace Vars
 		inline CVar<bool> RemoveDisguises   { false, L"Remove Disguises" };
 		inline CVar<bool> RemoveTaunts		{ false, L"Remove Taunts" };
 		inline CVar<int> FieldOfView		{ 110, L"Field of View" };
-		inline CVar<int> AimFOVAlpha		{ 10, L"Aim FOV Alpha" };
+		inline CVar<int> AimFOVAlpha		{ 0, L"Aim FOV Alpha" };
 		inline CVar<bool> RemoveScope		{ true, L"Remove Scope" };
 		inline CVar<bool> RemoveZoom		{ true, L"Remove Zoom" };
 		inline CVar<bool> RemovePunch		{ false, L"Remove Recoil" };
@@ -467,12 +467,14 @@ namespace Vars
 			inline CVar<int> TeleportKey	{ 0x52, L"Teleport Key" }; //R
 			inline CVar<int> RechargeKey	{ 0x48, L"Recharge Key" }; //H
 			inline CVar<int> DoubletapKey	{ 0x56, L"Doubletap Key" }; //V
-			inline CVar<int> DTBarStyle     { 0, L"Doubletap bar style" };
+			//inline CVar<int> DTBarStyle     { 0, L"Doubletap bar style" };
 			inline CVar<bool> RechargeWhileDead	{ false, L"Recharge While Dead" };
 			inline CVar<bool> AutoRecharge	{ false, L"AutoRecharge" }; //H
 			inline CVar<int> DTMode		    { 0, L"DT Mode" }; // 0 - On Key, 1 - Always DT, 2 - Disable on key, 3 - Disabled
-			inline CVar<int> DtbarOutlineHeight	{ 12, L"Dt default bar height" };
-			inline CVar<int> DtbarOutlineWidth	{ 8, L"Dt default bar width" };
+			inline CVar<int> DTBarScaleX	{ 12, L"DT Indicator Height" };
+			inline CVar<int> DTBarScaleY	{ 100, L"DT Indicator Widht" };
+			inline CVar<int> DTBarY{ 60,L"DT Offset Y" };
+			inline CVar<int> DTBarX{ 0,L"DT Offset X" };
 			inline CVar<bool> WaitForDT     { true, L"Wait for DT" };
 			inline CVar<bool> Fakelag       { true, L"Fakelag" };
 			inline CVar<bool> FakelagOnKey  { true, L"Fakelag On Key" };

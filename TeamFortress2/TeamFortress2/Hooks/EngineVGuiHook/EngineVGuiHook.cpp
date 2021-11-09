@@ -69,7 +69,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 					if (Vars::Visuals::AimPosSquare.m_Var) {
 						Vec3 vProjAimStart, vProjAimEnd = Vec3(g_ScreenSize.c, g_ScreenSize.h, 0.0f);
 
-						Utils::W2S(g_GlobalInfo.m_vClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguinClubPenguin, vProjAimStart);
+						Utils::W2S(g_GlobalInfo.m_vProjAimEnd, vProjAimStart);
 						Utils::W2S(g_GlobalInfo.m_vPredictedPos, vProjAimEnd);
 						g_Draw.Line(
 							vProjAimStart.x,
@@ -85,53 +85,56 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				// you can use it for more, i'm sure. - myzarfin
 				g_notify.Think();
 
+				//watermark
+				auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
+				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 15, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole"));
+				g_Draw.String(FONT_DEBUG, 10, (g_ScreenSize.h / 100) * 17, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"ping: %d (~%f)"), ping, ping/2);
+
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
 					const auto& pLocal = g_EntityCache.m_pLocal;
 					const auto& pWeapon = g_EntityCache.m_pLocalWeapon;
-
 					if (pLocal && pWeapon)
 					{
 						if (pLocal->GetLifeState() == LIFE_ALIVE)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 
-							static Color_t color1, color2;
+							float ratio = ((float)g_GlobalInfo.m_nShifted / (float)MAX_NEW_COMMANDS);
 
-							if (g_GlobalInfo.m_nWaitForShift) {
-								color1 = Colors::DtChargingLeft;
-								color2 = Colors::DtChargingRight;
-							}
-							else {
-								color1 = Colors::DtChargedLeft;
-								color2 = Colors::DtChargedRight;
-							}
+							if (ratio > 1) { ratio = 1; }
+							if (ratio < 0) { ratio = 0; } //player is playing as heavy, charges, changes to scout, maxnew changes to a value lower than heavies maxnew, becomes negative, slightly annoying
 
-							static int tickWidth = Vars::Misc::CL_Move::DtbarOutlineWidth.m_Var;
-							int barWidth = (tickWidth * g_GlobalInfo.dtTicks) + 2;
-							if (Vars::Misc::CL_Move::DTBarStyle.m_Var == 1) {
-								g_Draw.OutlinedRect(
-									g_ScreenSize.c - (barWidth / 2),
-									nY + 80,
-									barWidth,
-									Vars::Misc::CL_Move::DtbarOutlineHeight.m_Var,
-									Colors::DtOutline
-								);
-								g_Draw.GradientRect(
-									g_ScreenSize.c - (barWidth / 2) + 1,
-									nY + 81,
-									(g_ScreenSize.c - (barWidth / 2) + 1) + tickWidth * g_GlobalInfo.m_nShifted,
-									nY + 81 + Vars::Misc::CL_Move::DtbarOutlineHeight.m_Var - 2,
-									color1,
-									color2,
-									true
-								);
-							}
+							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
+							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
+							int xscale = (Vars::Misc::CL_Move::DTBarScaleX.m_Var);
+							int yscale = (Vars::Misc::CL_Move::DTBarScaleY.m_Var);
 
+							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), {255, 255, 255, 255});
+							g_Draw.GradientRect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), (nY - (xscale / 2) + yoff + xscale), { 62, 81, 221, 255 }, { 148, 246, 255, 255 }, TRUE);
+							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) - 10 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
+							if (g_GlobalInfo.m_nShifted == 0)
+							{
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 55, 40, 255 }, ALIGN_REVERSE, _(L"FLAT"));
+								g_Draw.Rect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, yscale, xscale, { 17, 24, 26, 255 });
+							}
+							else if (ratio != 1)
+							{
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 126, 0, 255 }, ALIGN_REVERSE, _(L"CHARGING"));
+								g_Draw.Rect(g_ScreenSize.c - (yscale / 2) + (yscale * ratio) + xoff, nY - (xscale / 2) + yoff, yscale - (yscale * ratio), xscale, { 17, 24, 26, 255 });
+							}
+							else if (!g_GlobalInfo.m_nWaitForShift)
+							{
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 66, 255, 0, 255 }, ALIGN_REVERSE, _(L"DT READY"));
+							}
+							else
+							{
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 255, 46, 46, 255 }, ALIGN_REVERSE, _(L"DT IMPOSSIBLE"));
+							}
 						}
 					}
-				}
+				}	
 
 				//Current Active Aimbot FOV
 				if (Vars::Visuals::AimFOVAlpha.m_Var && g_GlobalInfo.m_flCurAimFOV)
