@@ -425,6 +425,10 @@ namespace Vars
 		inline CVar<float> despawnTime{ 5.f, L"How many ticks to despawn a damage log event" };
 		inline CVar<int> damageLogger{ 0, L"Enable damage logger" };
 
+		inline CVar<int> WatermarkY{ 0,L"Watermark Offset Y" };
+		inline CVar<int> WatermarkX{ 0,L"Watermark Offset X" };
+		inline CVar<bool> Watermark{ true,L"Watermark" };
+
 
 		namespace Skins
 		{
@@ -463,6 +467,8 @@ namespace Vars
 		namespace CL_Move
 		{
 			inline CVar<bool> Enabled       { true, L"Enabled" };
+			inline CVar<bool> SEnabled       { true, L"Speedhack" };
+			inline CVar<int> SFactor       { 1, L"Speedhack Factor" };
 			inline CVar<bool> Doubletap		{ true, L"Doubletap" };
 			inline CVar<bool> NotInAir		{ true, L"Dont DT in air" };
 			inline CVar<int> TeleportKey	{ 0x52, L"Teleport Key" }; //R

@@ -29,6 +29,9 @@ void CMisc::CheatsBypass() {
 	else {
 		sv_cheats->SetValue(0);
 	}
+
+	ConVar* engine = g_Interfaces.CVars->FindVar("engine_no_focus_sleep");
+	engine->SetValue(0);
 }
 
 void CMisc::EdgeJump(CUserCmd* pCmd, const int nOldFlags)
@@ -434,6 +437,8 @@ void CMisc::SteamRPC()
 
 	g_SteamInterfaces.Friends015->SetRichPresence("steam_player_group_size", std::to_string(Vars::Misc::Steam::GroupSize.m_Var).c_str());
 }
+
+
 
 void Notify::Think() {
 	int		x{ 8 }, y{ 5 }, size{ 17 };

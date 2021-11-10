@@ -496,8 +496,10 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Visuals::despawnTime);
 			SAVE_VAR(Vars::Visuals::damageLogger);
 
-				
-				
+
+			SAVE_VAR(Vars::Visuals::Watermark);
+			SAVE_VAR(Vars::Visuals::WatermarkY);
+			SAVE_VAR(Vars::Visuals::WatermarkX);
 
 
 
@@ -528,6 +530,8 @@ void CConfigManager::Save(const wchar_t *name)
 			// CL_Move
 			{
 				SAVE_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
+				SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
+				SAVE_VAR(Vars::Misc::CL_Move::SFactor);
 				SAVE_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
@@ -993,6 +997,10 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Menu::LegacyMenu);
 			LOAD_VAR(Vars::Visuals::despawnTime);
 			LOAD_VAR(Vars::Visuals::damageLogger);
+
+			LOAD_VAR(Vars::Visuals::Watermark);
+			LOAD_VAR(Vars::Visuals::WatermarkY);
+			LOAD_VAR(Vars::Visuals::WatermarkX);
 			
 		}
 
@@ -1020,6 +1028,8 @@ void CConfigManager::Load(const wchar_t *name)
 			// CL_Move
 			{
 				LOAD_VAR(Vars::Misc::CL_Move::Enabled);//Enabled
+				LOAD_VAR(Vars::Misc::CL_Move::SEnabled);
+				LOAD_VAR(Vars::Misc::CL_Move::SFactor);
 				LOAD_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };

@@ -9,7 +9,7 @@ private:
 	void AutoStrafe(CUserCmd* pCmd);
 	void NoiseMakerSpam();
 	void InitSpamKV(void* pKV);
-	void ChatSpam();
+	void ChatSpam();	
 	bool steamCleared = false;
 
 public:

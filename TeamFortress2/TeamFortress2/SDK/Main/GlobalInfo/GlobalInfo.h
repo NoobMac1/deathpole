@@ -2,7 +2,7 @@
 
 #include "../BaseEntity/BaseEntity.h"
 
-#define MAX_NEW_COMMANDS 20
+#define MAX_NEW_COMMANDS 24
 #define MAX_NEW_COMMANDS_HEAVY 24
 #define DT_WAIT_CALLS 26
 

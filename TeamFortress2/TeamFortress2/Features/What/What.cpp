@@ -925,6 +925,9 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Old menu", &Vars::Menu::LegacyMenu.m_Var); HelpMarker("Enable the old menu (home key)");
 								ImGui::Checkbox("Menu snow", &Vars::Visuals::Snow.m_Var); HelpMarker("Enable the snow when menu is open");
 								ImGui::Checkbox("CatReply", &Vars::Misc::BeCat.m_Var); HelpMarker("Be marked by catbots.");
+								ImGui::Checkbox("Watermark", &Vars::Visuals::Watermark.m_Var); HelpMarker("Enables the deathpole watermark.");
+								ImGui::SliderInt("Watermark X Offset", &Vars::Visuals::WatermarkX.m_Var, -g_ScreenSize.w / 2 + 70, g_ScreenSize.w/2 - 70);
+								ImGui::SliderInt("Watermark Y Offset", &Vars::Visuals::WatermarkY.m_Var, 0, g_ScreenSize.h - 16);
 							}
 							if (ImGui::CollapsingHeader("Out of FoV arrows")) {
 								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FoV");
@@ -1095,6 +1098,8 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)");
 								ImGui::Checkbox("Fakelag on key", &Vars::Misc::CL_Move::FakelagOnKey.m_Var); HelpMarker("Fakelag will only activate when an assigned key is held");
 								InputKeybind("Fakelag key", Vars::Misc::CL_Move::FakelagKey); HelpMarker("Fakelag will only activate when this key is held");
+								ImGui::Checkbox("SpeedHack", &Vars::Misc::CL_Move::SEnabled.m_Var); HelpMarker("Speedhack Master Switch");
+								ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
 							}
 
 							if (ImGui::CollapsingHeader("Radar")) {
