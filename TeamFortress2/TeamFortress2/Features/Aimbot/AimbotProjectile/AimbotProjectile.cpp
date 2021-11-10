@@ -701,6 +701,8 @@ void CAimbotProjectile::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUs
 		bool bIsAttacking = IsAttacking(pCmd, pWeapon);
 
 		if (bIsAttacking) {
+			if (Vars::Aimbot::Global::showHitboxes.m_Var)
+				//ShowHitboxes(Target.m_pEntity, { 255, 255, 255, 100}, 2);
 			g_GlobalInfo.m_bAttacking = true;
 			if (Vars::Visuals::BulletTracer.m_Var && abs(pCmd->tick_count - nLastTracerTick) > 1) {
 				projectileTracer(pLocal, Target);

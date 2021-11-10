@@ -546,6 +546,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ImGui::Checkbox("Ignore taunting", &Vars::Aimbot::Global::IgnoreTaunting.m_Var); HelpMarker("The aimbot will ignore taunting players");
 							ImGui::Checkbox("BAim when lethal", &Vars::Aimbot::Global::BAimLethal.m_Var); HelpMarker("The aimbot will aim for body when damage is lethal to it");
 							ImGui::Checkbox("Doubletap", &Vars::Misc::CL_Move::Doubletap.m_Var); HelpMarker("When enough ticks are choked, the aimbot will shoot them all at once in a burst, leading to a rapid-fire effect");
+							ImGui::Checkbox("Show Hitboxes", &Vars::Aimbot::Global::showHitboxes.m_Var); HelpMarker("Renders client-side hitboxes when you attack an enemy");
 							ImGui::TextUnformatted("");
 							ImGui::TextUnformatted("Crithack");
 							ImGui::Checkbox("Active###critsactive", &Vars::Crits::Active.m_Var); HelpMarker("Crit hack - this is the worst fucking crit hack known to man and I'm sorry for adding it");

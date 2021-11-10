@@ -437,11 +437,11 @@ typedef float matrix3x4[3][4];
 
 namespace Math
 {
-	inline void SinCos(float radians, float *sine, float *cosine)
+	inline void SinCos(float radians, float* sine, float* cosine)
 	{
 		_asm
 		{
-			fld		DWORD PTR[radians]
+			fld        DWORD PTR[radians]
 			fsincos
 
 			mov edx, DWORD PTR[cosine]
@@ -458,7 +458,7 @@ namespace Math
 		c = cos(r);
 	}
 
-	inline void MatrixCopy(const matrix3x4 &source, matrix3x4 &target)
+	inline void MatrixCopy(const matrix3x4& source, matrix3x4& target)
 	{
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -467,21 +467,21 @@ namespace Math
 		}
 	}
 
-	inline void MatrixGetColumn(const matrix3x4 &src, int nCol, Vec3 *pColumn)
+	inline void MatrixGetColumn(const matrix3x4& src, int nCol, Vec3* pColumn)
 	{
 		pColumn->x = src[0][nCol];
 		pColumn->y = src[1][nCol];
 		pColumn->z = src[2][nCol];
 	}
 
-	inline void MatrixSetColumn(const Vec3 &in, int column, matrix3x4 &out)
+	inline void MatrixSetColumn(const Vec3& in, int column, matrix3x4& out)
 	{
 		out[0][column] = in.x;
 		out[1][column] = in.y;
 		out[2][column] = in.z;
 	}
 
-	inline void AngleMatrix(const Vec3 &angles, matrix3x4 &matrix)
+	inline void AngleMatrix(const Vec3& angles, matrix3x4& matrix)
 	{
 		float sr, sp, sy, cr, cp, cy;
 
@@ -511,10 +511,41 @@ namespace Math
 		matrix[2][3] = 0.0f;
 	}
 
+	inline void MatrixAngles(const matrix3x4& matrix, Vec3& angles) {
+		Vec3 forward, left, up;
+
+		// extract the basis vectors from the matrix. since we only need the z
+		// component of the up vector, we don't get x and y.
+		forward = { matrix[0][0], matrix[1][0], matrix[2][0] };
+		left = { matrix[0][1], matrix[1][1], matrix[2][1] };
+		up = { 0.f, 0.f, matrix[2][2] };
+
+		float len = forward.Lenght2D();
+
+		// enough here to get angles?
+		if (len > 0.001f) {
+			angles.x = RAD2DEG(std::atan2(-forward.z, len));
+			angles.y = RAD2DEG(std::atan2(forward.y, forward.x));
+			angles.z = RAD2DEG(std::atan2(left.z, up.z));
+		}
+
+		else {
+			angles.x = RAD2DEG(std::atan2(-forward.z, len));
+			angles.y = RAD2DEG(std::atan2(-left.x, left.y));
+			angles.z = 0.f;
+		}
+	}
+
 	inline void AngleMatrix(const Vec3 &angles, const Vec3 &origin, matrix3x4 &matrix)
 	{
 		AngleMatrix(angles, matrix);
 		MatrixSetColumn(origin, 3, matrix);
+	}
+
+	inline void GetMatrixOrigin(matrix3x4& matrix, Vec3& out) {
+		out[0] = matrix[0][3];
+		out[1] = matrix[1][3];
+		out[2] = matrix[2][3];
 	}
 
 	inline Vec3 VelocityToAngles(const Vec3 &direction)

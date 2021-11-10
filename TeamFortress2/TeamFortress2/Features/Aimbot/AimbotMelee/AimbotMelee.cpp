@@ -239,6 +239,8 @@ void CAimbotMelee::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserCmd
 		bool bIsAttacking = IsAttacking(pCmd, pWeapon);
 
 		if (bIsAttacking) {
+			if (Vars::Aimbot::Global::showHitboxes.m_Var)
+				//ShowHitboxes(Target.m_pEntity, { 255, 255, 255, 100 }, 2);
 			g_GlobalInfo.m_bAttacking = true;
 		}
 

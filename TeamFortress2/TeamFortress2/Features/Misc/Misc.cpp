@@ -478,9 +478,22 @@ void Notify::Think() {
 		else
 			color.a = 255;
 
+		const size_t cSize = strlen(notify->m_text.c_str()) + 1;
+		wchar_t* wc = new wchar_t[cSize];
+		mbstowcs(wc, notify->m_text.c_str(), cSize);
+
+		int w, h;
+		g_Interfaces.Surface->GetTextSize(FONT_INDICATORS, wc, w, h);
+
+		/*
 		g_Draw.Rect(x, y, attackStringW + 5, attackStringH + 2, { Colors::DmgLoggerBackground.r, Colors::DmgLoggerBackground.g, Colors::DmgLoggerBackground.b, color.a });
 		g_Draw.OutlinedRect(x, y, attackStringW + 5, attackStringH + 2, { Colors::DmgLoggerOutline.r, Colors::DmgLoggerOutline.g, Colors::DmgLoggerOutline.b, color.a });
 		g_Draw.String(FONT_INDICATORS, x + 5, y + 2, { Colors::DmgLoggerText.r, Colors::DmgLoggerText.g, Colors::DmgLoggerText.b, color.a }, ALIGN_DEFAULT, notify->m_text.c_str());
+		*/ //obsolete
+
+		g_Draw.Line(x, y, x, y + 19, { Colors::DmgLoggerOutline.r, Colors::DmgLoggerOutline.g, Colors::DmgLoggerOutline.b, color.a });
+		g_Draw.GradientRectA(x+1, y, w/3 + 9 , y + 19, { Colors::DmgLoggerBackground.r, Colors::DmgLoggerBackground.g, Colors::DmgLoggerBackground.b, color.a }, { Colors::DmgLoggerBackground.r, Colors::DmgLoggerBackground.g, Colors::DmgLoggerBackground.b, 1 }, true);
+		g_Draw.String(FONT_INDICATORS, x + 6, y +2, { Colors::DmgLoggerText.r, Colors::DmgLoggerText.g, Colors::DmgLoggerText.b, color.a }, ALIGN_DEFAULT, notify->m_text.c_str());
 
 		y += size;
 	}

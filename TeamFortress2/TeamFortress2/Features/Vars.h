@@ -77,6 +77,7 @@ namespace Vars
 			inline CVar<bool> IgnoreFriends		{ true, L"Ignore Friends" };
 			inline CVar<bool> IgnoreTaunting	{ true, L"Ignore Taunting" };
 			inline CVar<bool> BAimLethal{ false, L"Body aim if lethal" }; // This is in global cause i remmebered hunterman exists
+			inline CVar<bool> showHitboxes{ true, L"Show Hitboxes" };
 		}
 
 		namespace Hitscan
