@@ -73,7 +73,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 				}
 
 				const auto maxHealth = pEntity->GetMaxHealth();
-				std::string attackString = "[deathpole] You hit " + std::string(pi.name) + " for " + std::to_string(nDamage) + (bCrit ? " (crit) " : " ") + "(" + std::to_string(nHealth) + "/" + std::to_string(maxHealth) + ")      ";
+				std::string attackString = "[deathpole] You hit " + std::string(pi.name) + " for " + std::to_string(nDamage) + (bCrit ? " (crit) " : " ") + "(" + std::to_string(nHealth) + "/" + std::to_string(maxHealth) + ")";
 
 				std::wstring wattackString = std::wstring(attackString.begin(), attackString.end());
 				const wchar_t* wcattackString = wattackString.c_str();
