@@ -130,7 +130,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							}
 							else if (!g_GlobalInfo.m_nWaitForShift)
 							{
-								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 66, 255, 0, 255 }, ALIGN_REVERSE, _(L"DT READY"));
+								g_Draw.String(FONT_ESP_COND_OUTLINED, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), nY - (xscale / 2 + 1) - 10 + yoff, { 66, 255, 0, 255 }, ALIGN_REVERSE, _(L"READY"));
 							}
 							else
 							{
