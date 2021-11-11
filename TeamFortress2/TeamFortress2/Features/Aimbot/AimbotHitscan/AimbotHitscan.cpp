@@ -1,5 +1,6 @@
 #include "AimbotHitscan.h"
 #include "../../Vars.h"
+#include "../../Misc/Misc.cpp"
 
 int CAimbotHitscan::GetHitbox(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon)
 {
@@ -520,43 +521,6 @@ void bulletTracer(CBaseEntity* pLocal, Target_t Target) {
 	g_Interfaces.DebugOverlay->AddLineOverlayAlpha(shootPos, vecPos, Color.r, Color.g, Color.b, Color.a, true, 5);
 }
 
-void ShowHitboxes(CBaseEntity* pEntity, Color_t colour, float time){
-	g_Interfaces.DebugOverlay->ClearAllOverlays();
-	const model_t* model;
-	studiohdr_t* hdr;
-	mstudiohitboxset_t* set;
-	mstudiobbox_t* bbox;
-	Vec3 mins{}, maxs{}, origin{};
-	Vec3 angle;
-
-	model = pEntity->GetModel();
-	hdr = g_Interfaces.ModelInfo->GetStudioModel(model);
-	set = hdr->GetHitboxSet(pEntity->GetHitboxSet());
-
-	for (int i{}; i < set->numhitboxes; ++i) {
-		bbox = set->hitbox(i);
-		if (!bbox)
-			continue;
-
-		//nigga balls
-		matrix3x4 rot_matrix;
-		Math::AngleMatrix(bbox->angle, rot_matrix);
-
-		matrix3x4 matrix;
-		matrix3x4 boneees[128];
-		pEntity->SetupBones(boneees, 128, BONE_USED_BY_ANYTHING, g_Interfaces.GlobalVars->curtime);
-		Math::ConcatTransforms(boneees[bbox->bone], rot_matrix, matrix);
-
-		Vec3 bbox_angle;
-		Math::MatrixAngles(matrix, bbox_angle);
-
-		Vec3 matrix_origin;
-		Math::GetMatrixOrigin(matrix, matrix_origin);
-
-		g_Interfaces.DebugOverlay->AddBoxOverlay(matrix_origin, bbox->bbmin, bbox->bbmax, bbox_angle, colour.r, colour.g, colour.b, colour.a, time);
-	}
-}
-
 void CAimbotHitscan::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserCmd* pCmd)
 {
 	static int nLastTracerTick = pCmd->tick_count;
@@ -658,7 +622,7 @@ void CAimbotHitscan::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserC
 		if (bIsAttacking) {
 			g_GlobalInfo.m_bAttacking = true;
 			if (Vars::Aimbot::Global::showHitboxes.m_Var)
-				ShowHitboxes(Target.m_pEntity, { 255, 255, 255, 100 }, 2);
+				ShowHitboxes(Target.m_pEntity, { Colors::Hitbox }, 2);
 			if (Vars::Visuals::BulletTracer.m_Var && abs(pCmd->tick_count - nLastTracerTick) > 1) {
 				//bulletTracer(pLocal, Target);
 				nLastTracerTick = pCmd->tick_count;

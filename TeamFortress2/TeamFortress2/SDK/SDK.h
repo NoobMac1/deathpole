@@ -142,6 +142,7 @@ namespace Colors
 	inline Color_t DmgLoggerBackground =	{ 30, 30, 30, 255 };
 	inline Color_t DmgLoggerOutline =		{ 30, 30, 255, 255};
 	inline Color_t DmgLoggerText =			{ 255, 255, 255, 255 };
+	inline Color_t Hitbox =					{ 255, 255, 255, 100 };
 }
 
 namespace Utils

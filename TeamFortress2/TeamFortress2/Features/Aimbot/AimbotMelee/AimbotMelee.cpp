@@ -1,5 +1,6 @@
 #include "AimbotMelee.h"
 #include "../../Vars.h"
+#include "../../Misc/Misc.cpp"
 
 bool CAimbotMelee::CanMeleeHit(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, const Vec3& vecViewAngles, int nTargetIndex)
 {
@@ -240,7 +241,7 @@ void CAimbotMelee::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserCmd
 
 		if (bIsAttacking) {
 			if (Vars::Aimbot::Global::showHitboxes.m_Var)
-				//ShowHitboxes(Target.m_pEntity, { 255, 255, 255, 100 }, 2);
+				ShowHitboxes(Target.m_pEntity, { Colors::Hitbox }, 2);
 			g_GlobalInfo.m_bAttacking = true;
 		}
 

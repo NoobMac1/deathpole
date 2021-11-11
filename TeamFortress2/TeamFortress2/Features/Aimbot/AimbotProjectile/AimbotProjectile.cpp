@@ -1,5 +1,6 @@
 #include "AimbotProjectile.h"
 #include "../../Vars.h"
+#include "../../Misc/Misc.cpp"
 
 Vec3 CAimbotProjectile::Predictor_t::Extrapolate(float time)
 {
@@ -702,7 +703,7 @@ void CAimbotProjectile::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUs
 
 		if (bIsAttacking) {
 			if (Vars::Aimbot::Global::showHitboxes.m_Var)
-				//ShowHitboxes(Target.m_pEntity, { 255, 255, 255, 100}, 2);
+				ShowHitboxes(Target.m_pEntity, { Colors::Hitbox }, 2);
 			g_GlobalInfo.m_bAttacking = true;
 			if (Vars::Visuals::BulletTracer.m_Var && abs(pCmd->tick_count - nLastTracerTick) > 1) {
 				projectileTracer(pLocal, Target);

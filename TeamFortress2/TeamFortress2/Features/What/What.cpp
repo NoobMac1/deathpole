@@ -1192,6 +1192,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ColorPicker("Damage logger background", Colors::DmgLoggerBackground);
 							ColorPicker("Damage logger outline", Colors::DmgLoggerOutline);
 							ColorPicker("Damage logger text", Colors::DmgLoggerText);
+							ColorPicker("Hitboxes", Colors::Hitbox);
 
 							//ColorPicker("Fresnel chams top", Colors::FresnelTop);
 						}

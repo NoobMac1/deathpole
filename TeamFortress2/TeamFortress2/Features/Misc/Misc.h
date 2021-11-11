@@ -20,6 +20,7 @@ public:
 	void AutoRocketJump(CUserCmd* pCmd);
 	void NoPush();
 	void SteamRPC();
+	void ShowHitboxes(CBaseEntity* pEntity, Color_t colour, float time);
 	std::vector<std::string> strings;
 };
 
