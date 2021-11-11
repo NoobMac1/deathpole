@@ -533,6 +533,7 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::Misc::CL_Move::SEnabled);
 				SAVE_VAR(Vars::Misc::CL_Move::SFactor);
 				SAVE_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
+				SAVE_VAR(Vars::Misc::CL_Move::DoubletapAmt);
 				SAVE_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
 				SAVE_VAR(Vars::Misc::CL_Move::DoubletapKey);// { true, L"Doubletap" };
@@ -1032,6 +1033,7 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Misc::CL_Move::SEnabled);
 				LOAD_VAR(Vars::Misc::CL_Move::SFactor);
 				LOAD_VAR(Vars::Misc::CL_Move::Doubletap);// { true, L"Doubletap" };
+				LOAD_VAR(Vars::Misc::CL_Move::DoubletapAmt);
 				LOAD_VAR(Vars::Misc::CL_Move::WaitForDT);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::NotInAir);// { true, L"Doubletap" };
 				LOAD_VAR(Vars::Misc::CL_Move::TeleportKey);// { 0x46, L"Teleport Key" }; //F

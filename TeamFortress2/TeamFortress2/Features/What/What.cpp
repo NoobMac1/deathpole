@@ -970,6 +970,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								InputKeybind("Recharge key", Vars::Misc::CL_Move::RechargeKey); HelpMarker("Recharges ticks for shifting");
 								InputKeybind("Teleport key", Vars::Misc::CL_Move::TeleportKey); HelpMarker("Shifts ticks to move fast");
 								InputKeybind("Doubletap key", Vars::Misc::CL_Move::DoubletapKey); HelpMarker("Shifts ticks when shooting for a rapid-fire effect");
+								ImGui::SliderInt("Doubletap Tickcount", &Vars::Misc::CL_Move::DoubletapAmt.m_Var, 1, 24); HelpMarker("High values are unstable");
 								ImGui::Checkbox("Recharge While Dead", &Vars::Misc::CL_Move::RechargeWhileDead.m_Var); HelpMarker("Recharge your DoubleTap bar while you're dead");
 								ImGui::Checkbox("AutoRecharge", &Vars::Misc::CL_Move::AutoRecharge.m_Var); HelpMarker("Recharge your DoubleTap bar if you are doing nothing");
 								ImGui::Checkbox("Wait for DT", &Vars::Misc::CL_Move::WaitForDT.m_Var); HelpMarker("While the doubletap key is held and ticks are fully charged, it will wait until doubletap is ready to shoot");

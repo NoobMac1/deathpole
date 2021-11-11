@@ -105,7 +105,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 						{
 							const int nY = (g_ScreenSize.h / 2) + 20;
 
-							float ratio = ((float)g_GlobalInfo.m_nShifted / (float)MAX_NEW_COMMANDS);
+							float ratio = ((float)g_GlobalInfo.m_nShifted / (float)Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 
 							if (ratio > 1) { ratio = 1; }
 							if (ratio < 0) { ratio = 0; } //player is playing as heavy, charges, changes to scout, maxnew changes to a value lower than heavies maxnew, becomes negative, slightly annoying

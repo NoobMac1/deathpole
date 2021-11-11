@@ -11,7 +11,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 
 	auto pLocal = g_EntityCache.m_pLocal;
 
-	if (Vars::Misc::CL_Move::TeleportKey.m_Var && (GetAsyncKeyState(Vars::Misc::CL_Move::TeleportKey.m_Var)) && g_GlobalInfo.m_nShifted >= g_GlobalInfo.dtTicks) {
+	if (Vars::Misc::CL_Move::TeleportKey.m_Var && (GetAsyncKeyState(Vars::Misc::CL_Move::TeleportKey.m_Var)) && g_GlobalInfo.m_nShifted >= Vars::Misc::CL_Move::DoubletapAmt.m_Var) {
 		while (g_GlobalInfo.m_nShifted != 0) {
 			g_GlobalInfo.m_nShifted--;
 			oClMove(accumulated_extra_samples, (g_GlobalInfo.m_nShifted == 1));
@@ -36,7 +36,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 	if (GetAsyncKeyState(Vars::Misc::CL_Move::RechargeKey.m_Var)) {
 		g_GlobalInfo.m_bRecharging = true;
 	}
-	if (g_GlobalInfo.m_bRecharging && g_GlobalInfo.m_nShifted < g_GlobalInfo.dtTicks) {
+	if (g_GlobalInfo.m_bRecharging && g_GlobalInfo.m_nShifted < Vars::Misc::CL_Move::DoubletapAmt.m_Var) {
 		g_GlobalInfo.m_nShifted++;
 		g_GlobalInfo.m_nWaitForShift = DT_WAIT_CALLS;	
 		return; // Don't move
@@ -115,7 +115,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 //	if (GetAsyncKeyState(Vars::Misc::CL_Move::RechargeKey.m_Var)) {
 //		g_GlobalInfo.m_bRecharging = true;
 //	}
-//	if (g_GlobalInfo.m_bRecharging && g_GlobalInfo.m_nShifted <= g_GlobalInfo.dtTicks )
+//	if (g_GlobalInfo.m_bRecharging && g_GlobalInfo.m_nShifted <= Vars::Misc::CL_Move::DoubletapAmt.m_Var )
 //	{
 //		g_GlobalInfo.m_nShifted++;
 //		g_GlobalInfo.m_nWaitForShift = DT_WAIT_CALLS;
