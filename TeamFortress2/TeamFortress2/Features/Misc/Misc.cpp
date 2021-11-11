@@ -30,7 +30,6 @@ void CMisc::CheatsBypass() {
 		sv_cheats->SetValue(0);
 	}
 
-
 	//this is here because im fucking lazy LOL
 	ConVar* interpRatio = g_Interfaces.CVars->FindVar(_("cl_interp_ratio"));
 	ConVar* interp = g_Interfaces.CVars->FindVar(_("cl_interpolate"));
@@ -462,7 +461,7 @@ void CMisc::SteamRPC()
 
 
 void Notify::Think() {
-	int		x{ 8 }, y{ 5 }, size{ 17 };
+	int		x{ 8 }, y{ 5 }, size{ 20 };
 	Color_t	color;
 	float	left;
 

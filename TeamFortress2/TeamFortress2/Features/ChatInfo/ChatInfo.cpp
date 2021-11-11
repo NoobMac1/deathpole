@@ -25,7 +25,13 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 					PlayerInfo_t pi;
 					g_Interfaces.Engine->GetPlayerInfo(pEntity->GetIndex(), &pi);
 					// TODO: Add colors and possibly OTHER TEAM? 
-					g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(0, tfm::format("%s[dp] \x3%s voted %s", clr, pi.name, bVotedYes ? "Yes" : "No").c_str());
+					
+					//g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(0, tfm::format("%s[dp] \x3%s voted %s", clr, pi.name, bVotedYes ? "Yes" : "No").c_str());
+
+					std::string voteString = "[deathpole] " + std::string(pi.name) + " voted " + std::string(bVotedYes ? "Yes" : "No");
+					std::wstring wvoteString = std::wstring(voteString.begin(), voteString.end());
+					g_notify.Add(voteString);
+
 					if (Vars::Misc::VotesInChat.m_Var) {
 						g_Interfaces.Engine->ClientCmd_Unrestricted(tfm::format("say_party \"%s voted %s\"", pi.name, bVotedYes ? "Yes" : "No").c_str());
 					}
@@ -39,7 +45,11 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 					PlayerInfo_t pi;
 					g_Interfaces.Engine->GetPlayerInfo(nIndex, &pi);
 
-					g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(nIndex, tfm::format("%s[dp] \x3%s\x1 is now a \x3%s\x1!", clr, pi.name, Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str());
+					std::string classString = "[deathpole] " + std::string(pi.name) + " is now a " + std::string(Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str();
+					std::wstring wclassString = std::wstring(classString.begin(), classString.end());
+					g_notify.Add(classString);
+
+					//g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(nIndex, tfm::format("%s[dp] \x3%s\x1 is now a \x3%s\x1!", clr, pi.name, Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str());
 				}
 			}
 
