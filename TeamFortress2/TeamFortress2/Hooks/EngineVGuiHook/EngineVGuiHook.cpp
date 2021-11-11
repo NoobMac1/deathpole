@@ -88,7 +88,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				if (Vars::Visuals::Watermark.m_Var)
 				{
 					//watermark
-					auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 500);
+					auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
 
 					g_Draw.Line(g_ScreenSize.c - 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 }); g_Draw.Line(g_ScreenSize.c - 10 + Vars::Visuals::WatermarkX.m_Var, 4 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + 10 + Vars::Visuals::WatermarkX.m_Var, 4 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 });
 					g_Draw.Rect(g_ScreenSize.c - 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, 140, 20, { 62, 62, 62, 80 });
