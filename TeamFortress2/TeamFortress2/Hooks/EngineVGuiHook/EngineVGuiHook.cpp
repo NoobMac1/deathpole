@@ -108,7 +108,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							float ratio = ((float)g_GlobalInfo.m_nShifted / (float)Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 
 							if (ratio > 1) { ratio = 1; }
-							if (ratio < 0) { ratio = 0; } //player is playing as heavy, charges, changes to scout, maxnew changes to a value lower than heavies maxnew, becomes negative, slightly annoying
+							if (ratio < 0) { ratio = 0; } //player changes tick count.
 
 							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
 							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
