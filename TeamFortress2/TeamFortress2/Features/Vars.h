@@ -467,7 +467,7 @@ namespace Vars
 		namespace CL_Move
 		{
 			inline CVar<bool> Enabled       { true, L"Enabled" };
-			inline CVar<bool> SEnabled       { true, L"Speedhack" };
+			inline CVar<bool> SEnabled       { false, L"Speedhack" };
 			inline CVar<int> SFactor       { 1, L"Speedhack Factor" };
 			inline CVar<bool> Doubletap		{ true, L"Doubletap" };
 			inline CVar<bool> NotInAir		{ true, L"Dont DT in air" };
