@@ -33,7 +33,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 					g_notify.Add(voteString);
 
 					if (Vars::Misc::VotesInChat.m_Var) {
-						g_Interfaces.Engine->ClientCmd_Unrestricted(tfm::format("say_party \"%s voted %s\"", pi.name, bVotedYes ? "Yes" : "No").c_str());
+						g_Interfaces.Engine->ClientCmd_Unrestricted(tfm::format("say_party [deathpole] \"%s voted %s\"", pi.name, bVotedYes ? "Yes" : "No").c_str());
 					}
 				}
 			}
