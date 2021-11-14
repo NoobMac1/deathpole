@@ -89,10 +89,15 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				{
 					//watermark
 					auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
+					int wxoff, wyoff;
 
-					g_Draw.Line(g_ScreenSize.c - 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 }); g_Draw.Line(g_ScreenSize.c - 10 + Vars::Visuals::WatermarkX.m_Var, 4 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + 10 + Vars::Visuals::WatermarkX.m_Var, 4 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 });
-					g_Draw.Rect(g_ScreenSize.c - 70 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, 140, 20, { 62, 62, 62, 80 });
-					g_Draw.String(FONT_DEBUG, g_ScreenSize.c - 57 + Vars::Visuals::WatermarkX.m_Var, 5 + Vars::Visuals::WatermarkY.m_Var, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"deathpole | delay: %i"), ping);
+					std::string st = "deathpole | delay: " + std::to_string(ping);
+					const wchar_t* wstring = (std::wstring(st.begin(), st.end())).c_str();
+					g_Interfaces.Surface->GetTextSize(FONT_DEBUG, wstring, wxoff, wyoff);
+
+					g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var,Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 }); g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 });
+					g_Draw.Rect(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 2+Vars::Visuals::WatermarkY.m_Var, wxoff, 20, { 62, 62, 62, 80 });
+					g_Draw.String(FONT_DEBUG, g_ScreenSize.c + Vars::Visuals::WatermarkX.m_Var, 20-(wyoff/2)+Vars::Visuals::WatermarkY.m_Var, { 255, 255, 255, 255 }, ALIGN_CENTER, _(L"deathpole | delay: %i"), ping);
 				}
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
