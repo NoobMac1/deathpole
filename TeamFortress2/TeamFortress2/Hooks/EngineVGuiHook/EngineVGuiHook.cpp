@@ -76,7 +76,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							vProjAimStart.y,
 							vProjAimEnd.x,
 							vProjAimEnd.y,
-							{ 255, 255, 255, 255 } //Set this to a var if u wantto idc
+							{ Colors::Target } //Set this to a var if u wantto idc
 						);
 					}
 				}
@@ -95,7 +95,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 					const wchar_t* wstring = (std::wstring(st.begin(), st.end())).c_str();
 					g_Interfaces.Surface->GetTextSize(FONT_DEBUG, wstring, wxoff, wyoff);
 
-					g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var,Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 }); g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, { 141, 243, 255, 255 });
+					g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var,Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, Vars::Visuals::WatermarkY.m_Var, { Colors::DmgLoggerOutline }); g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, { Colors::DmgLoggerOutline });
 					g_Draw.Rect(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 2+Vars::Visuals::WatermarkY.m_Var, wxoff, 20, { 62, 62, 62, 80 });
 					g_Draw.String(FONT_DEBUG, g_ScreenSize.c + Vars::Visuals::WatermarkX.m_Var, 20-(wyoff/2)+Vars::Visuals::WatermarkY.m_Var, { 255, 255, 255, 255 }, ALIGN_CENTER, _(L"deathpole | delay: %i"), ping);
 				}
