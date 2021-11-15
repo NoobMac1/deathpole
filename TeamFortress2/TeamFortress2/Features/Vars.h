@@ -425,7 +425,7 @@ namespace Vars
 		inline CVar<float> despawnTime{ 5.f, L"How many ticks to despawn a damage log event" };
 		inline CVar<int> damageLogger{ 0, L"Enable damage logger" };
 
-		inline CVar<int> WatermarkY{ 100,L"Watermark Offset Y" };
+		inline CVar<int> WatermarkY{ 0,L"Watermark Offset Y" };
 		inline CVar<int> WatermarkX{ 0,L"Watermark Offset X" };
 		inline CVar<bool> Watermark{ true,L"Watermark" };
 
