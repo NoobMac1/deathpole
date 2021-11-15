@@ -342,8 +342,8 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 
 		drawList = ImGui::GetBackgroundDrawList();
 
-		Normal = io.Fonts->AddFontFromFileTTF(u8"C:\\Windows\\Fonts\\smallest_pixel-7.ttf", 14.0f, &m_font_config, io.Fonts->GetGlyphRangesCyrillic());
-		DT = io.Fonts->AddFontFromFileTTF(u8"C:\\Windows\\Fonts\\smallest_pixel-7.ttf", 14.0f, &m_font_config, io.Fonts->GetGlyphRangesCyrillic());
+		Normal = io.Fonts->AddFontFromFileTTF(u8"C:\\Windows\\Fonts\\tahomabd.ttf", 14.0f, &m_font_config, io.Fonts->GetGlyphRangesCyrillic());
+		DT = io.Fonts->AddFontFromFileTTF(u8"C:\\Windows\\Fonts\\tahoma.ttf", 14.0f, &m_font_config, io.Fonts->GetGlyphRangesCyrillic());
 
 		bInitImGui = true;
 	}
