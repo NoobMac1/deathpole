@@ -15,11 +15,14 @@
 #include "../../Features/Aimbot/AimbotProjectile/AimbotProjectile.h"
 #include "../../Features/Crits/Crits.h"
 
+
 void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 {
+
 	static auto StartDrawing = reinterpret_cast<void(__thiscall*)(void*)>(g_Pattern.Find(_(L"vguimatsurface.dll"), _(L"55 8B EC 64 A1 ? ? ? ? 6A FF 68 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 14")));
 	static auto FinishDrawing = reinterpret_cast<void(__thiscall*)(void*)>(g_Pattern.Find(_(L"vguimatsurface.dll"), _(L"55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 51 56 6A 00")));
-
+	static int lastcheck = g_Interfaces.GlobalVars->tickcount;
+	static int fps{};
 	if (!g_ScreenSize.w || !g_ScreenSize.h)
 		g_ScreenSize.Update();
 
@@ -106,7 +109,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							int xscale = (Vars::Misc::CL_Move::DTBarScaleX.m_Var);
 							int yscale = (Vars::Misc::CL_Move::DTBarScaleY.m_Var);
 
-							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), {255, 255, 255, 255});
+							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), { 255, 255, 255, 255 });
 							g_Draw.GradientRect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), (nY - (xscale / 2) + yoff + xscale), { Colors::DTStart }, { Colors::DTEnd }, TRUE);
 							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) - 10 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 							if (g_GlobalInfo.m_nShifted == 0)
@@ -129,7 +132,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							}
 						}
 					}
-				}	
+				}
 
 				//Current Active Aimbot FOV
 				if (Vars::Visuals::AimFOVAlpha.m_Var && g_GlobalInfo.m_flCurAimFOV)
@@ -156,7 +159,11 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			// get tickrate.
 			int rate = (int)std::round(1.f / g_Interfaces.GlobalVars->interval_per_tick);
 			// get framerate.
-			int fps = (int)std::round(1.f / g_Interfaces.GlobalVars->frametime);
+
+			if (lastcheck < (g_Interfaces.GlobalVars->tickcount - 5)) {
+				lastcheck = g_Interfaces.GlobalVars->tickcount;
+				fps = (int)std::round(1.f / g_Interfaces.GlobalVars->frametime);
+			} // this is fucking retarded but might work
 
 			TCHAR infoBuf[32767];
 			DWORD bufCharCount = 32767;
