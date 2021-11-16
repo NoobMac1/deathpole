@@ -156,6 +156,9 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::Aimbot::Global::IgnoreFriends);
 				SAVE_VAR(Vars::Aimbot::Global::IgnoreTaunting);
 				SAVE_VAR(Vars::Aimbot::Global::BAimLethal);
+				SAVE_VAR(Vars::Aimbot::Global::showHitboxes);
+				SAVE_VAR(Vars::Aimbot::Global::clearPreviousHitbox);
+				SAVE_VAR(Vars::Aimbot::Global::hitboxTime);
 			}
 
 			{
@@ -614,15 +617,13 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_OTHER(Colors::FresnelBase);
 			SAVE_OTHER(Colors::FresnelTop);
 			SAVE_OTHER(Colors::AimSquareCol);
-			SAVE_OTHER(Colors::DtChargingLeft);
-			SAVE_OTHER(Colors::DtChargingRight);
-			SAVE_OTHER(Colors::DtChargedLeft);
-			SAVE_OTHER(Colors::DtChargedRight);
 			SAVE_OTHER(Colors::DtOutline);
 			SAVE_OTHER(Colors::DmgLoggerBackground);
 			SAVE_OTHER(Colors::DmgLoggerOutline);
 			SAVE_OTHER(Colors::DmgLoggerText);
 			SAVE_OTHER(Colors::Hitbox);
+			SAVE_OTHER(Colors::DTStart);
+			SAVE_OTHER(Colors::DTEnd);
 
 
 			SAVE_OTHER(g_Radar.m_nRadarX);
@@ -685,6 +686,9 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::Aimbot::Hitscan::ScopedOnly);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AutoScope);
 				LOAD_VAR(Vars::Aimbot::Hitscan::AutoRev);
+				LOAD_VAR(Vars::Aimbot::Global::showHitboxes);
+				LOAD_VAR(Vars::Aimbot::Global::clearPreviousHitbox);
+				LOAD_VAR(Vars::Aimbot::Global::hitboxTime);
 				
 			}
 
@@ -1113,15 +1117,13 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_OTHER(Colors::FresnelBase);
 			LOAD_OTHER(Colors::FresnelTop);
 			LOAD_OTHER(Colors::AimSquareCol);
-			LOAD_OTHER(Colors::DtChargingLeft);
-			LOAD_OTHER(Colors::DtChargingRight);
-			LOAD_OTHER(Colors::DtChargedLeft);
-			LOAD_OTHER(Colors::DtChargedRight);
 			LOAD_OTHER(Colors::DtOutline);
 			LOAD_OTHER(Colors::DmgLoggerBackground);
 			LOAD_OTHER(Colors::DmgLoggerOutline);
 			LOAD_OTHER(Colors::DmgLoggerText);
 			LOAD_OTHER(Colors::Hitbox);
+			LOAD_OTHER(Colors::DTStart);
+			LOAD_OTHER(Colors::DTEnd);
 
 			LOAD_OTHER(g_Radar.m_nRadarX);
 			LOAD_OTHER(g_Radar.m_nRadarY);

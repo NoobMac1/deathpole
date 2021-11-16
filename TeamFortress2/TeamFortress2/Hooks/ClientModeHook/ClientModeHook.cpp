@@ -285,16 +285,15 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 	auto AntiWarp = [](CUserCmd* cmd) -> void
 	{
 		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
-			cmd->sidemove = -(cmd->sidemove) * (g_GlobalInfo.m_nShifted / g_GlobalInfo.dtTicks);
-			cmd->forwardmove = -(cmd->forwardmove) * (g_GlobalInfo.m_nShifted / g_GlobalInfo.dtTicks);
+			cmd->sidemove = -(cmd->sidemove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
+			cmd->forwardmove = -(cmd->forwardmove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 		}
 		else {
 			return;
 		}
 	};
 
-	AntiWarp(pCmd);
-
+	if (!Vars::Misc::CL_Move::SEnabled.m_Var) { AntiWarp(pCmd); }
 
 	if (Vars::Misc::TauntSlide.m_Var)
 	{
