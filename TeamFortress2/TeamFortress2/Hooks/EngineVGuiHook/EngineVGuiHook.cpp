@@ -177,7 +177,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			g_Interfaces.Surface->GetTextSize(g_Draw.m_vecFonts[FONT_MENU].dwFont, Utils::ConvertUtf8ToWide(ss.str()).data(), wideth, heighth);
 
 			if (Vars::Visuals::Watermark.m_Var) {
-				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 8, wideth + 10, 2, Vars::Menu::Colors::Widget);
+				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 8, wideth + 10, 2, { Colors::DmgLoggerOutline });
 
 				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 10, wideth + 10, heighth + 2, { 44, 49, 56, 100 });
 
