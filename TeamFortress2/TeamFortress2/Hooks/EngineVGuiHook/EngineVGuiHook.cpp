@@ -85,20 +85,6 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				// you can use it for more, i'm sure. - myzarfin
 				g_notify.Think();
 
-				if (Vars::Visuals::Watermark.m_Var)
-				{
-					//watermark
-					auto nci = g_Interfaces.Engine->GetNetChannelInfo(); int ping = (nci->GetLatency(FLOW_OUTGOING) * 1000);
-					int wxoff, wyoff;
-
-					std::string st = "deathpole | delay: " + std::to_string(ping);
-					const wchar_t* wstring = (std::wstring(st.begin(), st.end())).c_str();
-					g_Interfaces.Surface->GetTextSize(FONT_DEBUG, wstring, wxoff, wyoff);
-
-					g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var,Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, Vars::Visuals::WatermarkY.m_Var, { Colors::DmgLoggerOutline }); g_Draw.Line(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, g_ScreenSize.c + wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 1 + Vars::Visuals::WatermarkY.m_Var, { Colors::DmgLoggerOutline });
-					g_Draw.Rect(g_ScreenSize.c - wxoff/2 + Vars::Visuals::WatermarkX.m_Var, 2+Vars::Visuals::WatermarkY.m_Var, wxoff, 20, { 62, 62, 62, 80 });
-					g_Draw.String(FONT_DEBUG, g_ScreenSize.c + Vars::Visuals::WatermarkX.m_Var, 20-(wyoff/2)+Vars::Visuals::WatermarkY.m_Var, { 255, 255, 255, 255 }, ALIGN_CENTER, _(L"deathpole | delay: %i"), ping);
-				}
 				//Tickbase info
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
@@ -159,6 +145,49 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				}
 			};
 			OtherDraws();
+
+			// get time.
+			time_t t = std::time(nullptr);
+			std::ostringstream time;
+			time << std::put_time(std::localtime(&t), ("%H:%M:%S"));
+			// get round trip time in milliseconds.
+			//float fLatency = (g_Interfaces.Engine->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + g_Interfaces.Engine->GetNetChannelInfo()->GetLatency(FLOW_INCOMING));
+			/*int ms = std::max(0, (int)std::round(fLatency * 1000.f));*/ // fak off
+			// get tickrate.
+			int rate = (int)std::round(1.f / g_Interfaces.GlobalVars->interval_per_tick);
+			// get framerate.
+			int fps = (int)std::round(1.f / g_Interfaces.GlobalVars->frametime);
+
+			TCHAR infoBuf[32767];
+			DWORD bufCharCount = 32767;
+			typedef std::basic_string<TCHAR> tstring;
+			GetComputerNameW(infoBuf, &bufCharCount);
+			tstring nig = infoBuf;
+			std::string ger = std::string(nig.begin(), nig.end());
+
+			std::stringstream ss;
+			if (g_Interfaces.Engine->IsInGame()) {
+				ss << tfm::format(_("deathpole | admin | rate: %i | fps: %i"), rate, fps);
+			}
+			else {
+				ss << tfm::format(_("deathpole | admin | in menu"));
+			}
+
+			int wideth, heighth;
+			g_Interfaces.Surface->GetTextSize(g_Draw.m_vecFonts[FONT_MENU].dwFont, Utils::ConvertUtf8ToWide(ss.str()).data(), wideth, heighth);
+
+			if (Vars::Visuals::Watermark.m_Var) {
+				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 8, wideth + 10, 2, Vars::Menu::Colors::Widget);
+
+				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 10, wideth + 10, heighth + 2, { 44, 49, 56, 100 });
+
+				g_Draw.String(FONT_MENU, g_ScreenSize.w - (wideth / 2) - 15, 10, { 255, 255, 255 ,250 }, ALIGN_CENTERHORIZONTAL, ss.str().c_str());
+
+			}
+			//Debug
+			{
+
+			}
 			g_Misc.BypassPure();
 			g_ESP.Run();
 			g_SpyWarning.Run();

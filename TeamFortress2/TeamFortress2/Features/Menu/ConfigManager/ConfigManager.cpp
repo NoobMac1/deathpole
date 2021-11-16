@@ -498,8 +498,6 @@ void CConfigManager::Save(const wchar_t *name)
 
 
 			SAVE_VAR(Vars::Visuals::Watermark);
-			SAVE_VAR(Vars::Visuals::WatermarkY);
-			SAVE_VAR(Vars::Visuals::WatermarkX);
 
 
 
@@ -1001,8 +999,6 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::damageLogger);
 
 			LOAD_VAR(Vars::Visuals::Watermark);
-			LOAD_VAR(Vars::Visuals::WatermarkY);
-			LOAD_VAR(Vars::Visuals::WatermarkX);
 			
 		}
 
