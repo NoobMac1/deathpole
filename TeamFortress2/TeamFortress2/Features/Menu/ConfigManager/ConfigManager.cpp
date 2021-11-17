@@ -465,6 +465,7 @@ void CConfigManager::Save(const wchar_t *name)
 			SAVE_VAR(Vars::Visuals::FieldOfView);
 			SAVE_VAR(Vars::Visuals::AimFOVAlpha);
 			SAVE_VAR(Vars::Visuals::RemoveScope);
+			SAVE_VAR(Vars::Visuals::AimbotViewmodel);
 			SAVE_VAR(Vars::Visuals::RemoveZoom);
 			SAVE_VAR(Vars::Visuals::RemovePunch);
 			SAVE_VAR(Vars::Visuals::CrosshairAimPos);
@@ -965,6 +966,7 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::RemoveTaunts);
 			LOAD_VAR(Vars::Visuals::FieldOfView);
 			LOAD_VAR(Vars::Visuals::AimFOVAlpha);
+			LOAD_VAR(Vars::Visuals::AimbotViewmodel);
 			LOAD_VAR(Vars::Visuals::RemoveScope);
 			LOAD_VAR(Vars::Visuals::RemoveZoom);
 			LOAD_VAR(Vars::Visuals::RemovePunch);

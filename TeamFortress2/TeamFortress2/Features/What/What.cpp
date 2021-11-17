@@ -874,6 +874,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Aimbot prediction", &Vars::Visuals::AimPosSquare.m_Var); HelpMarker("Will show a rough estimate of where the aimbot is going to aim at");
 								ImGui::Checkbox("Bullet tracers", &Vars::Visuals::BulletTracer.m_Var); HelpMarker("Will draw a line from your position to where the aimbot will shoot if hitscan or projectile");
 								ImGui::Checkbox("Rainbow tracers", &Vars::Visuals::BulletTracerRainbow.m_Var); HelpMarker("Bullet tracer color will be dictated by a changing color");
+								ImGui::Checkbox("Aimbot viewmodel", &Vars::Visuals::AimbotViewmodel.m_Var); HelpMarker("Will aim viewmodel at target");
 								ImGui::TextUnformatted("");
 								ImGui::Checkbox("Thirdperson", &Vars::Visuals::ThirdPerson.m_Var); HelpMarker("Will move your camera to be in a thirdperson view");
 								InputKeybind("Thirdperson key", Vars::Visuals::ThirdPersonKey); HelpMarker("What key to toggle thirdperson, press ESC if no bind is desired");

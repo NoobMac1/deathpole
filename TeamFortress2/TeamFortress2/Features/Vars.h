@@ -382,20 +382,14 @@ namespace Vars
 			inline CVar<int>  IconSize	 { 14, L"Icon Size" };
 		}
 	}
-	
-	namespace CalcViewModelView {
-		inline SEOHook::Func Func;
-		using fn = void(__fastcall*)(void*, void*, CBaseEntity*, Vec3&, Vec3&);
-		void __fastcall Hook(void* ecx, void* edx, CBaseEntity* owner, Vec3& eyePosition, Vec3& eyeAngles);
-		void Init();
-	}
 
 	namespace Visuals
 	{
 		inline CVar<bool> RemoveDisguises   { false, L"Remove Disguises" };
 		inline CVar<bool> RemoveTaunts		{ false, L"Remove Taunts" };
 		inline CVar<int> FieldOfView		{ 110, L"Field of View" };
-		inline CVar<int> AimFOVAlpha		{ 0, L"Aim FOV Alpha" };
+		inline CVar<int> AimFOVAlpha{ 0, L"Aim FOV Alpha" };
+		inline CVar<bool> AimbotViewmodel{ false, L"Aim Viewmodel at target" };
 		inline CVar<bool> RemoveScope		{ true, L"Remove Scope" };
 		inline CVar<bool> RemoveZoom		{ true, L"Remove Zoom" };
 		inline CVar<bool> RemovePunch		{ false, L"Remove Recoil" };
