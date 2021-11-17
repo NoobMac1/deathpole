@@ -30,7 +30,7 @@ void CMisc::CheatsBypass() {
 		sv_cheats->SetValue(0);
 	}
 
-	//this is here because im fucking lazy LOL
+	//this is here because im fucking lazy LOL - si6r
 	ConVar* interpRatio = g_Interfaces.CVars->FindVar(_("cl_interp_ratio"));
 	ConVar* interp = g_Interfaces.CVars->FindVar(_("cl_interpolate"));
 	ConVar* interpAmount = g_Interfaces.CVars->FindVar(_("cl_interp"));
