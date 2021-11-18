@@ -81,6 +81,7 @@ public:
 	virtual int						GetSplitScreenPlayerSlot() const;
 	DWORD GetColor(void) const;
 	virtual void					AddFlags(int flags);
+	virtual void					RemoveFlags(int flags);
 	virtual int						GetFlags() const;
 	virtual	bool					IsCommand(void) const;
 	virtual void					SetValue(const char *value);

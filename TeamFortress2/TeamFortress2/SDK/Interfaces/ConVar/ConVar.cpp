@@ -89,6 +89,11 @@ void ConVar::AddFlags(int flags)
 	m_pParent->m_nFlags |= flags;
 }
 
+void ConVar::RemoveFlags(int flags)
+{
+	m_pParent->m_nFlags &= ~flags;
+}
+
 int ConVar::GetFlags(void) const
 {
 	return m_pParent->m_nFlags;

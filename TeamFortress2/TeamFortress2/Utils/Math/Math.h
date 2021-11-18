@@ -3,7 +3,9 @@
 #include <math.h>
 #include <cmath>		//std::isfinite std::remainder
 #include <cfloat>		//FLT_EPSILON
-#include <algorithm>	//std::min std::max
+#undef min
+#undef max 
+#include <algorithm>	//std::clamp
 
 #define M_RADPI		57.295779513082
 #define PI			3.14159265358979323846
