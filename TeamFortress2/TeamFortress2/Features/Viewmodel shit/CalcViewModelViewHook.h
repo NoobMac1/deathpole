@@ -1,3 +1,5 @@
+#include "../../Hooks/Hooks.h"
+
 namespace CalcViewModelView {
     inline SEOHook::Func Func;
     using fn = void(__fastcall*)(void*, void*, CBaseEntity*, Vec3&, Vec3&);

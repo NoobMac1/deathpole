@@ -1,4 +1,5 @@
 #include "CalcViewModelViewHook.h"
+#include "../../Hooks/Viewmodel/Viewmodel.h"
 
 void __fastcall CalcViewModelView::Hook(void* ecx, void* edx, CBaseEntity* owner, Vec3& eyePosition, Vec3& eyeAngles)
 {
