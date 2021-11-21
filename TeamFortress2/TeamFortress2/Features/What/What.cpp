@@ -929,7 +929,10 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Menu snow", &Vars::Visuals::Snow.m_Var); HelpMarker("Enable the snow when menu is open");
 								ImGui::Checkbox("CatReply", &Vars::Misc::BeCat.m_Var); HelpMarker("Be marked by catbots.");
 								ImGui::Checkbox("Watermark", &Vars::Visuals::Watermark.m_Var); HelpMarker("Enables the deathpole watermark.");
-								ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -180, 180);
+								ImGui::SliderInt("VM X Off", &Vars::Visuals::XOffset.m_Var, -50, 50);
+								ImGui::SliderInt("VM Y Off", &Vars::Visuals::YOffset.m_Var, -50, 50);
+								ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -50, 50);
+								ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
 							}
 							if (ImGui::CollapsingHeader("Out of FoV arrows")) {
 								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FoV");

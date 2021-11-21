@@ -17,8 +17,20 @@ void __fastcall CalcViewModelView::Hook(void* ecx, void* edx, CBaseEntity* owner
             eyeAngles = g_Interfaces.Engine->GetViewAngles();
         }
     }
-    eyeAngles.z += Vars::Visuals::ZOffset.m_Var; //just keep it here and blame user for issues
-    originalFn(ecx, edx, owner, eyePosition, eyeAngles);
+    //VM Offset Shit
+    
+    Vec3 vForward = {}, vRight = {}, vUp = {};
+    Math::AngleVectors(eyeAngles, &vForward, &vRight, &vUp);
+
+    Vec3 vEyePosition = eyePosition + (
+        (vRight * Vars::Visuals::XOffset.m_Var) +
+        (vForward * Vars::Visuals::YOffset.m_Var) +
+        (vUp * Vars::Visuals::ZOffset.m_Var)
+        );
+    
+    eyeAngles.z += Vars::Visuals::VMRoll.m_Var; //VM Roll
+
+    originalFn(ecx, edx, owner, vEyePosition, eyeAngles);
 }
 
 void CalcViewModelView::Init() {

@@ -502,6 +502,10 @@ void CConfigManager::Save(const wchar_t *name)
 
 
 			SAVE_VAR(Vars::Visuals::Watermark);
+			SAVE_VAR(Vars::Visuals::VMRoll);
+			SAVE_VAR(Vars::Visuals::XOffset);
+			SAVE_VAR(Vars::Visuals::YOffset);
+			SAVE_VAR(Vars::Visuals::ZOffset);
 
 
 
@@ -1005,6 +1009,10 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Visuals::damageLogger);
 
 			LOAD_VAR(Vars::Visuals::Watermark);
+			LOAD_VAR(Vars::Visuals::VMRoll);
+			LOAD_VAR(Vars::Visuals::XOffset);
+			LOAD_VAR(Vars::Visuals::YOffset);
+			LOAD_VAR(Vars::Visuals::ZOffset);
 			
 		}
 
