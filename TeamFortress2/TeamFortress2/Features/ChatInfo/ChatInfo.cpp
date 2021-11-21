@@ -105,7 +105,8 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 			auto time = Vars::Aimbot::Global::hitboxTime.m_Var;
 			auto colour = Colors::Hitbox;
 			auto pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")));
-			if (pEntity == pLocal) { return; }
+			const auto nAttacker = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("attacker")));
+			if (pEntity == pLocal) { return; }; if (pLocal != nAttacker) { return; }
 			const model_t* model;
 			studiohdr_t* hdr;
 			mstudiohitboxset_t* set;
