@@ -20,6 +20,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 		if (Vars::Visuals::ChatInfo.m_Var) {
 			if (Vars::Misc::VoteRevealer.m_Var && uNameHash == FNV1A::HashConst("vote_cast")) {
 				const auto pEntity = g_Interfaces.EntityList->GetClientEntity(pEvent->GetInt("entityid"));
+				if (pEntity == pLocal) { return; }
 				if (pEntity && pEntity->IsPlayer()) {
 					const bool bVotedYes = pEvent->GetInt("vote_option") == 0;
 					PlayerInfo_t pi;
@@ -40,6 +41,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 
 			if (uNameHash == FNV1A::HashConst("player_changeclass")) {
 				if (const auto& pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")))) {
+					if (pEntity == pLocal) { return; }
 					int nIndex = pEntity->GetIndex();
 
 					PlayerInfo_t pi;
@@ -60,6 +62,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 
 		if (Vars::Visuals::damageLogger.m_Var && uNameHash == FNV1A::HashConst("player_hurt")) {
 			if (const auto pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")))) {
+				if (pEntity == pLocal) { return; }
 				const auto nAttacker = pEvent->GetInt("attacker");
 				const auto nHealth = pEvent->GetInt("health");
 				const auto nDamage = pEvent->GetInt("damageamount");
@@ -97,11 +100,12 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 			}
 		}
 
-		if (Vars::Aimbot::Global::showHitboxes.m_Var && uNameHash == FNV1A::HashConst("player_hurt")) {
+		if (Vars::Aimbot::Global::showHitboxes.m_Var && uNameHash == FNV1A::HashConst("player_hurt")){
 			if (Vars::Aimbot::Global::clearPreviousHitbox.m_Var) { g_Interfaces.DebugOverlay->ClearAllOverlays(); }
 			auto time = Vars::Aimbot::Global::hitboxTime.m_Var;
 			auto colour = Colors::Hitbox;
 			auto pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")));
+			if (pEntity == pLocal) { return; }
 			const model_t* model;
 			studiohdr_t* hdr;
 			mstudiohitboxset_t* set;
