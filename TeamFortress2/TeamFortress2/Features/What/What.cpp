@@ -558,10 +558,10 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 						{
 							ImGui::TextUnformatted("Hitscan");
 							//ImGui::Checkbox("Active###Hit scan", &Vars::Aimbot::Hitscan::Active.m_Var); HelpMarker("Hitscan aimbot master switch");
-							static const char* hitscanSortMethod[]{ "FoV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###hitscanSortMethod", &Vars::Aimbot::Hitscan::SortMethod.m_Var, hitscanSortMethod, IM_ARRAYSIZE(hitscanSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
+							static const char* hitscanSortMethod[]{ "FOV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###hitscanSortMethod", &Vars::Aimbot::Hitscan::SortMethod.m_Var, hitscanSortMethod, IM_ARRAYSIZE(hitscanSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
 							static const char* hitscanAimMethod[]{ "Plain", "Smooth", "Silent" }; ImGui::PushItemWidth(100); ImGui::Combo("Aim method###hitscanAimMethod", &Vars::Aimbot::Hitscan::AimMethod.m_Var, hitscanAimMethod, IM_ARRAYSIZE(hitscanAimMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to aim at the target");
 							static const char* hitscanAimHitbox[]{ "Head", "Body", "Auto" }; ImGui::PushItemWidth(100); ImGui::Combo("Aim position###hitscanAimPosition", &Vars::Aimbot::Hitscan::AimHitbox.m_Var, hitscanAimHitbox, IM_ARRAYSIZE(hitscanAimHitbox)); ImGui::PopItemWidth(); HelpMarker("Which hitbox the aimbot will target");
-							ImGui::PushItemWidth(100); ImGui::SliderFloat("Smooth factor", &Vars::Aimbot::Hitscan::SmoothingAmount.m_Var, 1.0f, 10.f, "%.0f", 1.0f); ImGui::PopItemWidth(); HelpMarker("How many degrees the aimbot's FoV will have");
+							ImGui::PushItemWidth(100); ImGui::SliderFloat("Smooth factor", &Vars::Aimbot::Hitscan::SmoothingAmount.m_Var, 1.0f, 10.f, "%.0f", 1.0f); ImGui::PopItemWidth(); HelpMarker("How many degrees the aimbot's FOV will have");
 							static const char* hitscanTapFire[]{ "Off", "Distance", "Always" }; ImGui::PushItemWidth(100); ImGui::Combo("Tap-fire", &Vars::Aimbot::Hitscan::TapFire.m_Var, hitscanTapFire, IM_ARRAYSIZE(hitscanTapFire)); ImGui::PopItemWidth(); HelpMarker("When to tap-fire with inaccurate rapid-fire weapons");
 							ImGui::Checkbox("Minigun rev up", &Vars::Aimbot::Hitscan::AutoRev.m_Var); HelpMarker("Will rev heavy's minigun regardless of if aimbot has a target");
 							ImGui::Checkbox("Body multipoint", &Vars::Aimbot::Hitscan::ScanHitboxes.m_Var); HelpMarker("Will attempt to shoot the body hitbox by scanning the edges");
@@ -577,7 +577,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 						{
 							ImGui::TextUnformatted("Projectile");
 							ImGui::Checkbox("Performance mode", &Vars::Aimbot::Projectile::PerformanceMode.m_Var); HelpMarker("Only taget enemy closest to the crosshair");
-							static const char* projectileSortMethod[]{ "FoV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###projectileSortMethod", &Vars::Aimbot::Projectile::SortMethod.m_Var, projectileSortMethod, IM_ARRAYSIZE(projectileSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
+							static const char* projectileSortMethod[]{ "FOV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###projectileSortMethod", &Vars::Aimbot::Projectile::SortMethod.m_Var, projectileSortMethod, IM_ARRAYSIZE(projectileSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
 							static const char* projectileAimMethod[]{ "Plain", "Silent" }; ImGui::PushItemWidth(100); ImGui::Combo("Aim method###projectileAimMethod", &Vars::Aimbot::Projectile::AimMethod.m_Var, projectileAimMethod, IM_ARRAYSIZE(projectileAimMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to aim at the target");
 							static const char* projectileAimHitbox[]{ "Body", "Feet", "Auto" }; ImGui::PushItemWidth(100); ImGui::Combo("Aim position###projectileAimPosition", &Vars::Aimbot::Projectile::AimPosition.m_Var, projectileAimHitbox, IM_ARRAYSIZE(projectileAimHitbox)); ImGui::PopItemWidth(); HelpMarker("Which hitbox the aimbot will target");
 							ImGui::Checkbox("Aim at feet if on ground (Demoman)", &Vars::Aimbot::Projectile::FeetAimIfOnGround.m_Var); HelpMarker("If true, aimbot will aim at enemies feet if target is on the ground (Demoman only and will only work if the aim postition is set to auto");
@@ -586,9 +586,9 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ImGui::PushItemWidth(100); ImGui::SliderFloat("Manual Z Adjust amount", &Vars::Aimbot::Projectile::ZAdjustAmount.m_Var, 0.0f, 10.0f, "%.1f"); ImGui::PopItemWidth(); HelpMarker("Note: Higher values may cause inaccuracy");
 							ImGui::TextUnformatted("");
 							ImGui::TextUnformatted("Melee");
-							static const char* meleeSortMethod[]{ "FoV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###meleeSortMethod", &Vars::Aimbot::Melee::SortMethod.m_Var, meleeSortMethod, IM_ARRAYSIZE(meleeSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
+							static const char* meleeSortMethod[]{ "FOV", "Distance" }; ImGui::PushItemWidth(100); ImGui::Combo("Sort method###meleeSortMethod", &Vars::Aimbot::Melee::SortMethod.m_Var, meleeSortMethod, IM_ARRAYSIZE(meleeSortMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to decide which target to aim at");
 							static const char* meleeAimMethod[]{ "Plain", "Smooth", "Silent" }; ImGui::PushItemWidth(100); ImGui::Combo("Aim method###meleeAimMethod", &Vars::Aimbot::Melee::AimMethod.m_Var, meleeAimMethod, IM_ARRAYSIZE(meleeAimMethod)); ImGui::PopItemWidth(); HelpMarker("Which method the aimbot uses to aim at the target");
-							ImGui::PushItemWidth(100); ImGui::SliderFloat("Smooth factor###meleeSmooth", &Vars::Aimbot::Melee::SmoothingAmount.m_Var, 1.0f, 10.f, "%.0f", 1.0f); ImGui::PopItemWidth(); HelpMarker("How many degrees the aimbot's FoV will have");
+							ImGui::PushItemWidth(100); ImGui::SliderFloat("Smooth factor###meleeSmooth", &Vars::Aimbot::Melee::SmoothingAmount.m_Var, 1.0f, 10.f, "%.0f", 1.0f); ImGui::PopItemWidth(); HelpMarker("How many degrees the aimbot's FOV will have");
 							ImGui::Checkbox("Range check", &Vars::Aimbot::Melee::RangeCheck.m_Var); HelpMarker("Only aim at target if within melee range");
 							ImGui::Checkbox("Melee prediction", &Vars::Aimbot::Melee::PredictSwing.m_Var); HelpMarker("Aimbot will attack preemptively, predicting you will be in range of the target");
 							ImGui::Checkbox("Whip teammates", &Vars::Aimbot::Melee::WhipTeam.m_Var); HelpMarker("Aimbot will target teammates if holding the Disciplinary Action");
@@ -614,9 +614,9 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ImGui::TextUnformatted("");
 							ImGui::TextUnformatted("Auto airblast");
 							ImGui::Checkbox("Active###gAAB", &Vars::Triggerbot::Blast::Active.m_Var); HelpMarker("Auto airblast master switch");
-							ImGui::Checkbox("Rage mode###gAABr", &Vars::Triggerbot::Blast::Rage.m_Var); HelpMarker("Will airblast whenever possible, regardless of FoV");
+							ImGui::Checkbox("Rage mode###gAABr", &Vars::Triggerbot::Blast::Rage.m_Var); HelpMarker("Will airblast whenever possible, regardless of FOV");
 							ImGui::Checkbox("Silent###gAABs", &Vars::Triggerbot::Blast::Silent.m_Var); HelpMarker("Aim changes made by the rage mode setting aren't visible");
-							ImGui::PushItemWidth(100); ImGui::SliderInt("Airblast FoV###gAABFoV", &Vars::Triggerbot::Blast::Fov.m_Var, 1, 60, "%d"); ImGui::PopItemWidth(); HelpMarker("How many degrees the auto airblast's FoV will have");
+							ImGui::PushItemWidth(100); ImGui::SliderInt("Airblast FoV###gAABFOV", &Vars::Triggerbot::Blast::Fov.m_Var, 1, 60, "%d"); ImGui::PopItemWidth(); HelpMarker("How many degrees the auto airblast's FOV will have");
 
 						}
 						ImGui::NextColumn();
@@ -865,7 +865,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("World modulation", &Vars::Visuals::WorldModulation.m_Var); HelpMarker("Will colour modulate the world");
 								ImGui::Checkbox("Sky modulation", &Vars::Visuals::SkyModulation.m_Var); HelpMarker("Will colour modulate the sky");
 								ImGui::Checkbox("Remove scope", &Vars::Visuals::RemoveScope.m_Var); HelpMarker("Will remove the scope overlay on sniper rifles");
-								ImGui::Checkbox("Remove zoom", &Vars::Visuals::RemoveZoom.m_Var); HelpMarker("Will make scoping not affect your FoV");
+								ImGui::Checkbox("Remove zoom", &Vars::Visuals::RemoveZoom.m_Var); HelpMarker("Will make scoping not affect your FOV");
 								ImGui::Checkbox("Remove punch", &Vars::Visuals::RemovePunch.m_Var); HelpMarker("Will remove visual punch/recoil");
 								ImGui::Checkbox("Remove disguises", &Vars::Visuals::RemoveDisguises.m_Var); HelpMarker("Will remove disguises from spies, making them appear normally and improving aimbot accuracy");
 								ImGui::Checkbox("Remove taunts", &Vars::Visuals::RemoveTaunts.m_Var); HelpMarker("Will remove taunts on players, making them appear still and improving aimbot accuracy");
@@ -934,8 +934,8 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -50, 50);
 								ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
 							}
-							if (ImGui::CollapsingHeader("Out of FoV arrows")) {
-								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FoV");
+							if (ImGui::CollapsingHeader("Out of FOV arrows")) {
+								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FOV");
 								ImGui::PushItemWidth(100); ImGui::SliderFloat("Arrow length", &Vars::Visuals::ArrowLength.m_Var, 5.f, 50.f, "%.2f"); ImGui::PopItemWidth(); HelpMarker("How long the arrows are");
 								ImGui::PushItemWidth(100); ImGui::SliderFloat("Arrow angle", &Vars::Visuals::ArrowAngle.m_Var, 5.f, 180.f, "%.2f"); ImGui::PopItemWidth(); HelpMarker("The angle of the arrow");
 								//ImGui::PushItemWidth(100); ImGui::SliderFloat("Arrow range", &Vars::Visuals::ScreenRange.m_Var, 1.1f, 4.f, "%.2f"); ImGui::PopItemWidth(); HelpMarker("How far on the screen the arrows will go");
@@ -1087,9 +1087,9 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 
 							if (ImGui::CollapsingHeader(_("Body part scales"))) {
 								ImGui::Checkbox(_("Body part scales switch"), &Vars::ESP::Players::Funnybodypartslol.m_Var);
-								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Head scale"), &Vars::ESP::Players::Headscale.m_Var, -180.f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FoV will have"));
-								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Body scale"), &Vars::ESP::Players::Torsoscale.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FoV will have"));
-								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Hand scale"), &Vars::ESP::Players::Handscale.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FoV will have"));
+								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Head scale"), &Vars::ESP::Players::Headscale.m_Var, -180.f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FOV will have"));
+								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Body scale"), &Vars::ESP::Players::Torsoscale.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FOV will have"));
+								ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Hand scale"), &Vars::ESP::Players::Handscale.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); ImGui::PopItemWidth(); HelpMarker(_("How many degrees the aimbot's FOV will have"));
 							}
 						}
 						ImGui::NextColumn();
@@ -1190,7 +1190,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ColorPicker("World modulation", Colors::WorldModulation);
 							ColorPicker("Sky modulation", Colors::SkyModulation);
 							ColorPicker("Static prop modulation", Colors::StaticPropModulation);
-							ColorPicker("FoV circle", Colors::FOVCircle);
+							ColorPicker("FOV circle", Colors::FOVCircle);
 							ColorPicker("Bones", Colors::Bones);
 							ColorPicker("Bullet tracer", Colors::BulletTracer);
 							ColorPicker("Fresnel chams base", Colors::FresnelBase);
