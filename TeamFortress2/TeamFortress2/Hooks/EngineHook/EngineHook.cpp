@@ -20,6 +20,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 		return;
 	}
 
+	//Speedhack
 	if (Vars::Misc::CL_Move::SEnabled.m_Var)
 	{
 		int SpeedTicks{ 0 };
@@ -71,6 +72,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 		{
 			g_GlobalInfo.fast_stop = true;
 			while (g_GlobalInfo.m_nShifted) {
+
 				if (Vars::Misc::CL_Move::NotInAir.m_Var) {
 					if (pLocal->IsOnGround()) {
 						g_GlobalInfo.m_nShifted--;
