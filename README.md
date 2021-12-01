@@ -1,2 +1,3 @@
-# SEOwned paste
-*that beat rijin v1 in speedhack hvh*
+# Hobby project
+
+pls dont paste off my paste :c
