@@ -10,6 +10,25 @@ public:
 	const wchar_t* m_szDisplayName;
 };
 
+/*
+struct cfg
+{
+	struct colors
+	{
+		Color_t windowbg = { 30, 30, 30, 255 };
+		Color_t titlebar = { 50, 50, 50, 255 };
+		Color_t text = { 255, 255, 255, 190 };
+		Color_t widget = { 20, 20, 20, 255 };
+		Color_t widgetactive = { 70, 70, 70, 255 };
+		Color_t outlinemenu = { 255, 255, 255, 20 };
+		Color_t featureon = { 255, 255, 255, 0 };
+		Color_t featureoff = { 255, 255, 255, 0 };
+		Color_t featurebackground = { 255, 255, 255, 0 };
+		Color_t featureoutline = { 255, 255, 255, 0 };
+	};
+};
+*/
+
 namespace Vars
 {
 	namespace Menu

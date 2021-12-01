@@ -27,6 +27,7 @@ void AngleVectors2(const QAngle& angles, Vector* forward)
 
 void FastStop(CUserCmd* pCmd)
 {
+	/*
 	if (g_EntityCache.m_pLocal) {
 		// Get velocity
 		Vector vel = g_EntityCache.m_pLocal->GetVelocity();
@@ -60,6 +61,27 @@ void FastStop(CUserCmd* pCmd)
 		{
 			pCmd->forwardmove = pCmd->sidemove = 0.0f;
 		}
+	}
+	*/
+	if (const auto& pLocal = g_EntityCache.m_pLocal) {
+		Vec3 angle;
+		Math::VectorAngles(pLocal->GetVecVelocity(), angle);
+		float speed = pLocal->GetVelocity().x + pLocal->GetVelocity().y;
+		angle.y = pCmd->viewangles.y - angle.y;
+		Vec3 direction;
+		Math::AngleVectors(angle, &direction);
+		Vec3 stop = direction * -speed;
+		if (speed > 23.2f) {	// I don't know if this value is a good choice, but it will probably work
+			pCmd->forwardmove = stop.x;
+			pCmd->sidemove = stop.y;
+		}
+		else {
+			pCmd->forwardmove = 0.f;
+			pCmd->sidemove = 0.f;
+		}
+	}
+	else {
+		return;
 	}
 }
 
@@ -208,6 +230,7 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		pCmd->viewangles = ang;
 	}
 
+	// why have this & anti-warp
 	if (g_GlobalInfo.m_bShouldShift) {
 		FastStop(pCmd);
 	}
@@ -284,32 +307,9 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 
 	auto AntiWarp = [](CUserCmd* cmd) -> void
 	{
-		/*
 		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
 			cmd->sidemove = -(cmd->sidemove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 			cmd->forwardmove = -(cmd->forwardmove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
-		}
-		else {
-			return;
-		}
-		*/
-		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
-			const auto& pLocal = g_EntityCache.m_pLocal;
-			Vec3 angle;
-			Math::VectorAngles(pLocal->GetVecVelocity(), angle);
-			float speed = pLocal->GetVelocity().x + pLocal->GetVelocity().y;
-			angle.y = cmd->viewangles.y - angle.y;
-			Vec3 direction;
-			Math::AngleVectors(angle, &direction);
-			Vec3 stop = direction * -speed;
-			if (speed > 0.f) {
-				cmd->forwardmove = stop.x;
-				cmd->sidemove = stop.y;
-			}
-			else {
-				cmd->forwardmove = 0.f;
-				cmd->sidemove = 0.f;
-			}
 		}
 		else {
 			return;
