@@ -516,7 +516,7 @@ namespace Vars
 		
 		namespace Discord
 		{
-			inline CVar<bool>EnableRPC				{ true, L"Enable Discord RPC" };
+			inline CVar<bool>EnableRPC				{ false, L"Enable Discord RPC" };
 			inline CVar<bool>IncludeClass			{ true, L"Include class" };
 			inline CVar<bool>IncludeMap				{ true, L"Include map name" };
 			inline CVar<bool>IncludeTimestamp		{ true, L"Include timestamp" };
@@ -525,7 +525,7 @@ namespace Vars
 
 		namespace Steam
 		{
-			inline CVar<bool>EnableRPC{ true, L"Enable Steam RPC" };
+			inline CVar<bool>EnableRPC{ false , L"Enable Steam RPC" };
 			inline CVar<int>MatchGroup{ 0, L"Match group" }; // 0 - Special Event; 1 - MvM Mann Up; 2 - Competitive; 3 - Casual; 4 - MvM Boot Camp;
 			inline CVar<bool>OverrideMenu{ false, L"Override when in main menu" }; // Override matchgroup when in main menu
 			inline CVar<int>MapText{ 0, L"Match group" }; // 0 - Fedoraware; 1 - CUM.clab; 2 - Meowhook.club; 3 - rathook.cc; 4 - NNitro.tf; 5 - custom;
@@ -542,6 +542,7 @@ namespace Vars
 			inline CVar<int> Pitch		{ 0, L"Pitch" };		//0 - None, 1 - Up, 2 - Down, 3 - Fake Up, 4 - Fake Down
 			inline CVar<int> YawReal	{ 0, L"Yaw Real" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
 			inline CVar<int> YawFake	{ 0, L"Yaw Fake" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
+			inline CVar<float> SpinStep	{ 1, L"Spin Step" };	//nigga
 		}
 		namespace Resolver
 		{

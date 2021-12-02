@@ -2,6 +2,8 @@
 #include "../Vars.h"
 
 int edgeToEdgeOn = 0;
+float spinpoint = 0;
+float spinpointf = 0;
 
 void CAntiAim::FixMovement(CUserCmd* pCmd, Vec3 vOldAngles, float fOldSideMove, float fOldForwardMove)
 {
@@ -147,6 +149,13 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 			case 2: { pCmd->viewangles.y -= 90.0f; break; }		// right
 			case 3: { pCmd->viewangles.y += 180.0f; break; }	// backwards
 			case 4: { if (edgeToEdgeOn == 1) { pCmd->viewangles.y += 90; } else if (edgeToEdgeOn == 2) { pCmd->viewangles.y -= 90.0f; }; break; }	// edge
+			case 5: {
+				while (spinpoint > 180.0f) { spinpoint += -360.0f; }
+				while (spinpoint < -180.0f) { spinpoint += 360.0f; }
+				spinpoint -= Vars::AntiHack::AntiAim::SpinStep.m_Var;
+				pCmd->viewangles.y += spinpoint;
+				break;
+			}	// spin
 			default: { bYawSet = false; break; }
 			}
 
@@ -160,6 +169,14 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 			case 2: { pCmd->viewangles.y -= 90.0f; break; }		// right
 			case 3: { pCmd->viewangles.y += 180.0f; break; }	// backwards
 			case 4: { if (edgeToEdgeOn == 1) { pCmd->viewangles.y -= 90; } else if (edgeToEdgeOn == 2) { pCmd->viewangles.y += 90.0f; }; break; }	// edge
+			case 5: { 
+				while (spinpointf > 180.0f) { spinpointf += -360.0f; } 
+				while (spinpointf < -180.0f) { spinpointf += 360.0f; } 
+				spinpointf -= Vars::AntiHack::AntiAim::SpinStep.m_Var; 
+				pCmd->viewangles.y += spinpointf; 
+				break; 
+			}	// spin
+
 			default: { bYawSet = false; break; }
 			}
 

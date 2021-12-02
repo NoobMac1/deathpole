@@ -547,7 +547,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ImGui::Checkbox("BAim when lethal", &Vars::Aimbot::Global::BAimLethal.m_Var); HelpMarker("The aimbot will aim for body when damage is lethal to it");
 							ImGui::Checkbox("Doubletap", &Vars::Misc::CL_Move::Doubletap.m_Var); HelpMarker("When enough ticks are choked, the aimbot will shoot them all at once in a burst, leading to a rapid-fire effect");
 							ImGui::Checkbox("Show Hitboxes", &Vars::Aimbot::Global::showHitboxes.m_Var); HelpMarker("Renders client-side hitboxes when you attack an enemy");
-							ImGui::SliderInt("Show Hitbox Time", &Vars::Aimbot::Global::hitboxTime.m_Var, 1, 10);
+							ImGui::PushItemWidth(100); ImGui::SliderInt("Hitbox Time", &Vars::Aimbot::Global::hitboxTime.m_Var, 1, 10);
 							ImGui::Checkbox("Clear Hitboxes", &Vars::Aimbot::Global::clearPreviousHitbox.m_Var);
 							ImGui::TextUnformatted("");
 							ImGui::TextUnformatted("Crithack");
@@ -929,10 +929,10 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Menu snow", &Vars::Visuals::Snow.m_Var); HelpMarker("Enable the snow when menu is open");
 								ImGui::Checkbox("CatReply", &Vars::Misc::BeCat.m_Var); HelpMarker("Be marked by catbots.");
 								ImGui::Checkbox("Watermark", &Vars::Visuals::Watermark.m_Var); HelpMarker("Enables the deathpole watermark.");
-								ImGui::SliderInt("VM X Off", &Vars::Visuals::XOffset.m_Var, -50, 50);
-								ImGui::SliderInt("VM Y Off", &Vars::Visuals::YOffset.m_Var, -50, 50);
-								ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -50, 50);
-								ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
+								ImGui::PushItemWidth(70); ImGui::SliderInt("VM X Off", &Vars::Visuals::XOffset.m_Var, -100, 100);
+								ImGui::PushItemWidth(70); ImGui::SliderInt("VM Y Off", &Vars::Visuals::YOffset.m_Var, -100, 100);
+								ImGui::PushItemWidth(70); ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -100, 100);
+								ImGui::PushItemWidth(70); ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
 							}
 							if (ImGui::CollapsingHeader("Out of FOV arrows")) {
 								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FOV");
@@ -1097,15 +1097,19 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							if (ImGui::CollapsingHeader("HvH", ImGuiTreeNodeFlags_DefaultOpen)) {
 								ImGui::Checkbox("Anti-aim", &Vars::AntiHack::AntiAim::Active.m_Var); HelpMarker("Anti-aim master switch");
 								const char* pitch[]{ "None", "Up", "Down", "Fake up", "Fake down" }; ImGui::PushItemWidth(100); ImGui::Combo("Pitch", &Vars::AntiHack::AntiAim::Pitch.m_Var, pitch, IM_ARRAYSIZE(pitch)); ImGui::PopItemWidth(); HelpMarker("Which way to look up/down");
-								const char* realYaw[]{ "None", "Left", "Right", "Backwards", "Edge"}; ImGui::PushItemWidth(100); ImGui::Combo("Real yaw", &Vars::AntiHack::AntiAim::YawReal.m_Var, realYaw, IM_ARRAYSIZE(realYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to look horizontally");
-								const char* fakeYaw[]{ "None", "Left", "Right", "Backwards", "Edge"}; ImGui::PushItemWidth(100); ImGui::Combo("Fake yaw", &Vars::AntiHack::AntiAim::YawFake.m_Var, fakeYaw, IM_ARRAYSIZE(fakeYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to appear to look horizontally");
+								const char* realYaw[]{ "None", "Left", "Right", "Backwards", "Edge", "Spin"}; ImGui::PushItemWidth(100); ImGui::Combo("Real yaw", &Vars::AntiHack::AntiAim::YawReal.m_Var, realYaw, IM_ARRAYSIZE(realYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to look horizontally");
+								const char* fakeYaw[]{ "None", "Left", "Right", "Backwards", "Edge", "Spin"}; ImGui::PushItemWidth(100); ImGui::Combo("Fake yaw", &Vars::AntiHack::AntiAim::YawFake.m_Var, fakeYaw, IM_ARRAYSIZE(fakeYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to appear to look horizontally");
+								if (Vars::AntiHack::AntiAim::YawReal.m_Var == 5 || Vars::AntiHack::AntiAim::YawFake.m_Var == 5)
+								{
+									ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Spin Step"), &Vars::AntiHack::AntiAim::SpinStep.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f);
+								}
 								ImGui::Checkbox("Pitch Resolver", &Vars::AntiHack::Resolver::PitchResolver.m_Var); HelpMarker("Pitch Resolver master switch (ONLY HITS UP AND DOWN, THIS IS SHIT)");
 								ImGui::Checkbox("Fakelag", &Vars::Misc::CL_Move::Fakelag.m_Var); HelpMarker("Fakelag master switch");
 								ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)");
 								ImGui::Checkbox("Fakelag on key", &Vars::Misc::CL_Move::FakelagOnKey.m_Var); HelpMarker("Fakelag will only activate when an assigned key is held");
 								InputKeybind("Fakelag key", Vars::Misc::CL_Move::FakelagKey); HelpMarker("Fakelag will only activate when this key is held");
 								ImGui::Checkbox("SpeedHack", &Vars::Misc::CL_Move::SEnabled.m_Var); HelpMarker("Speedhack Master Switch");
-								ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
+								ImGui::PushItemWidth(100);  ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
 							}
 
 							if (ImGui::CollapsingHeader("Radar")) {
