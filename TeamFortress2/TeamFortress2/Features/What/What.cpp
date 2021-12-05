@@ -1096,13 +1096,12 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 						{
 							if (ImGui::CollapsingHeader("HvH", ImGuiTreeNodeFlags_DefaultOpen)) {
 								ImGui::Checkbox("Anti-aim", &Vars::AntiHack::AntiAim::Active.m_Var); HelpMarker("Anti-aim master switch");
-								const char* pitch[]{ "None", "Up", "Down", "Fake up", "Fake down" }; ImGui::PushItemWidth(100); ImGui::Combo("Pitch", &Vars::AntiHack::AntiAim::Pitch.m_Var, pitch, IM_ARRAYSIZE(pitch)); ImGui::PopItemWidth(); HelpMarker("Which way to look up/down");
+								const char* pitch[]{ "None", "Up", "Down", "Fake up", "Fake down", "Custom", "Roll"}; ImGui::PushItemWidth(100); ImGui::Combo("Pitch", &Vars::AntiHack::AntiAim::Pitch.m_Var, pitch, IM_ARRAYSIZE(pitch)); ImGui::PopItemWidth(); HelpMarker("Which way to look up/down");
+								if (Vars::AntiHack::AntiAim::Pitch.m_Var == 5) { ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Custom Pitch"), &Vars::AntiHack::AntiAim::CustomPitch.m_Var, -89.0f, 89.f, _("%.0f"), 1.0f); }
+								if (Vars::AntiHack::AntiAim::Pitch.m_Var == 6) { ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Roll Step"), &Vars::AntiHack::AntiAim::RollStep.m_Var, -89.0f, 89.f, _("%.0f"), 1.0f); }
 								const char* realYaw[]{ "None", "Left", "Right", "Backwards", "Edge", "Spin"}; ImGui::PushItemWidth(100); ImGui::Combo("Real yaw", &Vars::AntiHack::AntiAim::YawReal.m_Var, realYaw, IM_ARRAYSIZE(realYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to look horizontally");
 								const char* fakeYaw[]{ "None", "Left", "Right", "Backwards", "Edge", "Spin"}; ImGui::PushItemWidth(100); ImGui::Combo("Fake yaw", &Vars::AntiHack::AntiAim::YawFake.m_Var, fakeYaw, IM_ARRAYSIZE(fakeYaw)); ImGui::PopItemWidth(); HelpMarker("Which way to appear to look horizontally");
-								if (Vars::AntiHack::AntiAim::YawReal.m_Var == 5 || Vars::AntiHack::AntiAim::YawFake.m_Var == 5)
-								{
-									ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Spin Step"), &Vars::AntiHack::AntiAim::SpinStep.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f);
-								}
+								if (Vars::AntiHack::AntiAim::YawReal.m_Var == 5 || Vars::AntiHack::AntiAim::YawFake.m_Var == 5) { ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Spin Step"), &Vars::AntiHack::AntiAim::SpinStep.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); }
 								ImGui::Checkbox("Pitch Resolver", &Vars::AntiHack::Resolver::PitchResolver.m_Var); HelpMarker("Pitch Resolver master switch (ONLY HITS UP AND DOWN, THIS IS SHIT)");
 								ImGui::Checkbox("Fakelag", &Vars::Misc::CL_Move::Fakelag.m_Var); HelpMarker("Fakelag master switch");
 								ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)");

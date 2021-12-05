@@ -4,6 +4,7 @@
 int edgeToEdgeOn = 0;
 float spinpoint = 0;
 float spinpointf = 0;
+float rollpoint = 0;
 
 void CAntiAim::FixMovement(CUserCmd* pCmd, Vec3 vOldAngles, float fOldSideMove, float fOldForwardMove)
 {
@@ -80,14 +81,14 @@ bool findEdge(float edgeOrigYaw)
 	if (edgeRightDist < edgeLeftDist)
 	{
 		edgeToEdgeOn = 1;
-		if ((Vars::AntiHack::AntiAim::Pitch.m_Var == 3) || (Vars::AntiHack::AntiAim::Pitch.m_Var == 1))	// check for real up
+		if ((Vars::AntiHack::AntiAim::Pitch.m_Var == 3) || (Vars::AntiHack::AntiAim::Pitch.m_Var == 1) || (g_GlobalInfo.m_vRealViewAngles.x <= 89.0f  && Vars::AntiHack::AntiAim::Pitch.m_Var == 6) || (g_GlobalInfo.m_vRealViewAngles.x <= 89.0f && Vars::AntiHack::AntiAim::Pitch.m_Var == 5))	// check for real up
 			edgeToEdgeOn = 2;
 		return true;
 	}
 	else
 	{
 		edgeToEdgeOn = 2;
-		if ((Vars::AntiHack::AntiAim::Pitch.m_Var == 3) || (Vars::AntiHack::AntiAim::Pitch.m_Var == 1))	// ditto
+		if ((Vars::AntiHack::AntiAim::Pitch.m_Var == 3) || (Vars::AntiHack::AntiAim::Pitch.m_Var == 1) || (g_GlobalInfo.m_vRealViewAngles.x <= 89.0f && Vars::AntiHack::AntiAim::Pitch.m_Var == 6) || (g_GlobalInfo.m_vRealViewAngles.x <= 89.0f && Vars::AntiHack::AntiAim::Pitch.m_Var == 5))	// check for real up
 			edgeToEdgeOn = 1;
 		return true;
 	}
@@ -135,6 +136,15 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 		case 2: { pCmd->viewangles.x = 89.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }	// down
 		case 3: { pCmd->viewangles.x = -271.0f; g_GlobalInfo.m_vRealViewAngles.x = 89.0f; break; }	// fake down
 		case 4: { pCmd->viewangles.x = 271.0f; g_GlobalInfo.m_vRealViewAngles.x = -89.0f; break; }	// fake up
+		case 5: { pCmd->viewangles.x = Vars::AntiHack::AntiAim::CustomPitch.m_Var; g_GlobalInfo.m_vRealViewAngles.x = Vars::AntiHack::AntiAim::CustomPitch.m_Var; break; }	// custom
+		case 6: {
+			rollpoint += Vars::AntiHack::AntiAim::RollStep.m_Var;
+			while (rollpoint > 89.0f) { rollpoint += -178.0f; }
+			while (rollpoint < -89.0f) { rollpoint += 178.0f; } // wrap around
+			pCmd->viewangles.x = rollpoint;
+			g_GlobalInfo.m_vRealViewAngles.x = rollpoint;
+			break;
+		}	// roll (fucking useless I think)
 		default: { bPitchSet = false; break; }
 		}
 
@@ -150,9 +160,8 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 			case 3: { pCmd->viewangles.y += 180.0f; break; }	// backwards
 			case 4: { if (edgeToEdgeOn == 1) { pCmd->viewangles.y += 90; } else if (edgeToEdgeOn == 2) { pCmd->viewangles.y -= 90.0f; }; break; }	// edge
 			case 5: {
-				while (spinpoint > 180.0f) { spinpoint += -360.0f; }
-				while (spinpoint < -180.0f) { spinpoint += 360.0f; }
 				spinpoint -= Vars::AntiHack::AntiAim::SpinStep.m_Var;
+				while (spinpoint > 180.0f) { spinpoint += -360.0f; } while (spinpoint < -180.0f) { spinpoint += 360.0f; }
 				pCmd->viewangles.y += spinpoint;
 				break;
 			}	// spin
@@ -170,9 +179,9 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 			case 3: { pCmd->viewangles.y += 180.0f; break; }	// backwards
 			case 4: { if (edgeToEdgeOn == 1) { pCmd->viewangles.y -= 90; } else if (edgeToEdgeOn == 2) { pCmd->viewangles.y += 90.0f; }; break; }	// edge
 			case 5: { 
+				spinpointf -= Vars::AntiHack::AntiAim::SpinStep.m_Var;
 				while (spinpointf > 180.0f) { spinpointf += -360.0f; } 
 				while (spinpointf < -180.0f) { spinpointf += 360.0f; } 
-				spinpointf -= Vars::AntiHack::AntiAim::SpinStep.m_Var; 
 				pCmd->viewangles.y += spinpointf; 
 				break; 
 			}	// spin

@@ -576,6 +576,8 @@ void CConfigManager::Save(const wchar_t *name)
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawReal);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawFake);
 				SAVE_VAR(Vars::AntiHack::AntiAim::SpinStep);
+				SAVE_VAR(Vars::AntiHack::AntiAim::RollStep);
+				SAVE_VAR(Vars::AntiHack::AntiAim::CustomPitch);
 			}
 			//Resolver
 			{
@@ -1081,6 +1083,8 @@ void CConfigManager::Load(const wchar_t *name)
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawReal);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawFake);
 				LOAD_VAR(Vars::AntiHack::AntiAim::SpinStep);
+				LOAD_VAR(Vars::AntiHack::AntiAim::RollStep);
+				LOAD_VAR(Vars::AntiHack::AntiAim::CustomPitch);
 			}
 			//Resolver
 			{

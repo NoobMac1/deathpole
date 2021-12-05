@@ -51,11 +51,11 @@ public: //Netvars
 
 
 public: //Virtuals
-	M_VIRTUALGET(WeaponID, int, this, int(__thiscall*)(void*), 377)
-		M_VIRTUALGET(Slot, int, this, int(__thiscall*)(void*), 327)
-		M_VIRTUALGET(DamageType, int, this, int(__thiscall*)(void*), 378)
-		M_VIRTUALGET(FinishReload, void, this, void(__thiscall*)(void*), 275)
-		M_VIRTUALGET(BulletSpread, Vec3&, this, Vec3& (__thiscall*)(void*), 286)
+	M_VIRTUALGET(WeaponID, int, this, int(__thiscall*)(void*), 379)
+		M_VIRTUALGET(Slot, int, this, int(__thiscall*)(void*), 329)
+		M_VIRTUALGET(DamageType, int, this, int(__thiscall*)(void*), 380)
+		M_VIRTUALGET(FinishReload, void, this, void(__thiscall*)(void*), 277)
+		M_VIRTUALGET(BulletSpread, Vec3&, this, Vec3& (__thiscall*)(void*), 288)
 
 public: //Everything else, lol
 	__inline float GetSmackTime() {
@@ -89,7 +89,7 @@ public: //Everything else, lol
 	}
 
 	__inline float GetSwingRange(CBaseEntity* pLocal) {
-		return static_cast<float>(GetVFunc<int(__thiscall*)(CBaseEntity*)>(this, 451)(pLocal));
+		return static_cast<float>(GetVFunc<int(__thiscall*)(CBaseEntity*)>(this, 453)(pLocal));
 	}
 
 	__inline float GetWeaponSpread() {
@@ -108,7 +108,7 @@ public: //Everything else, lol
 		return ((OriginalFn)dwFunc)(this);
 	}
 	__inline bool DoSwingTrace(CGameTrace& Trace) {
-		return GetVFunc<int(__thiscall*)(CGameTrace&)>(this, 453)(Trace);
+		return GetVFunc<int(__thiscall*)(CGameTrace&)>(this, 455)(Trace);
 	}
 
 	__inline int LookupAttachment(const char* pAttachmentName)
@@ -118,7 +118,7 @@ public: //Everything else, lol
 	}
 
 	__inline bool GetAttachment(int number, Vec3& origin) {
-		return GetVFunc<bool(__thiscall*)(void*, int, Vec3&)>(this, 71)(this, number, origin);
+		return GetVFunc<bool(__thiscall*)(void*, int, Vec3&)>(this, 73)(this, number, origin);
 	}
 
 
@@ -132,7 +132,7 @@ public: //Everything else, lol
 	}
 
 	__inline bool CanFireRandomCriticalShot(const float flCritChance) {
-		return GetVFunc<bool(__thiscall*)(decltype(this), float)>(this, 422)(this, flCritChance);
+		return GetVFunc<bool(__thiscall*)(decltype(this), float)>(this, 424)(this, flCritChance);
 	}
 
 	__inline bool CanWeaponHeadShot() {
@@ -215,19 +215,19 @@ public: //Everything else, lol
 	__inline bool CalcIsAttackCriticalHelper(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 461, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 463, 0)(pWeapon);
 	}
 
 	__inline bool CalcIsAttackCriticalHelperNoCrits(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 462, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 464, 0)(pWeapon);
 	}
 
 	__inline bool CanFireCriticalShot(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 490, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 492, 0)(pWeapon);
 	}
 
 	/*__inline bool CalcIsAttackCriticalHelper() {
@@ -283,15 +283,15 @@ struct state_t
 
 	void Load(CBaseCombatWeapon* pWeapon)
 	{
-		flCritBucket = *(float*)((uintptr_t)pWeapon + 0xA54);//pWeapon->GetCritBucket();
-		iCurrentSeed = *(int*)((uintptr_t)pWeapon + 0xB58);//pWeapon->GetWeaponSeed();
-		flCritEndTime = *(float*)((uintptr_t)pWeapon + 0xB4C);//pWeapon->GetUnknown1();
-		flLastCritCheckTime = *(float*)((uintptr_t)pWeapon + 0xB50); //pWeapon->GetUnknown2();
-		iLastCritCheckFrame = *(int*)((uintptr_t)pWeapon + 0xB54);//pWeapon->GetUnknown4();
-		iNumAttacks = *(int*)((uintptr_t)pWeapon + 0xB58);//pWeapon->GetCritAttempts();
-		iNumCrits = *(int*)((uintptr_t)pWeapon + 0xA5C);//pWeapon->GetCritCount();
-		m_flObservedCritChance = *(float*)((uintptr_t)pWeapon + 0xC1C); // pWeapon->GetObservedCritChance();
-		unknown7 = *(bool*)((uintptr_t)pWeapon + 0xB34);
+		flCritBucket			= *(float*)((uintptr_t)pWeapon + 0xa3c);//pWeapon->GetCritBucket();
+		iCurrentSeed			= *(int*)((uintptr_t)pWeapon + 0xb40);//pWeapon->GetWeaponSeed();
+		flCritEndTime			= *(float*)((uintptr_t)pWeapon + 0xB4C);//pWeapon->GetUnknown1();
+		flLastCritCheckTime		= *(float*)((uintptr_t)pWeapon + 0xB50); //pWeapon->GetUnknown2();
+		iLastCritCheckFrame		= *(int*)((uintptr_t)pWeapon + 0xB54);//pWeapon->GetUnknown4();
+		iNumAttacks				= *(int*)((uintptr_t)pWeapon + 0xa40);//pWeapon->GetCritAttempts();
+		iNumCrits				= *(int*)((uintptr_t)pWeapon + 0xa44);//pWeapon->GetCritCount();
+		m_flObservedCritChance	= *(float*)((uintptr_t)pWeapon + 0xc00); // pWeapon->GetObservedCritChance();
+		unknown7				= *(bool*)((uintptr_t)pWeapon + 0xb1c);
 
 		//weapon_mode = pWeapon->GetWeaponMode();
 		//weapon_data = pWeapon->GetWeaponDataa();
@@ -302,15 +302,15 @@ struct state_t
 	}
 	void RestoreData(CBaseCombatWeapon* pWeapon)
 	{
-		*(float*)((uintptr_t)pWeapon + 0xA54) = flCritBucket;
-		*(int*)((uintptr_t)pWeapon + 0xB58) = iCurrentSeed;
-		*(float*)((uintptr_t)pWeapon + 0xB4C) = flCritEndTime;
-		*(float*)((uintptr_t)pWeapon + 0xB50) = flLastCritCheckTime;
-		*(float*)((uintptr_t)pWeapon + 0xB5C) = iLastCritCheckFrame;
-		*(int*)((uintptr_t)pWeapon + 0xA58) = iNumAttacks;
-		*(int*)((uintptr_t)pWeapon + 0xA5C) = iNumCrits;
-		*(float*)((uintptr_t)pWeapon + 0xC18) = m_flObservedCritChance;
-		*(bool*)((uintptr_t)pWeapon + 0xB34) = unknown7;
+		*(float*)((uintptr_t)pWeapon + 0xa3c)	= flCritBucket;
+		*(int*)((uintptr_t)pWeapon + 0xb40)		= iCurrentSeed;
+		*(float*)((uintptr_t)pWeapon + 0xB4C)	= flCritEndTime;
+		*(float*)((uintptr_t)pWeapon + 0xB50)	= flLastCritCheckTime;
+		*(float*)((uintptr_t)pWeapon + 0xB5C)	= iLastCritCheckFrame;
+		*(int*)((uintptr_t)pWeapon + 0xa40)		= iNumAttacks;
+		*(int*)((uintptr_t)pWeapon + 0xa44)		= iNumCrits;
+		*(float*)((uintptr_t)pWeapon + 0xc00)	= m_flObservedCritChance;
+		*(bool*)((uintptr_t)pWeapon + 0xb1c)	= unknown7;
 	}
 
 	bool operator==(const weapon_info& b) const

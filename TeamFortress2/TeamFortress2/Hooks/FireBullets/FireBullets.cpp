@@ -1,6 +1,7 @@
 #include "FireBullets.h"
 
 
+
 void __fastcall FireBullets::Hook(void* ecx, void* edx, CBaseCombatWeapon* pWeapon, const FireBulletsInfo_t& info, bool bDoEffects, int nDamageType, int nCustomDamageType)
 {
 	static auto original = Func.Original<fn>();

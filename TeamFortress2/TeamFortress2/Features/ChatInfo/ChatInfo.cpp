@@ -14,9 +14,24 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 	if (!g_Interfaces.Engine->IsConnected() || !g_Interfaces.Engine->IsInGame())
 		return;
 
-	static std::string clr({ '\x7', 'F', 'F', 'C', '1', '4', 'B' });
+	static std::string clr({ '\x7', '0', 'D', '9', '2', 'F', 'F' });
 
 	if (const auto pLocal = g_EntityCache.m_pLocal) {
+		if (Vars::Misc::VoteRevealer.m_Var && uNameHash == FNV1A::HashConst("vote_started")) {
+			const auto initiator = pEvent->GetInt("initiator");
+			const auto target = pEvent->GetString("param1"); // im almost certain this is the param for the targets name 
+
+			auto pEntity = g_Interfaces.EntityList->GetClientEntity(initiator);
+			bool ourteam = (pEntity->GetTeamNum() == pLocal->GetTeamNum());
+
+			PlayerInfo_t pii;
+			g_Interfaces.Engine->GetPlayerInfo(initiator, &pii);
+
+			g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(0, tfm::format("%s[dp]%sVote Initiator: \x3%s", clr, std::string(ourteam ? " " : " [enemy] "), pii.name).c_str());
+			if (pEvent->GetString("issue") == "#TF_vote_kick_player_other") { // if someone is calling a vote to like do something else why would we want to print the vote target
+				g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(0, tfm::format("%s[dp]%sVote Target: \x3%s", clr, std::string(ourteam ? " " : " [enemy] "), target).c_str());
+			}
+		}
 		if (Vars::Misc::VoteRevealer.m_Var && uNameHash == FNV1A::HashConst("vote_cast")) {
 			const auto pEntity = g_Interfaces.EntityList->GetClientEntity(pEvent->GetInt("entityid"));
 			if (pEntity == pLocal) { return; }

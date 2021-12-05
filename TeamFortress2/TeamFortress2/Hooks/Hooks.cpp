@@ -14,6 +14,7 @@ void CHooks::Init()
 		//ResetHook::Init();
 		FireBullets::Init();
 		CalcViewModelView::Init();
+		RemoveDelay::Init();
 	}
 
 	if (g_Interfaces.Client)

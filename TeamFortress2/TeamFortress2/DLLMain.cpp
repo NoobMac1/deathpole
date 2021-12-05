@@ -91,7 +91,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
 	SetupDiscord();
 	Discord_ClearPresence();
-	g_Events.Setup({ "vote_cast", "player_changeclass", "player_connect", "player_hurt", "achievement_earned"});
+	g_Events.Setup({ "vote_cast", "player_changeclass", "player_connect", "player_hurt", "achievement_earned", "vote_started", "vote_passed"}); // there r hundreds of these in source leak see if u can figure anything out to do with them
 
 	g_Interfaces.CVars->ConsoleColorPrintf({ 255, 193, 75, 255 }, _("deathpole loaded!\n"));
 	g_Interfaces.Engine->ClientCmd_Unrestricted("play vo/items/wheatley_sapper/wheatley_sapper_attached14.mp3");

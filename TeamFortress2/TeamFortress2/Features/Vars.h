@@ -543,6 +543,8 @@ namespace Vars
 			inline CVar<int> YawReal	{ 0, L"Yaw Real" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
 			inline CVar<int> YawFake	{ 0, L"Yaw Fake" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
 			inline CVar<float> SpinStep	{ 1, L"Spin Step" };	//nigga
+			inline CVar<float> CustomPitch { 0, L"Custom Pitch" };	//nigga
+			inline CVar<float> RollStep { 1, L"Roll Step" };	//nigga
 		}
 		namespace Resolver
 		{
