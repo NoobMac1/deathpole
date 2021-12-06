@@ -95,7 +95,6 @@
     <ClCompile Include="TeamFortress2\Hooks\FireBullets\FireBullets.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\Viewmodel\Viewmodel.cpp" />
     <ClCompile Include="TeamFortress2\Features\Viewmodel shit\CalcViewModelViewHook.cpp" />
-    <ClCompile Include="TeamFortress2\Hooks\RemoveDelay\RemoveDelay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TeamFortress2\Features\Aimbot\Aimbot.h" />
@@ -624,7 +623,6 @@
     <ClInclude Include="TeamFortress2\Hooks\FireBullets\FireBullets.h" />
     <ClInclude Include="TeamFortress2\Hooks\Viewmodel\Viewmodel.h" />
     <ClInclude Include="TeamFortress2\Features\Viewmodel shit\CalcViewModelViewHook.h" />
-    <ClInclude Include="TeamFortress2\Hooks\RemoveDelay\RemoveDelay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TeamFortress2\SDK\DirectX\d3dx9math.inl" />
