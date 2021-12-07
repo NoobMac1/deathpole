@@ -516,7 +516,7 @@ namespace Vars
 		
 		namespace Discord
 		{
-			inline CVar<bool>EnableRPC				{ false, L"Enable Discord RPC" };
+			inline CVar<bool>EnableRPC				{ true, L"Enable Discord RPC" };
 			inline CVar<bool>IncludeClass			{ true, L"Include class" };
 			inline CVar<bool>IncludeMap				{ true, L"Include map name" };
 			inline CVar<bool>IncludeTimestamp		{ true, L"Include timestamp" };
@@ -525,7 +525,7 @@ namespace Vars
 
 		namespace Steam
 		{
-			inline CVar<bool>EnableRPC{ false , L"Enable Steam RPC" };
+			inline CVar<bool>EnableRPC{ true, L"Enable Steam RPC" };
 			inline CVar<int>MatchGroup{ 0, L"Match group" }; // 0 - Special Event; 1 - MvM Mann Up; 2 - Competitive; 3 - Casual; 4 - MvM Boot Camp;
 			inline CVar<bool>OverrideMenu{ false, L"Override when in main menu" }; // Override matchgroup when in main menu
 			inline CVar<int>MapText{ 0, L"Match group" }; // 0 - Fedoraware; 1 - CUM.clab; 2 - Meowhook.club; 3 - rathook.cc; 4 - NNitro.tf; 5 - custom;

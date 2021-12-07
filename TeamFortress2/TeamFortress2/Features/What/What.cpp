@@ -547,7 +547,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 							ImGui::Checkbox("BAim when lethal", &Vars::Aimbot::Global::BAimLethal.m_Var); HelpMarker("The aimbot will aim for body when damage is lethal to it");
 							ImGui::Checkbox("Doubletap", &Vars::Misc::CL_Move::Doubletap.m_Var); HelpMarker("When enough ticks are choked, the aimbot will shoot them all at once in a burst, leading to a rapid-fire effect");
 							ImGui::Checkbox("Show Hitboxes", &Vars::Aimbot::Global::showHitboxes.m_Var); HelpMarker("Renders client-side hitboxes when you attack an enemy");
-							ImGui::PushItemWidth(100); ImGui::SliderInt("Hitbox Time", &Vars::Aimbot::Global::hitboxTime.m_Var, 1, 10);
+							ImGui::SliderInt("Show Hitbox Time", &Vars::Aimbot::Global::hitboxTime.m_Var, 1, 10);
 							ImGui::Checkbox("Clear Hitboxes", &Vars::Aimbot::Global::clearPreviousHitbox.m_Var);
 							ImGui::TextUnformatted("");
 							ImGui::TextUnformatted("Crithack");
@@ -929,10 +929,10 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Menu snow", &Vars::Visuals::Snow.m_Var); HelpMarker("Enable the snow when menu is open");
 								ImGui::Checkbox("CatReply", &Vars::Misc::BeCat.m_Var); HelpMarker("Be marked by catbots.");
 								ImGui::Checkbox("Watermark", &Vars::Visuals::Watermark.m_Var); HelpMarker("Enables the deathpole watermark.");
-								ImGui::PushItemWidth(70); ImGui::SliderInt("VM X Off", &Vars::Visuals::XOffset.m_Var, -100, 100);
-								ImGui::PushItemWidth(70); ImGui::SliderInt("VM Y Off", &Vars::Visuals::YOffset.m_Var, -100, 100);
-								ImGui::PushItemWidth(70); ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -100, 100);
-								ImGui::PushItemWidth(70); ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
+								ImGui::SliderInt("VM X Off", &Vars::Visuals::XOffset.m_Var, -50, 50);
+								ImGui::SliderInt("VM Y Off", &Vars::Visuals::YOffset.m_Var, -50, 50);
+								ImGui::SliderInt("VM Z Off", &Vars::Visuals::ZOffset.m_Var, -50, 50);
+								ImGui::SliderInt("Weapon Rotation", &Vars::Visuals::VMRoll.m_Var, -180, 180);
 							}
 							if (ImGui::CollapsingHeader("Out of FOV arrows")) {
 								ImGui::Checkbox("Active###fovar", &Vars::Visuals::OutOfFOVArrows.m_Var); HelpMarker("Will draw arrows to players who are outside of the range of your FOV");
@@ -1108,7 +1108,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Fakelag on key", &Vars::Misc::CL_Move::FakelagOnKey.m_Var); HelpMarker("Fakelag will only activate when an assigned key is held");
 								InputKeybind("Fakelag key", Vars::Misc::CL_Move::FakelagKey); HelpMarker("Fakelag will only activate when this key is held");
 								ImGui::Checkbox("SpeedHack", &Vars::Misc::CL_Move::SEnabled.m_Var); HelpMarker("Speedhack Master Switch");
-								ImGui::PushItemWidth(100);  ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
+								ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
 							}
 
 							if (ImGui::CollapsingHeader("Radar")) {

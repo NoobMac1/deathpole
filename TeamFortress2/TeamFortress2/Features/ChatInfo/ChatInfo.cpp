@@ -53,12 +53,12 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 				std::wstring wvoteString = std::wstring(voteString.begin(), voteString.end());
 				g_notify.Add(voteString);
 
-				if (Vars::Misc::VotesInChat.m_Var) {
-					g_Interfaces.Engine->ClientCmd_Unrestricted(tfm::format("say_party [deathpole] \"%s voted %s\"", pi.name, bVotedYes ? "Yes" : "No").c_str());
+					if (Vars::Misc::VotesInChat.m_Var) {
+						g_Interfaces.Engine->ClientCmd_Unrestricted(tfm::format("say_party [deathpole] \"%s voted %s\"", pi.name, bVotedYes ? "Yes" : "No").c_str());
+					}
 				}
 			}
-		}
-		if (Vars::Visuals::ChatInfo.m_Var) {
+
 			if (uNameHash == FNV1A::HashConst("player_changeclass")) {
 				if (const auto& pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")))) {
 					if (pEntity == pLocal) { return; }
@@ -67,17 +67,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 					PlayerInfo_t pi;
 					g_Interfaces.Engine->GetPlayerInfo(nIndex, &pi);
 
-					std::string classString;
-
-					if (pEntity->GetTeamNum() != pLocal->GetTeamNum())
-					{
-						classString = "[dp] [enemy] " + std::string(pi.name) + " is now a " + std::string(Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str();
-					}
-					else
-					{
-						classString = "[dp] " + std::string(pi.name) + " is now a " + std::string(Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str();
-					}
-					
+					std::string classString = "[deathpole] " + std::string(pi.name) + " is now a " + std::string(Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str();
 					std::wstring wclassString = std::wstring(classString.begin(), classString.end());
 					g_notify.Add(classString);
 
@@ -116,7 +106,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 				}
 
 				const auto maxHealth = pEntity->GetMaxHealth();
-				std::string attackString = "[dp] You hit " + std::string(pi.name) + " for " + std::to_string(nDamage) + (bCrit ? " (crit) " : " ") + "(" + std::to_string(nHealth) + "/" + std::to_string(maxHealth) + ")";
+				std::string attackString = "[deathpole] You hit " + std::string(pi.name) + " for " + std::to_string(nDamage) + (bCrit ? " (crit) " : " ") + "(" + std::to_string(nHealth) + "/" + std::to_string(maxHealth) + ")";
 
 				std::wstring wattackString = std::wstring(attackString.begin(), attackString.end());
 				const wchar_t* wcattackString = wattackString.c_str();
