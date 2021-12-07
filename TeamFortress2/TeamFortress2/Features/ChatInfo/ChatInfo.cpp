@@ -59,7 +59,7 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 				}
 			}
 
-			if (uNameHash == FNV1A::HashConst("player_changeclass")) {
+		if (uNameHash == FNV1A::HashConst("player_changeclass")) {
 				if (const auto& pEntity = g_Interfaces.EntityList->GetClientEntity(g_Interfaces.Engine->GetPlayerForUserID(pEvent->GetInt("userid")))) {
 					if (pEntity == pLocal) { return; }
 					int nIndex = pEntity->GetIndex();
@@ -73,11 +73,10 @@ void CChatInfo::Event(CGameEvent* pEvent, const FNV1A_t uNameHash) {
 
 					//g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(nIndex, tfm::format("%s[dp] \x3%s\x1 is now a \x3%s\x1!", clr, pi.name, Utils::GetClassByIndex(pEvent->GetInt("class"))).c_str());
 				}
-			}
+		}
 
-			if (uNameHash == FNV1A::HashConst("player_connect")) {
+		if (uNameHash == FNV1A::HashConst("player_connect")) {
 				g_Interfaces.ClientMode->m_pChatElement->ChatPrintf(GET_INDEX_USERID(pEvent->GetInt(_("userid"))), tfm::format("\x3%s\x1 connected. (%s)", pEvent->GetString("name"), pEvent->GetString("address")).c_str());
-			}
 		}
 
 		if (Vars::Visuals::damageLogger.m_Var && uNameHash == FNV1A::HashConst("player_hurt")) {
