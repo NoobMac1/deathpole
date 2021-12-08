@@ -396,12 +396,17 @@ bool CAimbotHitscan::ShouldFire(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon,
 	{
 		bool bIsScoped = pLocal->IsScoped();
 
-		if (Vars::Aimbot::Hitscan::WaitForHeadshot.m_Var)
+		if (Vars::Aimbot::Hitscan::WaitForHeadshot.m_Var) // this is really bad but the old method doesn't work and i can't fix it
 		{
-			if (g_GlobalInfo.m_nCurItemDefIndex != Sniper_m_TheClassic
-				&& g_GlobalInfo.m_nCurItemDefIndex != Sniper_m_TheSydneySleeper
-				&& !g_GlobalInfo.m_bWeaponCanHeadShot && bIsScoped)
-				return false;
+			if (g_GlobalInfo.m_nCurItemDefIndex == Sniper_m_TheClassic
+				|| g_GlobalInfo.m_nCurItemDefIndex == Sniper_m_TheSydneySleeper){
+				return true;
+			}
+			else{
+				float flDamage = Math::RemapValClamped(pWeapon->GetChargeDamage(), 0.0f, 150.0f, 0.0f, 450.0f);
+				if (flDamage >= 150) { return true; }
+			}
+			return false;
 		}
 
 		if (Vars::Aimbot::Hitscan::WaitForCharge.m_Var && bIsScoped)

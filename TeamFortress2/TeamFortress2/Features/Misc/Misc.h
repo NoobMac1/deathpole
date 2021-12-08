@@ -6,7 +6,6 @@ class CMisc
 {
 private:
 	void AutoJump(CUserCmd* pCmd);
-	void AutoStrafe(CUserCmd* pCmd);
 	void NoiseMakerSpam();
 	void InitSpamKV(void* pKV);
 	void ChatSpam();	
@@ -15,12 +14,12 @@ private:
 public:
 	void Run(CUserCmd* pCmd);
 	void CheatsBypass();
+	void AutoStrafe(CUserCmd* pCmd);
 	void EdgeJump(CUserCmd* pCmd, const int nOldFlags);
 	void BypassPure();
 	void AutoRocketJump(CUserCmd* pCmd);
 	void NoPush();
 	void SteamRPC();
-	void ShowHitboxes(CBaseEntity* pEntity, Color_t colour, float time);
 	std::vector<std::string> strings;
 };
 

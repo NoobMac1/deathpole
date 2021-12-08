@@ -591,7 +591,7 @@ void CAimbotProjectile::Aim(CUserCmd* pCmd, CBaseCombatWeapon* pWeapon, Vec3& vA
 	{
 	case 0: {
 		pCmd->viewangles = vAngle;
-		g_Interfaces.Engine->SetViewAngles(pCmd->viewangles);
+		g_Interfaces.Engine->SetViewAngles(vAngle);
 		break;
 	}
 

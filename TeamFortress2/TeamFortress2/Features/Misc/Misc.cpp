@@ -12,7 +12,6 @@ extern int attackStringH;
 void CMisc::Run(CUserCmd* pCmd)
 {
 	AutoJump(pCmd);
-	AutoStrafe(pCmd);
 	NoiseMakerSpam();
 	ChatSpam();
 	CheatsBypass();

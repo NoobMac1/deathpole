@@ -27,7 +27,6 @@ void AngleVectors2(const QAngle& angles, Vector* forward)
 
 void FastStop(CUserCmd* pCmd)
 {
-	/*
 	if (g_EntityCache.m_pLocal) {
 		// Get velocity
 		Vector vel = g_EntityCache.m_pLocal->GetVelocity();
@@ -60,24 +59,6 @@ void FastStop(CUserCmd* pCmd)
 		else
 		{
 			pCmd->forwardmove = pCmd->sidemove = 0.0f;
-		}
-	}
-	*/
-	if (const auto& pLocal = g_EntityCache.m_pLocal) {
-		Vec3 angle;
-		Math::VectorAngles(pLocal->GetVecVelocity(), angle);
-		float speed = pLocal->GetVelocity().x + pLocal->GetVelocity().y;
-		angle.y = pCmd->viewangles.y - angle.y;
-		Vec3 direction;
-		Math::AngleVectors(angle, &direction);
-		Vec3 stop = direction * -speed;
-		if (speed > 23.2f) {	// I don't know if this value is a good choice, but it will probably work
-			pCmd->forwardmove = stop.x;
-			pCmd->sidemove = stop.y;
-		}
-		else {
-			pCmd->forwardmove = 0.f;
-			pCmd->sidemove = 0.f;
 		}
 	}
 	else {
@@ -144,7 +125,7 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 
 	if (const auto& pLocal = g_EntityCache.m_pLocal)
 	{
-
+		/*
 		int classNum = pLocal->GetClassNum();
 		if (classNum == ETFClass::CLASS_HEAVY) {
 			g_GlobalInfo.dtTicks = MAX_NEW_COMMANDS_HEAVY;
@@ -152,6 +133,7 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		else {
 			g_GlobalInfo.dtTicks = MAX_NEW_COMMANDS;
 		}
+		*/
 		nOldFlags = pLocal->GetFlags();
 
 		if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon)
@@ -243,6 +225,7 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		g_Auto.Run(pCmd);
 		g_AntiAim.Run(pCmd, pSendPacket);
 		g_Misc.EdgeJump(pCmd, nOldFlags);
+		g_Misc.AutoStrafe(pCmd);
 	}
 	g_EnginePrediction.End(pCmd);
 	g_Misc.AutoRocketJump(pCmd);
@@ -307,7 +290,6 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 
 	auto AntiWarp = [](CUserCmd* cmd) -> void
 	{
-		/*
 		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
 			cmd->sidemove = -(cmd->sidemove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 			cmd->forwardmove = -(cmd->forwardmove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
@@ -315,31 +297,9 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		else {
 			return;
 		}
-		*/
-		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
-			const auto& pLocal = g_EntityCache.m_pLocal;
-			Vec3 angle;
-			Math::VectorAngles(pLocal->GetVecVelocity(), angle);
-			float speed = pLocal->GetVelocity().x + pLocal->GetVelocity().y;
-			angle.y = cmd->viewangles.y - angle.y;
-			Vec3 direction;
-			Math::AngleVectors(angle, &direction);
-			Vec3 stop = direction * -speed;
-			if (speed > 0.f) {
-				cmd->forwardmove = stop.x;
-				cmd->sidemove = stop.y;
-			}
-			else {
-				cmd->forwardmove = 0.f;
-				cmd->sidemove = 0.f;
-			}
-		}
-		else {
-			return;
-		}
 	};
 
-	if (!Vars::Misc::CL_Move::SEnabled.m_Var) { AntiWarp(pCmd); }
+	if (!Vars::Misc::CL_Move::SEnabled.m_Var) { AntiWarp(pCmd); } // disable antiwarp if we are speedhacking
 
 	if (Vars::Misc::TauntSlide.m_Var)
 	{

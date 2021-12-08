@@ -12,7 +12,7 @@ struct GlobalInfo_t
 	int m_nCurItemDefIndex              = 0;
 	int m_nWaitForShift                 = 0;
 	int m_nShifted                      = 0;
-	int dtTicks = MAX_NEW_COMMANDS; // how many to shift
+	//int dtTicks = MAX_NEW_COMMANDS; // how many to shift (obsolete)
 	int tickCounter = 0;
 	bool m_bWeaponCanHeadShot			= false;
 	bool m_bWeaponCanAttack				= false;
