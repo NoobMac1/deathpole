@@ -90,6 +90,7 @@ void CHooks::Init()
 
 		Table.Init(g_Interfaces.Engine);
 		Table.Hook(IsPlayingTimeDemo::index, &IsPlayingTimeDemo::Hook);
+		Table.Hook(56, &RemoveEventDelay::Hook);
 	}
 
 	if (g_Interfaces.ModelRender)

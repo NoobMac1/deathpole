@@ -872,8 +872,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Remove interpolation", &Vars::Misc::DisableInterpolation.m_Var); HelpMarker("Will remove interpolation on players, can improve accuracy");
 								ImGui::Checkbox("Aimbot crosshair", &Vars::Visuals::CrosshairAimPos.m_Var); HelpMarker("Will make your crosshair move to where the aimbot is going to shoot");
 								ImGui::Checkbox("Aimbot prediction", &Vars::Visuals::AimPosSquare.m_Var); HelpMarker("Will show a rough estimate of where the aimbot is going to aim at");
-								ImGui::Checkbox("Bullet tracers", &Vars::Visuals::BulletTracer.m_Var); HelpMarker("Will draw a line from your position to where the aimbot will shoot if hitscan or projectile");
-								ImGui::Checkbox("Rainbow tracers", &Vars::Visuals::BulletTracerRainbow.m_Var); HelpMarker("Bullet tracer color will be dictated by a changing color");
+								static const char* projectilesgTeam[]{ "Off", "Machina", "C.A.P.P.E.R", "Short Circuit", "Merasmus ZAP", "Merasmus ZAP Beam 2", "Big Nasty", "Distortion Trail" }; ImGui::PushItemWidth(100); ImGui::Combo("Particle tracer", &Vars::Visuals::ParticleTracer.m_Var, projectilesgTeam, IM_ARRAYSIZE(projectilesgTeam)); ImGui::PopItemWidth(); HelpMarker("When to draw glow on projectiles");
 								ImGui::Checkbox("Aimbot viewmodel", &Vars::Visuals::AimbotViewmodel.m_Var); HelpMarker("Will aim viewmodel at target");
 								ImGui::TextUnformatted("");
 								ImGui::Checkbox("Thirdperson", &Vars::Visuals::ThirdPerson.m_Var); HelpMarker("Will move your camera to be in a thirdperson view");
@@ -975,7 +974,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 								InputKeybind("Recharge key", Vars::Misc::CL_Move::RechargeKey); HelpMarker("Recharges ticks for shifting");
 								InputKeybind("Teleport key", Vars::Misc::CL_Move::TeleportKey); HelpMarker("Shifts ticks to move fast");
 								InputKeybind("Doubletap key", Vars::Misc::CL_Move::DoubletapKey); HelpMarker("Shifts ticks when shooting for a rapid-fire effect");
-								ImGui::SliderInt("Doubletap Tickcount", &Vars::Misc::CL_Move::DoubletapAmt.m_Var, 1, 24); HelpMarker("High values are unstable");
+								ImGui::SliderInt("Doubletap Tickcount", &Vars::Misc::CL_Move::DoubletapAmt.m_Var, 1, 19); HelpMarker("High values are unstable");
 								ImGui::Checkbox("Recharge While Dead", &Vars::Misc::CL_Move::RechargeWhileDead.m_Var); HelpMarker("Recharge your DoubleTap bar while you're dead");
 								ImGui::Checkbox("AutoRecharge", &Vars::Misc::CL_Move::AutoRecharge.m_Var); HelpMarker("Recharge your DoubleTap bar if you are doing nothing");
 								ImGui::Checkbox("Wait for DT", &Vars::Misc::CL_Move::WaitForDT.m_Var); HelpMarker("While the doubletap key is held and ticks are fully charged, it will wait until doubletap is ready to shoot");

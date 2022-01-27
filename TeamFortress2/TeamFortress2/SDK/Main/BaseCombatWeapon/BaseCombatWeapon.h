@@ -3,7 +3,6 @@
 #include "../BaseEntity/BaseEntity.h"
 
 
-
 class CBaseCombatWeapon : public CBaseEntity
 {
 public: //Netvars
@@ -53,9 +52,9 @@ public: //Netvars
 public: //Virtuals
 	M_VIRTUALGET(WeaponID, int, this, int(__thiscall*)(void*), 379)
 		M_VIRTUALGET(Slot, int, this, int(__thiscall*)(void*), 329)
-		M_VIRTUALGET(DamageType, int, this, int(__thiscall*)(void*), 378)
-		M_VIRTUALGET(FinishReload, void, this, void(__thiscall*)(void*), 277)
-		M_VIRTUALGET(BulletSpread, Vec3&, this, Vec3& (__thiscall*)(void*), 288)
+		M_VIRTUALGET(DamageType, int, this, int(__thiscall*)(void*), 340)
+		M_VIRTUALGET(FinishReload, void, this, void(__thiscall*)(void*), 275)
+		M_VIRTUALGET(BulletSpread, Vec3&, this, Vec3& (__thiscall*)(void*), 286)
 
 public: //Everything else, lol
 	__inline float GetSmackTime() {
@@ -89,7 +88,7 @@ public: //Everything else, lol
 	}
 
 	__inline float GetSwingRange(CBaseEntity* pLocal) {
-		return static_cast<float>(GetVFunc<int(__thiscall*)(CBaseEntity*)>(this, 451)(pLocal));
+		return static_cast<float>(GetVFunc<int(__thiscall*)(CBaseEntity*)>(this, 453)(pLocal));
 	}
 
 	__inline float GetWeaponSpread() {
@@ -126,7 +125,7 @@ public: //Everything else, lol
 		bool bResult = false;
 		if (const auto& pOwner = g_Interfaces.EntityList->GetClientEntityFromHandle(GethOwner())) {
 			const int nOldFov = pOwner->GetFov(); pOwner->SetFov(70);
-			bResult = GetVFunc<bool(__thiscall*)(decltype(this), bool, CBaseEntity*)>(this, 421)(this, bHeadShot, nullptr);
+			bResult = GetVFunc<bool(__thiscall*)(decltype(this), bool, CBaseEntity*)>(this, 423)(this, bHeadShot, nullptr);
 			pOwner->SetFov(nOldFov);
 		} return bResult;
 	}
@@ -205,29 +204,26 @@ public: //Everything else, lol
 	}
 
 	__inline void GetProjectileFireSetup(CBaseEntity* pPlayer, Vec3 vOffset, Vec3* vSrc, Vec3* vForward, bool bHitTeam, float flEndDist) {
-		typedef void(__thiscall* EstimateAbsVelocityFn)(decltype(this), CBaseEntity*, Vec3, Vec3*, Vec3*, bool, float);
-		static DWORD dwFn = g_Pattern.Find(_(L"client.dll"), _(L"E8 ? ? ? ? F3 0F 10 46 ? F3 0F 5C 05 ? ? ? ? F3 0F 11 46 ? 5E 5D C2 20 00")) + 0x1;
-		static DWORD dwOffset = ((*(PDWORD)(dwFn)) + dwFn + 0x4);
-		EstimateAbsVelocityFn fn = (EstimateAbsVelocityFn)dwOffset;
-		fn(this, pPlayer, vOffset, vSrc, vForward, bHitTeam, flEndDist);
+		static auto FN = reinterpret_cast<void(__thiscall*)(CBaseEntity*, CBaseEntity*, Vec3, Vec3*, Vec3*, bool, float)>(g_Pattern.Find(_(L"client.dll"), _(L"53 8B DC 83 EC ? 83 E4 ? 83 C4 ? 55 8B 6B ? 89 6C ? ? 8B EC 81 EC ? ? ? ? 56 8B F1 57 8B 06 8B 80 ? ? ? ? FF D0 84 C0")));
+		FN(this, pPlayer, vOffset, vSrc, vForward, bHitTeam, flEndDist);
 	}
 
 	__inline bool CalcIsAttackCriticalHelper(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 469, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 461, 0)(pWeapon);
 	}
 
 	__inline bool CalcIsAttackCriticalHelperNoCrits(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 463, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 462, 0)(pWeapon);
 	}
 
 	__inline bool CanFireCriticalShot(CBaseEntity* pWeapon)
 	{
 		typedef bool (*fn_t)(CBaseEntity*);
-		return GetVFunc<fn_t>(pWeapon, 492, 0)(pWeapon);
+		return GetVFunc<fn_t>(pWeapon, 490, 0)(pWeapon);
 	}
 
 	/*__inline bool CalcIsAttackCriticalHelper() {
@@ -241,6 +237,8 @@ public: //Everything else, lol
 	__inline int GetMinigunState() {
 		return *reinterpret_cast<int*>(this + 0xC48);
 	}
+
+	CHudTexture* GetWeaponIcon();
 };
 
 class weapon_info
@@ -333,16 +331,3 @@ struct state_t
 		return !(*this == B);
 	}
 };
-
-/*		M_OFFSETGET(CritBucket, float, 0xA38)
-M_OFFSETGET(WeaponSeed, int, 0xB3C)
-M_OFFSETGET(Unknown1, int, 0xB30)
-M_OFFSETGET(Unknown2, int, 0xB34)
-M_OFFSETGET(Unknown3, bool, 0xB17)
-M_OFFSETGET(Unknown4, float, 0xB40)
-M_OFFSETGET(CritAttempts, int, 0xA3C)
-M_OFFSETGET(CritCount, int, 0xA40)
-M_OFFSETGET(ObservedCritChance, int, 0xBFC)
-M_OFFSETGET(Unknown7, bool, 0xB18)
-M_OFFSETGET(WeaponMode, bool, 0xB04)
-M_OFFSETGET(WeaponDataa, bool, 0xB10)*/

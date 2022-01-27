@@ -326,7 +326,7 @@ void CESP::DrawPlayers(CBaseEntity* pLocal)
 				float flHealth = static_cast<float>(nHealth);
 				float flMaxHealth = static_cast<float>(nMaxHealth);
 
-				Color_t clr = flHealth > flMaxHealth ? Colors::Overheal : HealthColor;
+				Color_t clr = flHealth > flMaxHealth ? Colors::Overheal : Colors::Overheal;
 
 				if (!Player->IsVulnerable())
 					clr = Colors::Invuln;
@@ -334,15 +334,27 @@ void CESP::DrawPlayers(CBaseEntity* pLocal)
 				if (flHealth > flMaxHealth)
 					flHealth = flMaxHealth;
 
-				static const int nWidth = 2;
+				static const int nWidth = 4;
 				int nHeight = (h + (flHealth < flMaxHealth ? 2 : 1));
 				int nHeight2 = (h + 1);
 
 				float ratio = (flHealth / flMaxHealth);
+				g_Draw.Rect(((x - nWidth) - 2), (y), nWidth, (nHeight), {0, 0, 0, 100});
 				g_Draw.Rect(((x - nWidth) - 2), (y + nHeight - (nHeight * ratio)), nWidth, (nHeight * ratio), clr);
 
-				if (Vars::ESP::Main::Outline.m_Var == 2)
-					g_Draw.OutlinedRect(((x - nWidth) - 2) - 1, (y + nHeight - (nHeight * ratio)) - 1, nWidth + 2, (nHeight * ratio) + 2, Colors::OutlineESP);
+				
+
+				if (Vars::ESP::Main::Outline.m_Var == 2) {
+					g_Draw.OutlinedRect(((x - nWidth) - 2) - 1, (y)-1, nWidth + 2, (nHeight)+2, Colors::OutlineESP);
+					if (true) //edgy bars make this a var eventually
+					{
+						for (int i = 0; i < 4; i++) {
+							g_Draw.Line(x - nWidth - 3, y + i * (nHeight / 4), x-2, y + i * (nHeight / 4), Colors::OutlineESP);
+							g_Draw.Line(x - nWidth - 3, y + i * (nHeight / 4) + 1, x-2, y + i * (nHeight / 4) + 1, Colors::OutlineESP);
+						}
+
+					}
+				}
 
 				x += 1;
 			}

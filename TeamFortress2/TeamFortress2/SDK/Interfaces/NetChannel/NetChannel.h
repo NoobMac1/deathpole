@@ -96,7 +96,11 @@ public:
 	virtual void			DenyFile(const char *filename, unsigned int transferID) = 0;
 	virtual void			RequestFile_OLD(const char *filename, unsigned int transferID) = 0;
 	virtual void			SetChoked(void) = 0;
-	virtual int				SendDatagram(bf_write *data) = 0;
+	void SendDatagram(bf_write* data)
+	{
+		typedef void(__thiscall* FN)(PVOID);
+		GetVFunc<FN>(this, 43)(this);
+	}
 	virtual bool			Transmit(bool onlyReliable = false) = 0;
 	virtual const netadr_t	&GetRemoteAddress(void) const = 0;
 	virtual void			*GetMsgHandler(void) const = 0;

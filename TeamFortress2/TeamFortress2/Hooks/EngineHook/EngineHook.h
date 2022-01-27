@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Hooks.h"
 #include "../../SDK/SDK.h"
 #include "../ClientModeHook/ClientModeHook.h"
 namespace EngineHook

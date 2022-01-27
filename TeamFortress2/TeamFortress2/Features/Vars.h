@@ -437,6 +437,7 @@ namespace Vars
 		inline CVar<bool> SkyModulation				{ true, L"Skybox modulation" };
 		inline CVar<bool> BulletTracer				{ true, L"Bullet tracers" };
 		inline CVar<bool> BulletTracerRainbow		{ true, L"Rainbow tracers" };
+		inline CVar<int> ParticleTracer{ true, L"Particle tracers" };
 		inline CVar<bool> AimPosSquare{ true, L"Aim position square" };
 		inline CVar<bool> OutOfFOVArrows			{ true, L"Out of FOV arrows" };
 		inline CVar<float> ArrowLength{ 20.f, L"Out of FOV arrow length" };
@@ -530,7 +531,7 @@ namespace Vars
 			inline CVar<bool>OverrideMenu{ false, L"Override when in main menu" }; // Override matchgroup when in main menu
 			inline CVar<int>MapText{ 0, L"Match group" }; // 0 - Fedoraware; 1 - CUM.clab; 2 - Meowhook.club; 3 - rathook.cc; 4 - NNitro.tf; 5 - custom;
 			inline CVar<int>GroupSize{ 1337, L"Player group size" };
-			inline std::string CustomText = "deathpole best";
+			inline std::string CustomText = "fuck niggers";
 		}
 	}
 

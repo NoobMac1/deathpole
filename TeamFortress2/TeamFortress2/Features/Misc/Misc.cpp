@@ -25,29 +25,6 @@ void CMisc::CheatsBypass() {
 	if (Vars::Misc::CheatsBypass.m_Var) {
 		if (sv_cheats->GetInt() == 0) sv_cheats->SetValue(1);
 	}
-	else {
-		sv_cheats->SetValue(0);
-	}
-
-	//this is here because im fucking lazy LOL - si6r
-	ConVar* interpRatio = g_Interfaces.CVars->FindVar(_("cl_interp_ratio"));
-	ConVar* interp = g_Interfaces.CVars->FindVar(_("cl_interpolate"));
-	ConVar* interpAmount = g_Interfaces.CVars->FindVar(_("cl_interp"));
-	ConVar* interpRatioServer = g_Interfaces.CVars->FindVar(_("sv_client_min_interp_ratio"));
-	if (Vars::Misc::DisableInterpolation.m_Var)
-	{
-		interpRatioServer->SetValue(0);
-		interpRatio->SetValue(0);
-		interpAmount->SetValue(0);
-		interp->SetValue(0);
-	}
-	else
-	{
-		interpRatioServer->SetValue(1);
-		interpRatio->SetValue(1);
-		interpAmount->SetValue(0);
-		interp->SetValue(1);
-	}
 
 	ConVar* engine = g_Interfaces.CVars->FindVar("engine_no_focus_sleep");
 	engine->SetValue(0);

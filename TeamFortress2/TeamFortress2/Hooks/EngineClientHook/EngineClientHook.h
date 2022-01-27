@@ -12,4 +12,10 @@ namespace EngineClientHook
 		using fn = bool(__thiscall*)(CEngineClient*);
 		bool __stdcall Hook();
 	}
+
+	namespace RemoveEventDelay
+	{
+		using fn = bool(__thiscall*)(CEngineClient*);
+		float __fastcall Hook();
+	}
 }

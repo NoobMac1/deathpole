@@ -14,3 +14,11 @@ bool __stdcall EngineClientHook::IsPlayingTimeDemo::Hook()
 
 	return Table.Original<fn>(index)(g_Interfaces.Engine);
 }
+
+float __fastcall EngineClientHook::RemoveEventDelay::Hook()
+{
+	static DWORD dwGetTime = g_Pattern.Find(XorStr(L"engine.dll").c_str(), XorStr(L"E8 ? ? ? ? 83 EC 10").c_str());
+
+	if (reinterpret_cast<DWORD>(_ReturnAddress()) == (dwGetTime + 0x3D))
+		return FLT_MAX;
+}

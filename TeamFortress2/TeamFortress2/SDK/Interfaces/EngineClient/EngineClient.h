@@ -114,6 +114,12 @@ public:
 		return GetVFunc<FN>(this, 36)(this);
 	}
 
+	void FireEvents()
+	{
+		typedef void(__thiscall* FN)(PVOID);
+		GetVFunc<FN>(this, 56)(this);
+	}
+
 	bool IsTakingScreenshot()
 	{
 		typedef bool(__thiscall *FN)(PVOID);
@@ -141,7 +147,7 @@ public:
 	void ServerCmdKeyValues(void* pKV)
 	{
 		typedef void(__thiscall* FN)(void*, void*);
-		GetVFunc<FN>(this, 127)(this, pKV);
+		GetVFunc<FN>(this, 128)(this, pKV);
 	}
 
 	ISpatialQuery *GetBSPTreeQuery()

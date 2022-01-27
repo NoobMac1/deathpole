@@ -25,8 +25,7 @@ struct GlobalInfo_t
 	bool m_bSilentTime					= false;
 	bool m_bLocalSpectated				= false;
 	bool m_bRollExploiting			    = false;
-	bool m_bAttacking			 	    = false;
-	bool fast_stop						= false;
+	bool m_bAttacking			 	    = false;	
 	bool m_bModulateWorld				= true;
 	bool m_bShouldShift                 = false;
 	bool m_bRecharging                  = false;
