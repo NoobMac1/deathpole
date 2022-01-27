@@ -481,7 +481,7 @@ void CWhat::Render(IDirect3DDevice9* pDevice) {
 					}
 
 					std::wstring s = entry.path().filename().wstring();
-					s.erase(s.end() - 4, s.end());
+					s.erase(s.end() - 3, s.end());
 
 					std::string configName(s.begin(), s.end());
 

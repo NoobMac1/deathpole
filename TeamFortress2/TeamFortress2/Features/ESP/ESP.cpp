@@ -185,21 +185,24 @@ void CESP::DrawPlayers(CBaseEntity* pLocal)
 			case 1: {
 				int height = (h + 1); //don't ask me /shrug
 
-				g_Draw.OutlinedRect(x, y, w, height, DrawColor);
+				//g_Draw.OutlinedRect(x, y, w, height, DrawColor); //I WANT A WHITE FUCKING BOX
+				g_Draw.OutlinedRect(x, y, w, height, { 0,0,0 });
 				if (Vars::ESP::Main::Outline.m_Var == 2)
 					g_Draw.OutlinedRect((x - 1), (y - 1), (w + 2), (height + 2), Colors::OutlineESP);
 
 				break;
 			}
 			case 2: {
-				g_Draw.CornerRect(x, y, w, h, 3, 5, DrawColor);
+				//g_Draw.CornerRect(x, y, w, h, 3, 5, DrawColor);
+				g_Draw.CornerRect(x, y, w, h, 3, 5, { 0,0,0 });
 				if (Vars::ESP::Main::Outline.m_Var == 2)
 					g_Draw.CornerRect((x - 1), (y - 1), (w + 2), (h + 2), 3, 5, Colors::OutlineESP);
 
 				break;
 			}
 			case 3: {
-				Draw3DBox(vTrans, DrawColor);
+				//Draw3DBox(vTrans, DrawColor);
+				Draw3DBox(vTrans, { 0,0,0 });
 				break;
 			}
 			default:
@@ -276,7 +279,8 @@ void CESP::DrawPlayers(CBaseEntity* pLocal)
 						g_Draw.Rect((middle - (wideth / 2)) - 5, y - offset - 2, wideth + 10, 2, LineColor);
 						offset -= 1;
 					}
-					g_Draw.String(FONT_NAME, middle, (y - offset), DrawColor, ALIGN_CENTERHORIZONTAL, Utils::ConvertUtf8ToWide(pi.name).data());
+					//g_Draw.String(FONT_NAME, middle, (y - offset), DrawColor, ALIGN_CENTERHORIZONTAL, Utils::ConvertUtf8ToWide(pi.name).data()); //WHITE NAME TOO FUCK OFF
+					g_Draw.String(FONT_NAME, middle, (y - offset), { 0,0,0 }, ALIGN_CENTERHORIZONTAL, Utils::ConvertUtf8ToWide(pi.name).data());
 				}
 
 				if (Vars::ESP::Players::GUID.m_Var)
