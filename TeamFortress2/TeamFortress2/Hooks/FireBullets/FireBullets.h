@@ -2,7 +2,7 @@
 #include "../Hooks.h"
 
 namespace FireBullets {
-	inline SEOHook::Func Func;
+	inline DPHook::Func Func;
 	struct FireBulletsInfo_t
 	{
 		FireBulletsInfo_t()

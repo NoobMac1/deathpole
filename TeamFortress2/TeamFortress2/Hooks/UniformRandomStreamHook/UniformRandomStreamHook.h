@@ -4,7 +4,7 @@
 
 namespace UniformRandomStreamHook
 {
-	inline SEOHook::VTable Table;
+	inline DPHook::VTable Table;
 
 	namespace RandInt
 	{

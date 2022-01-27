@@ -3,7 +3,7 @@
 #include "Color/Color.h"
 #include "Interface/Interface.h"
 #include "VFunc/VFunc.h"
-#include "SEOHook/SEOHook.h"
+#include "DPHook/DPHook.h"
 #include "Pattern/Pattern.h"
 #include "UtlVector/UtlVector.h"
 #include "Hash/Hash.h"

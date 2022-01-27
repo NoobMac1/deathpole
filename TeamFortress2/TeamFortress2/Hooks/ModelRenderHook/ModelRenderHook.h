@@ -4,7 +4,7 @@
 
 namespace ModelRenderHook
 {
-	inline SEOHook::VTable Table;
+	inline DPHook::VTable Table;
 
 	namespace DrawModelExecute
 	{

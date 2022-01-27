@@ -4,7 +4,7 @@
 
 namespace ClientHook
 {
-	inline SEOHook::VTable Table;
+	inline DPHook::VTable Table;
 
 	namespace PreEntity
 	{

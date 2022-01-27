@@ -7,7 +7,7 @@
 
 namespace Scoreboard
 {
-	inline SEOHook::Func Func;
+	inline DPHook::Func Func;
 	namespace KeyValues {
 		using fn = void(__fastcall *)(void*, void*, const char*, int);
 		void __fastcall Hook(void* ecx, void* edx, const char* keyName, int value);

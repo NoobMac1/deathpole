@@ -2,7 +2,7 @@
 #include "../../SDK/SDK.h"
 
 namespace InputHook {
-	inline SEOHook::VTable Table;
+	inline DPHook::VTable Table;
 	namespace GetUserCmd {
 		const int index = 8;
 		using fn = CUserCmd * (__thiscall*)(IInput*, int);

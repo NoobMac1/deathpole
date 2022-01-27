@@ -131,7 +131,7 @@ namespace InCondHook
 		TF_COND_LAST
 	};
 
-	inline SEOHook::Func Func;
+	inline DPHook::Func Func;
 	using fn = bool(__fastcall*)(void*, void*, ETFCond cond);
 	bool __fastcall Hook(void* ecx, void* edx, ETFCond cond);
 }

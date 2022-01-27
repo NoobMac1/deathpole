@@ -4,7 +4,7 @@
 
 namespace ViewRenderHook
 {
-	inline SEOHook::VTable Table;
+	inline DPHook::VTable Table;
 
 	namespace LevelInit
 	{

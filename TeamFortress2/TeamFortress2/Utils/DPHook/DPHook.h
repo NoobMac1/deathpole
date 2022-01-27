@@ -7,7 +7,7 @@
 #pragma warning (push)
 #pragma warning (disable : 26812) //unscoped enum
 
-namespace SEOHook
+namespace DPHook
 {
 	//PURPOSE: Hooking VFuncs via a Detour
 	class VTable
