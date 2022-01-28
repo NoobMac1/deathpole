@@ -52,11 +52,11 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)Include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(DXSDK_DIR)Lib\x86</LibraryPath>
-    <TargetName>deathpole</TargetName>
+    <TargetName>deathpole $(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>Fware($(Configuration))</TargetName>
+    <TargetName>deathpole $(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -121,7 +121,6 @@
     <ClCompile Include="TeamFortress2\Features\Keybinds\Keybinds.cpp" />
     <ClCompile Include="TeamFortress2\Features\Menu\ConfigManager\ConfigManager.cpp" />
     <ClCompile Include="TeamFortress2\Features\Menu\InputHelper\InputHelper.cpp" />
-    <ClCompile Include="TeamFortress2\Features\Menu\Menu.cpp" />
     <ClCompile Include="TeamFortress2\Features\Misc\Misc.cpp" />
     <ClCompile Include="TeamFortress2\Features\Chams\Chams.cpp" />
     <ClCompile Include="TeamFortress2\Features\PlayerArrows\PlayerArrows.cpp" />
@@ -136,15 +135,15 @@
     <ClCompile Include="TeamFortress2\Features\Auto\Auto.cpp" />
     <ClCompile Include="TeamFortress2\Features\Viewmodel shit\CalcViewModelViewHook.cpp" />
     <ClCompile Include="TeamFortress2\Features\Visuals\Visuals.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_stdlib.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="TeamFortress2\Features\What\What.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_stdlib.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="TeamFortress2\Features\Menu\Menu.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\ClientHook\ClientHook.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\ClientModeHook\ClientModeHook.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\DrawStaticPropsHook\DrawStaticPropsHook.cpp" />
@@ -216,7 +215,6 @@
     <ClInclude Include="TeamFortress2\Features\Keybinds\Keybinds.h" />
     <ClInclude Include="TeamFortress2\Features\Menu\ConfigManager\ConfigManager.h" />
     <ClInclude Include="TeamFortress2\Features\Menu\InputHelper\InputHelper.h" />
-    <ClInclude Include="TeamFortress2\Features\Menu\Menu.h" />
     <ClInclude Include="TeamFortress2\Features\Misc\Misc.h" />
     <ClInclude Include="TeamFortress2\Features\Chams\Chams.h" />
     <ClInclude Include="TeamFortress2\Features\PlayerArrows\PlayerArrows.h" />
@@ -232,16 +230,16 @@
     <ClInclude Include="TeamFortress2\Features\Vars.h" />
     <ClInclude Include="TeamFortress2\Features\Viewmodel shit\CalcViewModelViewHook.h" />
     <ClInclude Include="TeamFortress2\Features\Visuals\Visuals.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imconfig.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imgui.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imgui_impl_dx9.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imgui_internal.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imgui_stdlib.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imstb_textedit.h" />
-    <ClInclude Include="TeamFortress2\Features\What\ImGui\imstb_truetype.h" />
-    <ClInclude Include="TeamFortress2\Features\What\What.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imconfig.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imgui.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imgui_impl_dx9.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imgui_internal.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imgui_stdlib.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imstb_textedit.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\ImGui\imstb_truetype.h" />
+    <ClInclude Include="TeamFortress2\Features\Menu\Menu.h" />
     <ClInclude Include="TeamFortress2\Hooks\ClientHook\ClientHook.h" />
     <ClInclude Include="TeamFortress2\Hooks\ClientModeHook\ClientModeHook.h" />
     <ClInclude Include="TeamFortress2\Hooks\DrawStaticPropsHook\DrawStaticPropsHook.h" />

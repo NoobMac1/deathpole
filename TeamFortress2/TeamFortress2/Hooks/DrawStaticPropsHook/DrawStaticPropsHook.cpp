@@ -16,9 +16,13 @@ void __fastcall SetColorModulationHook::Hook(void* ecx, void* edx, float const* 
 		Color::TOFLOAT(Colors::StaticPropModulation.r),
 		Color::TOFLOAT(Colors::StaticPropModulation.g),
 		Color::TOFLOAT(Colors::StaticPropModulation.b),
-		Color::TOFLOAT(Colors::StaticPropModulation.a),
 	};
 
 	bool bShouldUseCustom = Vars::Visuals::WorldModulation.m_Var && bDrawing;
 	Func.Original<fn>()(ecx, edx, bShouldUseCustom ? custom : pColor);
+}
+
+void __fastcall SetAlphaModulationHook::Hook(void* ecx, void* edx, float alpha)
+{
+	Func.Original<fn>()(ecx, edx, bDrawing ? Vars::Visuals::PropAlpha.m_Var : alpha);
 }

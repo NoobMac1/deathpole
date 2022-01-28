@@ -46,9 +46,9 @@ void __fastcall FireBullets::Hook(void* ecx, void* edx, CBaseCombatWeapon* pWeap
 			pLocal->IsCritBoosted() ? (ParticleTracer(team == 2 ? "bullet_tracer_raygun_red_crit" : "bullet_tracer_raygun_blue_crit", trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true)) : (ParticleTracer(team == 2 ? "bullet_tracer_raygun_red" : "bullet_tracer_raygun_blue", trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true));
 			break;
 
-			//Short circuit
+			//black ink
 		case 3:
-			ParticleTracer(team == 2 ? "dxhr_lightningball_hit_zap_red" : "dxhr_lightningball_hit_zap_blue", trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true);
+			ParticleTracer("merasmus_zap_beam01", trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true);
 			break;
 
 			//Merasmus ZAP
@@ -58,7 +58,7 @@ void __fastcall FireBullets::Hook(void* ecx, void* edx, CBaseCombatWeapon* pWeap
 
 			//Merasmus ZAP Beam 2
 		case 5:
-			ParticleTracer("merasmus_zap_beam02", trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true);
+			ParticleTracer(Vars::Visuals::ParticleName.c_str(), trace.vStartPos, trace.vEndPos, pLocal->GetIndex(), iAttachment, true);
 			break;
 
 		case 6:

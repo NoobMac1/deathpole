@@ -500,7 +500,7 @@ void CConfigManager::Save(const wchar_t *name)
 				
 			SAVE_VAR(Vars::Visuals::despawnTime);
 			SAVE_VAR(Vars::Visuals::damageLogger);
-
+			SAVE_VAR(Vars::Visuals::PropAlpha);
 
 			SAVE_VAR(Vars::Visuals::Watermark);
 			SAVE_VAR(Vars::Visuals::VMRoll);
@@ -581,6 +581,7 @@ void CConfigManager::Save(const wchar_t *name)
 			//AntiAim
 			{
 				SAVE_VAR(Vars::AntiHack::AntiAim::Active);
+				SAVE_VAR(Vars::AntiHack::AntiAim::ServerHB);
 				SAVE_VAR(Vars::AntiHack::AntiAim::Pitch);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawReal);
 				SAVE_VAR(Vars::AntiHack::AntiAim::YawFake);
@@ -1020,7 +1021,7 @@ void CConfigManager::Load(const wchar_t *name)
 			LOAD_VAR(Vars::Menu::LegacyMenu);
 			LOAD_VAR(Vars::Visuals::despawnTime);
 			LOAD_VAR(Vars::Visuals::damageLogger);
-
+			LOAD_VAR(Vars::Visuals::PropAlpha);
 			LOAD_VAR(Vars::Visuals::Watermark);
 			LOAD_VAR(Vars::Visuals::VMRoll);
 			LOAD_VAR(Vars::Visuals::XOffset);
@@ -1097,6 +1098,7 @@ void CConfigManager::Load(const wchar_t *name)
 			//AntiAim
 			{
 				LOAD_VAR(Vars::AntiHack::AntiAim::Active);
+				LOAD_VAR(Vars::AntiHack::AntiAim::ServerHB);
 				LOAD_VAR(Vars::AntiHack::AntiAim::Pitch);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawReal);
 				LOAD_VAR(Vars::AntiHack::AntiAim::YawFake);

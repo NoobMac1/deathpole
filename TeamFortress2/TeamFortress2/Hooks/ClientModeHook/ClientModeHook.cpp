@@ -224,67 +224,22 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 
 
 	//fakelag
-
+	
 	if (const auto& pLocal = g_EntityCache.m_pLocal) {
 		if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon) {
-			if (g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < Vars::Misc::CL_Move::FakelagValue.m_Var) {
-				if (Vars::Misc::CL_Move::Fakelag.m_Var) {
-					if (Vars::Misc::CL_Move::FakelagOnKey.m_Var && GetAsyncKeyState(Vars::Misc::CL_Move::FakelagKey.m_Var)) {
-						*pSendPacket = false;
-					}
-					else {
-						*pSendPacket = false;
-					}
-				}
-				*pSendPacket = true;
+			if (Vars::Misc::CL_Move::Fakelag.m_Var) {
+				if ((g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < Vars::Misc::CL_Move::FakelagValue.m_Var) && !(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK)) && pLocal->IsAlive()) { *pSendPacket = false; }
+				else { *pSendPacket = true; }
 			}
-			/*if (Vars::Misc::CL_Move::Fakelag.m_Var) {
-				//*pSendPacket =
-			}*/
-			/*if (Vars::Misc::CL_Move::Fakelag.m_Var) {
-				*pSendPacket = ((g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < Vars::Misc::CL_Move::FakelagValue.m_Var) ||
-				(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK))) && pLocal->IsAlive() ? Vars::Misc::CL_Move::FakelagOnKey.m_Var &&
-				GetAsyncKeyState(Vars::Misc::CL_Move::FakelagKey.m_Var) ? false : false : true;
-			}*/
 		}
 	}
-
-	/*if (const auto& pLocal = g_EntityCache.m_pLocal) {
-		if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon) {
-			if (pLocal->IsAlive())
-			{
-				auto netchan = g_Interfaces.Engine->GetNetChannelInfo();
-
-				if ((Vars::Misc::CL_Move::Fakelag.m_Var && netchan->m_nChokedPackets < (int)Vars::Misc::CL_Move::FakelagValue.m_Var) || pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK)) {
-					if (Vars::Misc::CL_Move::FakelagOnKey.m_Var) {
-						if (GetAsyncKeyState(Vars::Misc::CL_Move::FakelagKey.m_Var)) {
-							*pSendPacket = false;
-						}
-					}
-					else {
-						*pSendPacket = false;
-					}
-				}
-				else {
-					*pSendPacket = true;
-				}
-			}
-		}
-	}*/
-
-	// Bless your beautiful soul reestart/kris - someone else
-
-	// This shit doesn't work half of the time too, btw. - jp4
-	//fart
-	// THIS SHIT SUUUUUCKS
-
 
 	auto AntiWarp = [](CUserCmd* cmd) -> void
 	{
 		
 		if (g_GlobalInfo.m_bShouldShift && g_GlobalInfo.m_nShifted) {
-			cmd->sidemove = -(cmd->sidemove) / (Vars::Misc::CL_Move::DoubletapAmt.m_Var);
-			cmd->forwardmove = -(cmd->forwardmove) / (Vars::Misc::CL_Move::DoubletapAmt.m_Var);
+			cmd->sidemove = -(cmd->sidemove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
+			cmd->forwardmove = -(cmd->forwardmove) * (g_GlobalInfo.m_nShifted / Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 		}
 		else {
 			return;

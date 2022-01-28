@@ -432,12 +432,14 @@ namespace Vars
 		inline CVar<bool> ThirdPersonInstantYaw		{ true, L"Instant Yaw" };
 
 		inline CVar<bool> WorldModulation			{ false, L"World Modulation" };
+		inline CVar<float> PropAlpha				{ 1.f, L"Props" };
 		inline CVar<bool> OverrideWorldTextures		{ false, L"World Texture Override" };
 		inline CVar<bool> SkyboxChanger				{ true, L"Skybox changer" };
 		inline CVar<bool> SkyModulation				{ true, L"Skybox modulation" };
 		inline CVar<bool> BulletTracer				{ true, L"Bullet tracers" };
 		inline CVar<bool> BulletTracerRainbow		{ true, L"Rainbow tracers" };
 		inline CVar<int> ParticleTracer{ true, L"Particle tracers" };
+		inline std::string ParticleName = "merasmus_zap_beam02";
 		inline CVar<bool> AimPosSquare{ true, L"Aim position square" };
 		inline CVar<bool> OutOfFOVArrows			{ true, L"Out of FOV arrows" };
 		inline CVar<float> ArrowLength{ 20.f, L"Out of FOV arrow length" };
@@ -540,6 +542,7 @@ namespace Vars
 		namespace AntiAim
 		{
 			inline CVar<bool> Active	{ false, L"Active" };
+			inline CVar<bool> ServerHB	{ true, L"Show Server Hitboxes" };
 			inline CVar<int> Pitch		{ 0, L"Pitch" };		//0 - None, 1 - Up, 2 - Down, 3 - Fake Up, 4 - Fake Down
 			inline CVar<int> YawReal	{ 0, L"Yaw Real" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards
 			inline CVar<int> YawFake	{ 0, L"Yaw Fake" };	//0 - None, 1 - Left, 2 - Right, 3 - Backwards

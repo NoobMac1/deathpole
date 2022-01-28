@@ -1,5 +1,5 @@
 #include "EndSceneHook.h"
-#include "../../Features/What/What.h"
+#include "../../Features/Menu/Menu.h"
 
 HRESULT __stdcall EndSceneHook::Func(IDirect3DDevice9* pDevice) {
 	static void* firstAddress = _ReturnAddress();

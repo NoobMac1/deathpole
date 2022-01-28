@@ -139,8 +139,8 @@ void CAntiAim::Run(CUserCmd* pCmd, bool* pSendPacket)
 		case 5: { pCmd->viewangles.x = Vars::AntiHack::AntiAim::CustomPitch.m_Var; g_GlobalInfo.m_vRealViewAngles.x = Vars::AntiHack::AntiAim::CustomPitch.m_Var; break; }	// custom
 		case 6: {
 			rollpoint += Vars::AntiHack::AntiAim::RollStep.m_Var;
-			while (rollpoint > 89.0f) { rollpoint += -178.0f; }
-			while (rollpoint < -89.0f) { rollpoint += 178.0f; } // wrap around
+			while (rollpoint > 89.0f) { rollpoint += -89.0f; }
+			while (rollpoint < -89.0f) { rollpoint += 89.0f; } // wrap around
 			pCmd->viewangles.x = rollpoint;
 			g_GlobalInfo.m_vRealViewAngles.x = rollpoint;
 			break;
