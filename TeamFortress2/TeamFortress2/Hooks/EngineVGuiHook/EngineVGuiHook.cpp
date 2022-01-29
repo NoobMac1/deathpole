@@ -159,9 +159,9 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			// get tickrate.
 			int rate = (int)std::round(1.f / g_Interfaces.GlobalVars->interval_per_tick);
 			// get framerate.
-
-			if (lastcheck < (g_Interfaces.GlobalVars->tickcount - 5)) {
-				lastcheck = g_Interfaces.GlobalVars->tickcount;
+			g_GlobalInfo.watermarkCounter++;
+			if (g_GlobalInfo.watermarkCounter > 15) {
+				g_GlobalInfo.watermarkCounter = 0;
 				fps = (int)std::round(1.f / g_Interfaces.GlobalVars->frametime);
 			} // this is fucking retarded but might work
 
@@ -174,7 +174,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 
 			std::stringstream ss;
 			if (g_Interfaces.Engine->IsInGame()) {
-				ss << tfm::format(_("deathpole | admin | rate: %i | fps: %i"), rate, fps);
+				ss << tfm::format(_("deathpole | admin | rate: %i | fps: %i"), rate-1, fps);
 			}
 			else {
 				ss << tfm::format(_("deathpole | admin | in menu"));
@@ -193,7 +193,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			}
 			//Debug
 			{
-
+				
 			}
 			g_Misc.BypassPure();
 			g_ESP.Run();

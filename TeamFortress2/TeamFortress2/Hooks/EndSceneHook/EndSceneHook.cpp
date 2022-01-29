@@ -6,7 +6,7 @@ HRESULT __stdcall EndSceneHook::Func(IDirect3DDevice9* pDevice) {
 	if (firstAddress != _ReturnAddress()) // EndScene is called twice, this prevents double rendering
 		return Hook.CallOriginal<fn>()(pDevice);
 
-	g_What.Render(pDevice);
+	g_Menu.Render(pDevice);
 	return Hook.CallOriginal<fn>()(pDevice);
 }
 

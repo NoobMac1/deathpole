@@ -4,12 +4,12 @@
 
 void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFinalTick)
 {
+	auto pLocal = g_EntityCache.m_pLocal;
+
 	static auto oClMove = Func.Original<fn>();
 	if (!Vars::Misc::CL_Move::Enabled.m_Var) {
 		return oClMove(accumulated_extra_samples, bFinalTick);
 	}
-
-	auto pLocal = g_EntityCache.m_pLocal;
 
 	//Teleport
 	if (Vars::Misc::CL_Move::TeleportKey.m_Var && (GetAsyncKeyState(Vars::Misc::CL_Move::TeleportKey.m_Var)) && g_GlobalInfo.m_nShifted >= Vars::Misc::CL_Move::DoubletapAmt.m_Var) {
@@ -41,7 +41,7 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 	}
 	if (g_GlobalInfo.m_bRecharging && g_GlobalInfo.m_nShifted < Vars::Misc::CL_Move::DoubletapAmt.m_Var) {
 		g_GlobalInfo.m_nShifted++;
-		g_GlobalInfo.m_nWaitForShift = DT_WAIT_CALLS;	
+		g_GlobalInfo.m_nWaitForShift = DT_WAIT_CALLS;
 		return; // Don't move
 	}
 	else {
@@ -60,8 +60,6 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 		g_GlobalInfo.m_bShouldShift = g_GlobalInfo.m_bShouldShift ? true : g_GlobalInfo.lateUserCmd->buttons & IN_ATTACK;
 	}
 
-
-
 	if (!pLocal) {
 		return;
 	}
@@ -77,7 +75,6 @@ void __cdecl EngineHook::CL_Move::Hook(float accumulated_extra_samples, bool bFi
 				g_GlobalInfo.m_nShifted--;
 			}
 		}
-		g_Interfaces.Engine->FireEvents(); // immediately queue shifted ticks (probably not an issue but jic)
 		g_GlobalInfo.m_bShouldShift = false;
 	}
 	

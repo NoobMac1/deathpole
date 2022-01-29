@@ -10,7 +10,7 @@
 
 bool CAuto::ShouldRun(CBaseEntity* pLocal)
 {
-	if (!Vars::Triggerbot::Global::Active.m_Var || !g_AutoGlobal.IsKeyDown())
+	if (!Vars::Triggerbot::Global::Active.m_Var || (!g_AutoGlobal.IsKeyDown() && Vars::Triggerbot::Global::TriggerKey.m_Var))
 		return false;
 
 	if (g_Interfaces.EngineVGui->IsGameUIVisible() || g_Interfaces.Surface->IsCursorVisible())

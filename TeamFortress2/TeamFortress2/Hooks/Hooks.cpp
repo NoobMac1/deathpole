@@ -207,6 +207,13 @@ void CHooks::Init()
 		Func.Hook(reinterpret_cast<void*>(SetAlphaModulation), reinterpret_cast<void*>(Hook));
 	}
 
+	// holiday
+	{
+		using namespace TF_IsHolidayActive;
+		target = g_Pattern.Find(L"client.dll", L"55 8B EC A1 ? ? ? ? 83 78 30 00 74 04 32 C0 5D C3");
+		func.Hook((void*)target, (void*)hook);
+	}
+
 	if (MH_EnableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
 		WinAPI::MessageBoxW(0, _(L"MH failed to enable all hooks!"), _(L"ERROR!"), MB_ICONERROR);
 }

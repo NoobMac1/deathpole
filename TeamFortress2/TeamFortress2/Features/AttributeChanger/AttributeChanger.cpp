@@ -111,6 +111,18 @@ void CAttributChanger::Run()
 
 					if (m_mapAttributes[*nIndex].m_nSheen)
 						pList->Add(AttributeID::Sheen, m_mapAttributes[*nIndex].m_nSheen);
+
+					if (m_mapAttributes[*nIndex].voice)
+						pList->Add(AttributeID::halloween_voice_modulation, true);
+					if (m_mapAttributes[*nIndex].pumpkins)
+						pList->Add(AttributeID::halloween_pumpkin_explosions, true);
+					if (m_mapAttributes[*nIndex].foot)
+						pList->Add(AttributeID::halloween_footstep_type, 1);
+
+					if (m_mapAttributes[*nIndex].australium)
+						pList->Add(AttributeID::IsAustraliumItem, true);
+					if (!(m_mapAttributes[*nIndex].australium))
+						pList->Add(AttributeID::IsFestive, true);
 				}
 			}
 		}
@@ -159,9 +171,15 @@ void CAttributChanger::LoadConfig()
 		while (*szSection != NULL)
 		{
 			const int nIndex = LoadInt(szSection, L"Index");
-			m_mapAttributes[nIndex] = { nIndex, LoadInt(szSection, L"Effect"),
-										LoadInt(szSection, L"Particle"), LoadInt(szSection, L"Sheen"),
-										LoadBool(szSection, L"Ancient"), LoadBool(szSection, L"StyleOverride") };
+			m_mapAttributes[nIndex] = { nIndex,
+										Vars::Visuals::Skins::Effect.m_Var,
+										Vars::Visuals::Skins::Particle.m_Var,
+										Vars::Visuals::Skins::Sheen.m_Var,
+										Vars::Visuals::Skins::Acient.m_Var,
+										Vars::Visuals::Skins::Override.m_Var ,
+										Vars::Visuals::Skins::Spooky.m_Var,
+										Vars::Visuals::Skins::Australium.m_Var
+			};
 
 			szSection += (wcslen(szSection) + 1);
 		}
@@ -181,9 +199,15 @@ void CAttributChanger::SetAttribute()
 		if (const auto& pWeapon = pLocal->GetActiveWeapon())
 		{
 			const int nIndex = pWeapon->GetItemDefIndex();
-			m_mapAttributes[nIndex] = { nIndex, Vars::Visuals::Skins::Effect.m_Var,
-										Vars::Visuals::Skins::Particle.m_Var, Vars::Visuals::Skins::Sheen.m_Var,
-										Vars::Visuals::Skins::Acient.m_Var,   Vars::Visuals::Skins::Override.m_Var };
+			m_mapAttributes[nIndex] = { nIndex,
+										Vars::Visuals::Skins::Effect.m_Var,
+										Vars::Visuals::Skins::Particle.m_Var,
+										Vars::Visuals::Skins::Sheen.m_Var,
+										Vars::Visuals::Skins::Acient.m_Var,
+										Vars::Visuals::Skins::Override.m_Var ,
+										Vars::Visuals::Skins::Spooky.m_Var,
+										Vars::Visuals::Skins::Australium.m_Var
+			};
 
 			ForceFullUpdate(g_Interfaces.ClientState);
 		}

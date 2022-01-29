@@ -465,7 +465,8 @@ namespace Vars
 			inline CVar<int> Particle				{ 0, L"Particle" };
 			inline CVar<bool> Acient				{ false, L"Ancient" };
 			inline CVar<bool> Override				{ false, L"Style Override" };
-			inline CVar<bool> Australium				{ false, L"Australium" };
+			inline CVar<bool> Spooky				{ false,L"so scary" };
+			inline CVar<bool> Australium			{ false, L"Australium" };
 		}
 	}
 

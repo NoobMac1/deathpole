@@ -14,6 +14,7 @@ struct GlobalInfo_t
 	int m_nShifted                      = 0;
 	//int dtTicks = MAX_NEW_COMMANDS; // how many to shift (obsolete)
 	int tickCounter = 0;
+	int watermarkCounter = 0;
 	bool m_bWeaponCanHeadShot			= false;
 	bool m_bWeaponCanAttack				= false;
 	bool m_bWeaponCanSecondaryAttack	= false;
@@ -27,11 +28,11 @@ struct GlobalInfo_t
 	bool m_bRollExploiting			    = false;
 	bool m_bAttacking			 	    = false;	
 	bool m_bModulateWorld				= true;
+	bool m_bChoking						= false;
 	bool m_bShouldShift                 = false;
 	bool m_bRecharging                  = false;
 	bool unloadWndProcHook = false;
 	float m_flCurAimFOV					= 0.0f;
-	Vec3 m_bDesiredVel					= {};
 	Vec3 m_vPredictedPos				= {};
 	Vec3 m_vAimPos						= {};
 	VMatrix m_WorldToProjection			= {};

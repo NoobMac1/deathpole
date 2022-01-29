@@ -7,6 +7,12 @@
 
 enum AttributeID
 {
+	set_item_tint_rgb_override = 1004,// (?)
+	halloween_footstep_type = 1005,
+	halloween_voice_modulation = 1006,
+	halloween_pumpkin_explosions = 1007,
+	halloween_green_flames = 1008,	// weird
+	halloween_death_ghosts = 1009,	// ?
 	IsAustraliumItem = 2027,
 	LootRarity = 2022,
 	ItemStyleOverride = 542,
@@ -14,7 +20,8 @@ enum AttributeID
 	IsFestive = 2053,
 	Sheen = 2014,
 	UnusualEffect = 134,
-	ParticleEffect = 370
+	ParticleEffect = 370,
+	bombinomicon_effect_on_death = 344,
 };
 
 struct AttributeInfo_t
@@ -25,6 +32,10 @@ struct AttributeInfo_t
 	int m_nSheen;
 	bool m_bAncient;
 	bool m_bStyleOverride;
+	bool voice;
+	bool pumpkins;
+	bool foot;
+	bool australium;
 };
 
 class CAttributChanger

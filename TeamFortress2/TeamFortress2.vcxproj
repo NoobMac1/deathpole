@@ -154,6 +154,7 @@
     <ClCompile Include="TeamFortress2\Hooks\FireBullets\FireBullets.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\GameMovementHook\GameMovementHook.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\GetDrawPositionHook\GetDrawPositionHook.cpp" />
+    <ClCompile Include="TeamFortress2\Hooks\holiday\hol.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\Hooks.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\InCondHook\InCondHook.cpp" />
     <ClCompile Include="TeamFortress2\Hooks\InputHook\InputHook.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="TeamFortress2\Hooks\FireBullets\FireBullets.h" />
     <ClInclude Include="TeamFortress2\Hooks\GameMovementHook\GameMovementHook.h" />
     <ClInclude Include="TeamFortress2\Hooks\GetDrawPositionHook\GetDrawPositionHook.h" />
+    <ClInclude Include="TeamFortress2\Hooks\holiday\hol.h" />
     <ClInclude Include="TeamFortress2\Hooks\Hooks.h" />
     <ClInclude Include="TeamFortress2\Hooks\InCondHook\InCondHook.h" />
     <ClInclude Include="TeamFortress2\Hooks\InputHook\InputHook.h" />

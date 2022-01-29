@@ -22,6 +22,7 @@
 #include "GameMovementHook/GameMovementHook.h"
 #include "FireBullets/FireBullets.h"
 #include "../Features/Viewmodel shit/CalcViewModelViewHook.h"
+#include "holiday/hol.h"
 class CHooks
 {
 private:

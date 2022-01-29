@@ -7,12 +7,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 LONG __stdcall WndProcHook::Hook(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {/*
-	if (g_What.menuOpen) {
+	if (g_Menu.menuOpen) {
 		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
 		return 1;
 	}
 	return (g_Menu.m_bOpen && (g_Interfaces.EngineVGui->IsGameUIVisible() || g_Menu.m_bTyping) ? 1 : CallWindowProc(WndProc, hWnd, uMsg, wParam, lParam));*/
-	if (g_What.menuOpen) {
+	if (g_Menu.menuOpen) {
 		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
 		return 1;
 	}

@@ -236,6 +236,33 @@ void CMenu::TextCenter(std::string text) {
 	ImGui::PopFont();
 }
 
+void CMenu::Run() {
+	m_bReopened = false;
+
+	static bool bOldOpen = m_bOpen;
+
+	if (bOldOpen != m_bOpen)
+	{
+		bOldOpen = m_bOpen;
+
+		if (m_bOpen)
+			m_bReopened = true;
+	}
+
+	flTimeOnChange = 0.0f;
+
+	if (Utils::IsGameWindowInFocus() && (GetAsyncKeyState(VK_HOME) & 1)) {
+		flTimeOnChange = g_Interfaces.Engine->Time();
+	}
+	m_flFadeElapsed = g_Interfaces.Engine->Time() - flTimeOnChange;
+
+	if (m_flFadeElapsed < m_flFadeDuration) {
+		m_flFadeAlpha = Math::RemapValClamped(m_flFadeElapsed, 0.0f, m_flFadeDuration, !m_bOpen ? 1.0f : 0.0f, m_bOpen ? 1.0f : 0.0f);
+		g_Interfaces.Surface->DrawSetAlphaMultiplier(m_flFadeAlpha);
+	}
+
+	g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
+}
 
 void CMenu::Render(IDirect3DDevice9* pDevice) {
 	static bool bInitImGui = false;
@@ -1075,6 +1102,8 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 								ImGui::PopItemWidth();
 								HelpMarker("Which sheen to apply to the weapon");
 								ImGui::Checkbox("Style override", &Vars::Visuals::Skins::Override.m_Var);
+								ImGui::Checkbox("Spooky", &Vars::Visuals::Skins::Spooky.m_Var);
+								ImGui::Checkbox("Australium", &Vars::Visuals::Skins::Australium.m_Var);
 
 								if (ImGui::Button("Set current")) {
 									g_AttributeChanger.m_bSet = true;
