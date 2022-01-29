@@ -228,7 +228,11 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 	if (const auto& pLocal = g_EntityCache.m_pLocal) {
 		if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon) {
 			if (Vars::Misc::CL_Move::Fakelag.m_Var) {
-				if ((g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < Vars::Misc::CL_Move::FakelagValue.m_Var) && !(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK)) && pLocal->IsAlive()) { *pSendPacket = false; }
+				int chokeamount;
+				if (!Vars::Misc::CL_Move::FakelagRandom.m_Var) { chokeamount = Vars::Misc::CL_Move::FakelagValue.m_Var; }
+				else { chokeamount = (rand() % (Vars::Misc::CL_Move::FakelagValueMax.m_Var - Vars::Misc::CL_Move::FakelagValueMin.m_Var)) + Vars::Misc::CL_Move::FakelagValueMin.m_Var; }
+
+				if ((g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < chokeamount) && !(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK)) && pLocal->IsAlive()) { *pSendPacket = false; }
 				else { *pSendPacket = true; }
 			}
 		}

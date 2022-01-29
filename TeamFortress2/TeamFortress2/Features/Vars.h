@@ -513,9 +513,10 @@ namespace Vars
 			inline CVar<int> DTBarX{ 0,L"DT Offset X" };
 			inline CVar<bool> WaitForDT     { true, L"Wait for DT" };
 			inline CVar<bool> Fakelag       { true, L"Fakelag" };
-			inline CVar<bool> FakelagOnKey  { true, L"Fakelag On Key" };
-			inline CVar<int> FakelagKey	    { 0x54, L"Fakelag Key" }; //T
+			inline CVar<bool> FakelagRandom  { true, L"Random FLG value" };
 			inline CVar<int> FakelagValue   { 1, L"Fakelag value" };
+			inline CVar<int> FakelagValueMin   { 1, L"Fakelag value mn" };
+			inline CVar<int> FakelagValueMax   { 14, L"Fakelag value mx" };
 		}
 		
 		namespace Discord

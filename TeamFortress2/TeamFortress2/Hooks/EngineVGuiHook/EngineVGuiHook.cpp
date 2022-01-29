@@ -109,7 +109,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							int xscale = (Vars::Misc::CL_Move::DTBarScaleX.m_Var);
 							int yscale = (Vars::Misc::CL_Move::DTBarScaleY.m_Var);
 
-							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), { 255, 255, 255, 255 });
+							g_Draw.OutlinedRect(g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) + yoff, (yscale + 2), (xscale + 2), Colors::DtOutline);
 							g_Draw.GradientRect(g_ScreenSize.c - (yscale / 2) + xoff, nY - (xscale / 2) + yoff, (g_ScreenSize.c - (yscale / 2) + xoff + yscale), (nY - (xscale / 2) + yoff + xscale), { Colors::DTStart }, { Colors::DTEnd }, TRUE);
 							g_Draw.String(FONT_ESP_COND_OUTLINED, g_ScreenSize.c - (yscale / 2 + 1) + xoff, nY - (xscale / 2 + 1) - 10 + yoff, { 255, 255, 255, 255 }, ALIGN_DEFAULT, _(L"CHARGE"));
 							if (g_GlobalInfo.m_nShifted == 0)
@@ -201,6 +201,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			g_PlayerArrows.Run();
 			g_SpectatorList.Run();
 			g_Radar.Run();
+			g_Keybinds.Run();
 			g_Crits.Frame();
 			g_Menu.Run();
 		}

@@ -1136,9 +1136,12 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 								if (Vars::AntiHack::AntiAim::YawReal.m_Var == 5 || Vars::AntiHack::AntiAim::YawFake.m_Var == 5) { ImGui::PushItemWidth(100); ImGui::SliderFloat(_("Spin Step"), &Vars::AntiHack::AntiAim::SpinStep.m_Var, -180.0f, 180.f, _("%.0f"), 1.0f); }
 								ImGui::Checkbox("Pitch Resolver", &Vars::AntiHack::Resolver::PitchResolver.m_Var); HelpMarker("Pitch Resolver master switch (ONLY HITS UP AND DOWN, THIS IS SHIT)");
 								ImGui::Checkbox("Fakelag", &Vars::Misc::CL_Move::Fakelag.m_Var); HelpMarker("Fakelag master switch");
-								ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)");
-								ImGui::Checkbox("Fakelag on key", &Vars::Misc::CL_Move::FakelagOnKey.m_Var); HelpMarker("Fakelag will only activate when an assigned key is held");
-								InputKeybind("Fakelag key", Vars::Misc::CL_Move::FakelagKey); HelpMarker("Fakelag will only activate when this key is held");
+								ImGui::Checkbox("Fakelag Randomize", &Vars::Misc::CL_Move::FakelagRandom.m_Var); HelpMarker("Randomize the fakelag value between two values");
+								if (Vars::Misc::CL_Move::FakelagRandom.m_Var){
+									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Min Value", &Vars::Misc::CL_Move::FakelagValueMin.m_Var, 1, Vars::Misc::CL_Move::FakelagValueMax.m_Var, "%d"); ImGui::PopItemWidth();
+									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Max Value", &Vars::Misc::CL_Move::FakelagValueMax.m_Var, Vars::Misc::CL_Move::FakelagValueMin.m_Var, 14, "%d"); ImGui::PopItemWidth();
+								}
+								else { ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)"); }
 								ImGui::Checkbox("SpeedHack", &Vars::Misc::CL_Move::SEnabled.m_Var); HelpMarker("Speedhack Master Switch");
 								ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
 							}
@@ -1191,15 +1194,6 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 						ImGui::Columns(2);
 						{
 							ImGui::TextDisabled("Cheat colours");
-							/*
-							if (Vars::Misc::CL_Move::DTBarStyle.m_Var == 1) {
-								ColorPicker("Dt bar chargin left", Colors::DtChargingLeft);
-								ColorPicker("Dt bar chargin right", Colors::DtChargingRight);
-								ColorPicker("Dt bar charged left", Colors::DtChargedLeft);
-								ColorPicker("Dt bar charged right", Colors::DtChargedRight);
-								ColorPicker("Dt bar outline", Colors::DtOutline);
-							}
-							*/
 							ColorPicker("Outline ESP", Colors::OutlineESP);
 							ColorPicker("Conditions", Colors::Cond);
 							ColorPicker("Target", Colors::Target);
@@ -1234,6 +1228,7 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 							ColorPicker("Damage logger outline", Colors::DmgLoggerOutline);
 							ColorPicker("Damage logger text", Colors::DmgLoggerText);
 							ColorPicker("Hitboxes", Colors::Hitbox);
+							ColorPicker("Dt bar outline", Colors::DtOutline);
 							ColorPicker("DT Bar Start", Colors::DTStart);
 							ColorPicker("DT Bar End", Colors::DTEnd);
 
