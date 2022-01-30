@@ -28,6 +28,7 @@
 #include "Input/Input.h"
 #include "KeyValuesSystem/KeyValuesSystem.h"
 #include "UniformRandomStream/UniformRandomStream.h"
+#include "InputSystem/InputSystem.h"
 
 class CClockDriftMgr
 {
@@ -52,13 +53,14 @@ class CClientState
 {
 public:
 	byte pad0[0x10];
-	INetChannel *m_NetChannel;			// 0x10
+	INetChannel* m_NetChannel;			// 0x10
 	byte pad1[0x140];
 	CClockDriftMgr	m_ClockDriftMgr;		// 0x154
 	int				m_nDeltaTick;			// 0x1A0
 	byte pad2[0x110];
 	int				m_nMaxClients;			// 0x2B4	
-	byte pad3[0x486C];
+	byte pad3[0x4868];
+	float			m_frameTime;			// 0x4B20
 	int				lastoutgoingcommand;	// 0x4B24
 	int				chokedcommands;			// 0x4B28
 	int				last_command_ack;		// 0x4B2C
@@ -78,38 +80,41 @@ public:
 	void Init();
 };
 
+
 class CInterfaces
 {
-public: 
-	CBaseClientDLL*             Client						= nullptr;
-	CClientDLLSharedAppSystems* ClientShared				= nullptr;
-	CClientState*				ClientState					= nullptr;
-	CClientModeShared*          ClientMode					= nullptr;
-	CEngineClient*              Engine						= nullptr;
-	IVEngineEffects*			EngineEffects				= nullptr;
-	CPanel*                     Panel						= nullptr;
-	CSurface*                   Surface						= nullptr;
-	CClientEntityList*          EntityList					= nullptr;
-	CModelInfoClient*           ModelInfo					= nullptr;
-	CEngineTrace*               EngineTrace					= nullptr;
-	CPrediction*                Prediction					= nullptr;
-	CGameMovement*              GameMovement				= nullptr;
-	CMoveHelper*                MoveHelper					= nullptr;
-	ICvar*                      CVars						= nullptr;
-	CGlobalVarsBase*            GlobalVars					= nullptr;
-	CEngineVGui*                EngineVGui					= nullptr;
-	int32_t*                    RandomSeed					= nullptr;
-	void*                       DemoPlayer					= nullptr;
-	IVRenderView*               RenderView					= nullptr;
-	IViewRender*                ViewRender					= nullptr;
-	CDebugOverlay*              DebugOverlay				= nullptr;
-	CGameEventManager*          GameEvent					= nullptr;
-	CModelRender*               ModelRender					= nullptr;
-	CMaterialSystem*            MatSystem					= nullptr;
-	IInput*						Input						= nullptr;
-	IKeyValuesSystem*			KeyValuesSystem				= nullptr;
-	IUniformRandomStream*		UniformRandomStream			= nullptr;
-	void *						StudioRender				= nullptr;
+public:
+	CBaseClientDLL* Client = nullptr;
+	CClientDLLSharedAppSystems* ClientShared = nullptr;
+	CClientState* ClientState = nullptr;
+	CClientModeShared* ClientMode = nullptr;
+	CEngineClient* Engine = nullptr;
+	IVEngineEffects* EngineEffects = nullptr;
+	CPanel* Panel = nullptr;
+	CSurface* Surface = nullptr;
+	CClientEntityList* EntityList = nullptr;
+	CModelInfoClient* ModelInfo = nullptr;
+	CEngineTrace* EngineTrace = nullptr;
+	CPrediction* Prediction = nullptr;
+	CGameMovement* GameMovement = nullptr;
+	CMoveHelper* MoveHelper = nullptr;
+	ICvar* CVars = nullptr;
+	CGlobalVarsBase* GlobalVars = nullptr;
+	CEngineVGui* EngineVGui = nullptr;
+	int32_t* RandomSeed = nullptr;
+	void* DemoPlayer = nullptr;
+	IVRenderView* RenderView = nullptr;
+	IViewRender* ViewRender = nullptr;
+	CDebugOverlay* DebugOverlay = nullptr;
+	CGameEventManager* GameEvent = nullptr;
+	CModelRender* ModelRender = nullptr;
+	CMaterialSystem* MatSystem = nullptr;
+	IInput* Input = nullptr;
+	IKeyValuesSystem* KeyValuesSystem = nullptr;
+	IUniformRandomStream* UniformRandomStream = nullptr;
+	void* StudioRender = nullptr;
+	IInputSystem* InputSystem = nullptr;
+	void* CHud = nullptr;
 	void Init();
 };
 

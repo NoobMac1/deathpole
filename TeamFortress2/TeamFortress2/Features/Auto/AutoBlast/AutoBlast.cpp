@@ -8,7 +8,7 @@ void CAutoAirblast::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserCm
 	if (!Vars::Triggerbot::Blast::Active.m_Var || !g_GlobalInfo.m_bWeaponCanSecondaryAttack)
 		return;
 
-	id = pWeapon->GetWeaponID();
+	int id = pWeapon->GetWeaponID();
 
 	if (id != TF_WEAPON_FLAMETHROWER && id != TF_WEAPON_FLAME_BALL)
 		return;
@@ -32,7 +32,7 @@ void CAutoAirblast::Run(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon, CUserCm
 				case ETFClassID::CTFGrenadePipebombProjectile:
 				{
 					if (pProjectile->GetTouched())
-						continue; //Ignore landed stickies
+						continue; //Ignore landed/failed pipes (dont explode on hit, no need to deflect)
 
 					break;
 				}

@@ -86,7 +86,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 		{ 0x0, _("Arial"), 16, 0, FONTFLAG_OUTLINE },
 
 		//FONT_INDICATORS
-		{ 0x0, _("Tahoma"), 13, 0, FONTFLAG_OUTLINE }
+		{ 0x0, _("Verdana"), 16, 0, FONTFLAG_OUTLINE },
 		});
 
 	SetupDiscord();

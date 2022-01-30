@@ -60,6 +60,7 @@ void CMisc::EdgeJump(CUserCmd* pCmd, const int nOldFlags)
 			{
 				if (pLocal->IsAlive() && !pLocal->IsOnGround() && !pLocal->IsSwimming() && GetAsyncKeyState(Vars::Misc::EdgeJumpKey.m_Var))
 					pCmd->buttons |= IN_JUMP;
+				else { return; }
 			}
 		}
 	}

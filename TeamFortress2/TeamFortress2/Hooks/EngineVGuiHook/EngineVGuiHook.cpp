@@ -63,10 +63,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 				if (g_Interfaces.EngineVGui->IsGameUIVisible())
 					return;
 
-				//Proj aim line
-				//This could use alot of improvement, but still subjectively better than a flying rec
-				//Credits to JAGNEmk aka me x)
-				// Fuck you.
+				//projektile aimbot line (looks ugly)
 				if (!g_GlobalInfo.m_vPredictedPos.IsZero())
 				{
 					if (Vars::Visuals::AimPosSquare.m_Var) {
@@ -79,16 +76,15 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							vProjAimStart.y,
 							vProjAimEnd.x,
 							vProjAimEnd.y,
-							{ Colors::Target } //Set this to a var if u wantto idc
+							{ Colors::Target }
 						);
 					}
 				}
-
-				// for damage logger. 
-				// you can use it for more, i'm sure. - myzarfin
+				
+				//damage logger
 				g_notify.Think();
 
-				//Tickbase info
+				//rijin style dt ind
 				if (Vars::Misc::CL_Move::Enabled.m_Var)
 				{
 					const auto& pLocal = g_EntityCache.m_pLocal;
@@ -102,7 +98,7 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 							float ratio = ((float)g_GlobalInfo.m_nShifted / (float)Vars::Misc::CL_Move::DoubletapAmt.m_Var);
 
 							if (ratio > 1) { ratio = 1; }
-							if (ratio < 0) { ratio = 0; } //player changes tick count.
+							else if (ratio < 0) { ratio = 0; } //player changes tick count.
 
 							int xoff = (Vars::Misc::CL_Move::DTBarX.m_Var);
 							int yoff = (Vars::Misc::CL_Move::DTBarY.m_Var);
@@ -149,46 +145,40 @@ void __stdcall EngineVGuiHook::Paint::Hook(int mode)
 			};
 			OtherDraws();
 
-			// get time.
-			time_t t = std::time(nullptr);
-			std::ostringstream time;
-			time << std::put_time(std::localtime(&t), ("%H:%M:%S"));
-			// get round trip time in milliseconds.
-			//float fLatency = (g_Interfaces.Engine->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + g_Interfaces.Engine->GetNetChannelInfo()->GetLatency(FLOW_INCOMING));
-			/*int ms = std::max(0, (int)std::round(fLatency * 1000.f));*/ // fak off
 			// get tickrate.
 			int rate = (int)std::round(1.f / g_Interfaces.GlobalVars->interval_per_tick);
-			// get framerate.
-			g_GlobalInfo.watermarkCounter++;
-			if (g_GlobalInfo.watermarkCounter > 15) {
+
+			if (g_GlobalInfo.watermarkCounter > 75) {
 				g_GlobalInfo.watermarkCounter = 0;
+				// get framerate.
 				fps = (int)std::round(1.f / g_Interfaces.GlobalVars->frametime);
-			} // this is fucking retarded but might work
+			} // delay updates so it doesn't spaz
+			else { g_GlobalInfo.watermarkCounter++; }
 
 			TCHAR infoBuf[32767];
 			DWORD bufCharCount = 32767;
 			typedef std::basic_string<TCHAR> tstring;
 			GetComputerNameW(infoBuf, &bufCharCount);
-			tstring nig = infoBuf;
-			std::string ger = std::string(nig.begin(), nig.end());
+			tstring computername = infoBuf;
+			std::string computernamestd = std::string(computername.begin(), computername.end());
 
-			std::stringstream ss;
+			std::stringstream watermarktext;
 			if (g_Interfaces.Engine->IsInGame()) {
-				ss << tfm::format(_("deathpole | admin | rate: %i | fps: %i"), rate-1, fps);
+				watermarktext << tfm::format(_("deathpole | %s | rate: %i | fps: %i"), computernamestd, rate-1, fps);
 			}
 			else {
-				ss << tfm::format(_("deathpole | admin | in menu"));
+				watermarktext << tfm::format(_("deathpole | %s | in menu"), computernamestd);
 			}
 
 			int wideth, heighth;
-			g_Interfaces.Surface->GetTextSize(g_Draw.m_vecFonts[FONT_MENU].dwFont, Utils::ConvertUtf8ToWide(ss.str()).data(), wideth, heighth);
+			g_Interfaces.Surface->GetTextSize(g_Draw.m_vecFonts[FONT_MENU].dwFont, Utils::ConvertUtf8ToWide(watermarktext.str()).data(), wideth, heighth);
 
 			if (Vars::Visuals::Watermark.m_Var) {
 				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 8, wideth + 10, 2, { Colors::DmgLoggerOutline });
 
 				g_Draw.Rect(g_ScreenSize.w - wideth - 20, 10, wideth + 10, heighth + 2, { 44, 49, 56, 100 });
 
-				g_Draw.String(FONT_MENU, g_ScreenSize.w - (wideth / 2) - 15, 10, { 255, 255, 255 ,250 }, ALIGN_CENTERHORIZONTAL, ss.str().c_str());
+				g_Draw.String(FONT_MENU, g_ScreenSize.w - (wideth / 2) - 15, 10, { 255, 255, 255 ,250 }, ALIGN_CENTERHORIZONTAL, watermarktext.str().c_str());
 
 			}
 			//Debug

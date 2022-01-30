@@ -11,10 +11,10 @@ public:
 	int m_nKeybindsX = 700, m_nKeybindsY = 700;
 private:
 	bool ShouldRun();
-	void DragNewWindow();
-	void DrawNewWindow();
+	void DragKeybinds();
+	void DrawKeybinds();
 	bool DrawButton(const wchar_t* label, int x, int y, int w, int h);
-	void DrawFeature(const wchar_t* label, int x, int y, int w, int h, bool active);
+	void DrawFeature(const char* label, int x, int y, bool active);
 	//, bool &buttonClick);
 	bool buttonPressed = false;
 

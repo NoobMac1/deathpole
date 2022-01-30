@@ -292,8 +292,7 @@ bool CAimbotProjectile::SolveProjectile(CBaseEntity* pLocal, CBaseCombatWeapon* 
 			case TF_WEAPON_ROCKETLAUNCHER:
 				//case TF_WEAPON_ROCKETLAUNCHER_DIRECTHIT:
 			case TF_WEAPON_DIRECTHIT:
-				// dragons furry
-			case 109:
+			case TF_WEAPON_FLAME_BALL:
 			case TF_WEAPON_FLAREGUN:
 				//case TF_WEAPON_FLAREGUN_REVENGE:
 			case TF_WEAPON_RAYGUN_REVENGE:

@@ -1138,10 +1138,10 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 								ImGui::Checkbox("Fakelag", &Vars::Misc::CL_Move::Fakelag.m_Var); HelpMarker("Fakelag master switch");
 								ImGui::Checkbox("Fakelag Randomize", &Vars::Misc::CL_Move::FakelagRandom.m_Var); HelpMarker("Randomize the fakelag value between two values");
 								if (Vars::Misc::CL_Move::FakelagRandom.m_Var){
-									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Min Value", &Vars::Misc::CL_Move::FakelagValueMin.m_Var, 1, Vars::Misc::CL_Move::FakelagValueMax.m_Var, "%d"); ImGui::PopItemWidth();
-									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Max Value", &Vars::Misc::CL_Move::FakelagValueMax.m_Var, Vars::Misc::CL_Move::FakelagValueMin.m_Var, 14, "%d"); ImGui::PopItemWidth();
+									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Min Value", &Vars::Misc::CL_Move::FakelagValueMin.m_Var, 1, Vars::Misc::CL_Move::FakelagValueMax.m_Var - 1, "%d"); ImGui::PopItemWidth();
+									ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag Max Value", &Vars::Misc::CL_Move::FakelagValueMax.m_Var, Vars::Misc::CL_Move::FakelagValueMin.m_Var + 1, 22, "%d"); ImGui::PopItemWidth();
 								}
-								else { ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 14, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)"); }
+								else { ImGui::PushItemWidth(100); ImGui::SliderInt("Fakelag value", &Vars::Misc::CL_Move::FakelagValue.m_Var, 1, 22, "%d"); ImGui::PopItemWidth(); HelpMarker("How much lag you should fake(?)"); }
 								ImGui::Checkbox("SpeedHack", &Vars::Misc::CL_Move::SEnabled.m_Var); HelpMarker("Speedhack Master Switch");
 								ImGui::SliderInt("SpeedHack Factor", &Vars::Misc::CL_Move::SFactor.m_Var, 1, 66, "%d"); HelpMarker("High values are not recommended");
 							}
@@ -1195,6 +1195,7 @@ void CMenu::Render(IDirect3DDevice9* pDevice) {
 						{
 							ImGui::TextDisabled("Cheat colours");
 							ColorPicker("Outline ESP", Colors::OutlineESP);
+							ColorPicker("Feature Text", Colors::FeatureText);
 							ColorPicker("Conditions", Colors::Cond);
 							ColorPicker("Target", Colors::Target);
 							ColorPicker("Invulnerable", Colors::Invuln);

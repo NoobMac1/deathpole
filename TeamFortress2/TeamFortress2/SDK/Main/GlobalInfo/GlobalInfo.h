@@ -2,8 +2,6 @@
 
 #include "../BaseEntity/BaseEntity.h"
 
-#define MAX_NEW_COMMANDS 24
-#define MAX_NEW_COMMANDS_HEAVY 24
 #define DT_WAIT_CALLS 26
 
 struct GlobalInfo_t
@@ -12,6 +10,8 @@ struct GlobalInfo_t
 	int m_nCurItemDefIndex              = 0;
 	int m_nWaitForShift                 = 0;
 	int m_nShifted                      = 0;
+	int m_nChokeAmount					= 22;
+	int m_nChokedAmount					= 0;
 	//int dtTicks = MAX_NEW_COMMANDS; // how many to shift (obsolete)
 	int tickCounter = 0;
 	int watermarkCounter = 0;
@@ -29,8 +29,8 @@ struct GlobalInfo_t
 	bool m_bAttacking			 	    = false;	
 	bool m_bModulateWorld				= true;
 	bool m_bChoking						= false;
-	bool m_bShouldShift                 = false;
-	bool m_bRecharging                  = false;
+	bool m_bShouldShift					= false;
+	bool m_bRecharging					= false;
 	bool unloadWndProcHook = false;
 	float m_flCurAimFOV					= 0.0f;
 	Vec3 m_vPredictedPos				= {};

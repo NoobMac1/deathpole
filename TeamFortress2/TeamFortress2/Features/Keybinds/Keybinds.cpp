@@ -1,113 +1,57 @@
 #include "Keybinds.h"
 #include "../Vars.h"
 #include "../Menu/Menu.h"
-#include "../Menu/ConfigManager/ConfigManager.h"
-#include <string>
-#include <algorithm>
-#include <cassert>
-#include <cstring>
-#include <string>
-#include "../Vars.h"
 
 constexpr Color_t clrBlack = { 0, 0, 0, 255 };
 constexpr Color_t clrWhite = { 255, 255, 255, 255 };
-
 
 void CKeybinds::Run()
 {
 	if (!ShouldRun())
 		return;
-
-	// Set window size, could maybe use a variable for this wink wink
-
 	m_nKeybindsSize = 120;
-
-	// Draw background, handle input.
-	DrawNewWindow();
+	DrawKeybinds(); // draw keybinds window
 }
 
-bool CKeybinds::DrawButton(const wchar_t* label, int x, int y, int w, int h) {
-	bool callback = false;
-	int mousex, mousey;
-	g_Interfaces.Surface->GetCursorPos(mousex, mousey);
-
-	bool bHeld = GetAsyncKeyState(VK_LBUTTON);
-	// Hover
-	if (mousex > x &&	// if mouse is within left bound
-		mousex < x + w &&	// if mouse is within right bound
-		mousey > y &&	// if mouse is within top bound
-		mousey < y + h) // &&	// if mouse is within bottom bound)						// if mouse key is held
-	{
-		g_Draw.Rect(x, y, w, h, Vars::Menu::Colors::WidgetActive);
-	}
-
-
-	// Click
-	if (mousex > x &&	// if mouse is within left bound
-		mousex < x + w &&	// if mouse is within right bound
-		mousey > y &&	// if mouse is within top bound
-		mousey < y + h && // &&	// if mouse is within bottom bound
-		bHeld) // && !buttonClick)						// if mouse key is held
-	{
-		g_Draw.Rect(x, y, w, h, Vars::Menu::Colors::TitleBar);
-		//buttonClick = true;
-		callback = true;
-	}
-
-	g_Draw.OutlinedRect(x, y, w, h, Vars::Menu::Colors::OutlineMenu);
-	g_Draw.String(FONT_MENU, x + (w / 2), y + (h / 2), Vars::Menu::Colors::Text, ALIGN_CENTER, label);
-
-	return callback;
-}
-
-void CKeybinds::DrawFeature(const wchar_t* label, int x, int y, int w, int h, bool active) {
-	g_Draw.OutlinedRect(x - 2, y - 2, w + 4, h + 4, Vars::Menu::Colors::FeatureOutline);
-	g_Draw.Rect(x, y, w, h, Vars::Menu::Colors::FeatureBackground);
-	g_Draw.String(FONT_INDICATORS, x + (w / 2), y + (h / 2), active ? Vars::Menu::Colors::FeatureOn : Vars::Menu::Colors::FeatureOff, ALIGN_CENTER, label);
-}
-
-
-
-void CKeybinds::DrawNewWindow()
+void CKeybinds::DrawFeature(const char* label, int x, int y, bool active)
 {
-	//If the menu is open, check for input and draw the titlebar.
-	//The titlebar also indicates where we can drag / move the radar.
-	if (g_Menu.m_bOpen || g_Menu.m_flFadeElapsed < g_Menu.m_flFadeDuration)
-	{
-		DragNewWindow();
-
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(g_Menu.m_flFadeAlpha);
-		g_Draw.Rect(m_nKeybindsX - m_nKeybindsSize, m_nKeybindsY - m_nKeybindsSize - 20, m_nKeybindsSize, 20, Vars::Menu::Colors::TitleBar);
-		g_Draw.String(FONT_MENU, m_nKeybindsX - (m_nKeybindsSize / 2), m_nKeybindsY - m_nKeybindsSize - 10, { 255, 255, 255, 255 }, ALIGN_CENTER, "Features");
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
-
-		//Build the bg color
-		Color_t clrBack = Vars::Menu::Colors::WindowBackground;
-
-		//g_Draw.Rect(m_nKeybindsX - m_nKeybindsSize, m_nKeybindsY - m_nKeybindsSize, m_nKeybindsSize, m_nKeybindsSize, clrBack);
-		//g_Draw.OutlinedRect(m_nKeybindsX - m_nKeybindsSize, m_nKeybindsY - m_nKeybindsSize, m_nKeybindsSize, m_nKeybindsSize, clrBack);
-		//g_Draw.OutlinedRect(m_nNewWindowX - m_nNewWindowSize, m_nNewWindowY - m_nNewWindowSize, m_nNewWindowSize, m_nNewWindowSize, Vars::Menu::Colors::OutlineMenu);
-		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.0f);
-
-	}
-	int height = g_Draw.m_vecFonts[FONT_INDICATORS].nTall;
-	DrawFeature(_(L"Aimbot"), m_nKeybindsX - (m_nKeybindsSize / 2) - 50, m_nKeybindsY - m_nKeybindsSize + 10, 100, height, GetAsyncKeyState(Vars::Aimbot::Global::AimKey.m_Var) ? true : false);
-	DrawFeature(_(L"Trigger"), m_nKeybindsX - (m_nKeybindsSize / 2) - 50, m_nKeybindsY - m_nKeybindsSize + 10 + 21, 100, height, GetAsyncKeyState(Vars::Triggerbot::Global::TriggerKey.m_Var) ? true : false);
-	DrawFeature(_(L"Doubletap"), m_nKeybindsX - (m_nKeybindsSize / 2) - 50, m_nKeybindsY - m_nKeybindsSize + 10 + (21 * 3), 100, height, GetAsyncKeyState(Vars::Misc::CL_Move::DoubletapKey.m_Var) ? true : false);
-	DrawFeature(_(L"Recharge"), m_nKeybindsX - (m_nKeybindsSize / 2) - 50, m_nKeybindsY - m_nKeybindsSize + 10 + (21 * 4), 100, height, GetAsyncKeyState(Vars::Misc::CL_Move::RechargeKey.m_Var) ? true : false);
-	DrawFeature(_(L"Thirdperson"), m_nKeybindsX - (m_nKeybindsSize / 2) - 50, m_nKeybindsY - m_nKeybindsSize + 10 + (21 * 5), 100, height, Vars::Visuals::ThirdPerson.m_Var ? true : false);
+	if (active) { g_Draw.String(FONT_INDICATORS, x, y, Colors::FeatureText, ALIGN_DEFAULT, label); }
 }
 
+void CKeybinds::DrawKeybinds()
+{
+	if (g_Menu.m_bOpen)
+	{
+		g_Interfaces.Surface->DrawSetAlphaMultiplier(0.6f);
+		g_Draw.Rect(m_nKeybindsX - m_nKeybindsSize, m_nKeybindsY - m_nKeybindsSize - 10, m_nKeybindsSize, 10, { 36, 34, 54, 150}); // fuck you i like this colour
+		g_Interfaces.Surface->DrawSetAlphaMultiplier(1.f);
+		DragKeybinds();
+	}
+	// if menu open, allow us to drag, render bar
+
+	
+	Color_t clrBack = { 30, 30, 30, static_cast<byte>(Vars::Radar::Main::BackAlpha.m_Var) }; // using radar colour
+
+	DrawFeature(_("AIM"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 5 - m_nKeybindsSize, GetAsyncKeyState(Vars::Aimbot::Global::AimKey.m_Var));
+	DrawFeature(_("TRG"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 25 - m_nKeybindsSize, (GetAsyncKeyState(Vars::Triggerbot::Global::TriggerKey.m_Var) || !Vars::Triggerbot::Global::TriggerKey.m_Var));
+	DrawFeature(_("DT"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 45 - m_nKeybindsSize, (GetAsyncKeyState(Vars::Misc::CL_Move::DoubletapKey.m_Var) || Vars::Misc::CL_Move::DTMode.m_Var == 1));
+	DrawFeature(_("RCG"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 65 - m_nKeybindsSize, (g_GlobalInfo.m_bRecharging));
+	DrawFeature(_("ANT"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 85 - m_nKeybindsSize, (Vars::AntiHack::AntiAim::Active.m_Var));
+	DrawFeature(_("FLG"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 105 - m_nKeybindsSize, (g_GlobalInfo.m_bChoking));
+	DrawFeature(_("EDG"), m_nKeybindsX + 5 - m_nKeybindsSize, m_nKeybindsY + 125 - m_nKeybindsSize, GetAsyncKeyState(Vars::Misc::EdgeJumpKey.m_Var));
+} // this is fucking retarded
+
+// if we have the esc-menu open do not draw, supa simple
 bool CKeybinds::ShouldRun()
 {
-	//If in game
 	if (g_Interfaces.EngineVGui->IsGameUIVisible())
 		return false;
 
 	return true;
 }
 
-void CKeybinds::DragNewWindow()
+// paste, og @ Radar.cpp
+void CKeybinds::DragKeybinds()
 {
 	int mousex, mousey;
 	g_Interfaces.Surface->GetCursorPos(mousex, mousey);
@@ -119,7 +63,7 @@ void CKeybinds::DragNewWindow()
 
 	if ((mousex > (m_nKeybindsX - m_nKeybindsSize) &&
 		mousex < (m_nKeybindsX - m_nKeybindsSize) + (m_nKeybindsSize) &&
-		mousey >(m_nKeybindsY - m_nKeybindsSize) - 30 &&
+		mousey >(m_nKeybindsY - m_nKeybindsSize) - 10 &&
 		mousey < (m_nKeybindsY - m_nKeybindsSize)) && bHeld)
 	{
 		m_bDrag = true;

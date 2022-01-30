@@ -145,6 +145,7 @@ namespace Colors
 	inline Color_t Hitbox =					{ 255, 255, 255, 100 };
 	inline Color_t DTStart =				{ 62, 81, 221, 255 };
 	inline Color_t DTEnd =					{ 148, 246, 255, 255 };
+	inline Color_t FeatureText =					{ 200, 200, 200, 255 };
 }
 
 namespace Utils

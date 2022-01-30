@@ -27,6 +27,7 @@ void __stdcall ClientHook::ShutDown::Hook()
 
 void __stdcall ClientHook::FrameStageNotify::Hook(EClientFrameStage FrameStage)
 {
+	g_Interfaces.Engine->FireEvents();
 	switch (FrameStage)
 	{
 	case EClientFrameStage::FRAME_RENDER_START:

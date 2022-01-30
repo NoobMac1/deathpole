@@ -514,9 +514,9 @@ namespace Vars
 			inline CVar<bool> WaitForDT     { true, L"Wait for DT" };
 			inline CVar<bool> Fakelag       { true, L"Fakelag" };
 			inline CVar<bool> FakelagRandom  { true, L"Random FLG value" };
-			inline CVar<int> FakelagValue   { 1, L"Fakelag value" };
+			inline CVar<int> FakelagValue   { 22, L"Fakelag value" };
 			inline CVar<int> FakelagValueMin   { 1, L"Fakelag value mn" };
-			inline CVar<int> FakelagValueMax   { 14, L"Fakelag value mx" };
+			inline CVar<int> FakelagValueMax   { 22, L"Fakelag value mx" };
 		}
 		
 		namespace Discord

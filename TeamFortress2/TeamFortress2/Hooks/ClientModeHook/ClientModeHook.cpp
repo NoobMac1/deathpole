@@ -25,44 +25,66 @@ void AngleVectors2(const QAngle& angles, Vector* forward)
 	forward->z = -sp;
 }
 
-void FastStop(CUserCmd* pCmd)
+inline Vector ComputeMove(CUserCmd* pCmd, CBaseEntity* pLocal, Vec3& a, Vec3& b)
 {
-	if (g_EntityCache.m_pLocal) {
-		// Get velocity
-		Vector vel = g_EntityCache.m_pLocal->GetVelocity();
-		//velocity::EstimateAbsVelocity(RAW_ENT(LOCAL_E), vel);
+	Vec3 diff = (b - a);
+	if (diff.Lenght() == 0.0f)
+		return Vec3(0.0f, 0.0f, 0.0f);
+	const float x = diff.x;
+	const float y = diff.y;
+	Vec3 vsilent(x, y, 0);
+	Vec3 ang;
+	Math::VectorAngles(vsilent, ang);
+	float yaw = DEG2RAD(ang.y - pCmd->viewangles.y);
+	float pitch = DEG2RAD(ang.x - pCmd->viewangles.x);
+	Vec3 move = { cos(yaw) * 450.0f, -sin(yaw) * 450.0f, -cos(pitch) * 450.0f };
 
-		static auto sv_friction = g_Interfaces.CVars->FindVar("sv_friction");
-		static auto sv_stopspeed = g_Interfaces.CVars->FindVar("sv_stopspeed");
+	// Only apply upmove in water
+	if (!(g_Interfaces.EngineTrace->GetPointContents(pLocal->GetEyePosition()) & CONTENTS_WATER))
+		move.z = pCmd->upmove;
+	return move;
+}
 
-		auto speed = vel.Lenght2D();
-		auto friction = sv_friction->GetFloat() * *reinterpret_cast<float*>(g_EntityCache.m_pLocal + 0x12b8);
-		auto control = (speed < sv_stopspeed->GetFloat()) ? sv_stopspeed->GetFloat() : speed;
-		auto drop = control * friction * g_Interfaces.GlobalVars->interval_per_tick;
+// Function for when you want to goto a vector
+inline void WalkTo(CUserCmd* pCmd, CBaseEntity* pLocal, Vec3& a, Vec3& b, float scale)
+{
+	// Calculate how to get to a vector
+	auto result = ComputeMove(pCmd, pLocal, a, b);
+	// Push our move to usercmd
+	pCmd->forwardmove = result.x * scale;
+	pCmd->sidemove = result.y * scale;
+	pCmd->upmove = result.z * scale;
+}
 
-		if (speed > drop - 1.0f)
+void FastStop(CUserCmd* pCmd, CBaseEntity* pLocal) {
+	static Vec3 vStartOrigin = {};
+	static Vec3 vStartVel = {};
+	static int nShiftTick = 0;
+	if (pLocal && pLocal->IsAlive()) {
+		if (g_GlobalInfo.m_bShouldShift)
 		{
-			Vector velocity = vel;
-			Vector direction;
-			Math::VectorAngles(vel, direction);
-			float speed = velocity.Lenght();
+			if (vStartOrigin.IsZero()) {
+				vStartOrigin = pLocal->GetVecOrigin();
+			}
 
-			direction.y = pCmd->viewangles.y - direction.y;
+			if (vStartVel.IsZero()) {
+				vStartVel = pLocal->GetVecVelocity();
+			}
 
-			Vector forward;
-			AngleVectors2(direction, &forward);
-			Vector negated_direction = forward * -speed;
+			Vec3 vPredicted = vStartOrigin + (vStartVel * TICKS_TO_TIME(24 - nShiftTick));
+			Vec3 vPredictedMax = vStartOrigin + (vStartVel * TICKS_TO_TIME(24));
 
-			pCmd->forwardmove = negated_direction.x;
-			pCmd->sidemove = negated_direction.y;
+			float flScale = Math::RemapValClamped(vPredicted.DistTo(vStartOrigin), 0.0f, vPredictedMax.DistTo(vStartOrigin) * 1.27f, 1.0f, 0.0f);
+			float flScaleScale = Math::RemapValClamped(vStartVel.Lenght2D(), 0.0f, 520.f, 0.f, 1.f);
+			WalkTo(pCmd, pLocal, vPredictedMax, vStartOrigin, flScale * flScaleScale);
+
+			nShiftTick++;
 		}
-		else
-		{
-			pCmd->forwardmove = pCmd->sidemove = 0.0f;
+		else {
+			vStartOrigin = Vec3(0, 0, 0);
+			vStartVel = Vec3(0, 0, 0);
+			nShiftTick = 0;
 		}
-	}
-	else {
-		return;
 	}
 }
 
@@ -203,11 +225,6 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		pCmd->viewangles = ang;
 	}
 
-	// why have this & anti-warp
-	if (g_GlobalInfo.m_bShouldShift) {
-		FastStop(pCmd);
-	}
-
 	g_Misc.Run(pCmd);
 	g_Crits.Tick(pCmd);
 	g_EnginePrediction.Start(pCmd);
@@ -224,17 +241,15 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 
 
 	//fakelag
-	
 	if (const auto& pLocal = g_EntityCache.m_pLocal) {
 		if (const auto& pWeapon = g_EntityCache.m_pLocalWeapon) {
-			if (Vars::Misc::CL_Move::Fakelag.m_Var) {
-				int chokeamount;
-				if (!Vars::Misc::CL_Move::FakelagRandom.m_Var) { chokeamount = Vars::Misc::CL_Move::FakelagValue.m_Var; }
-				else { chokeamount = (rand() % (Vars::Misc::CL_Move::FakelagValueMax.m_Var - Vars::Misc::CL_Move::FakelagValueMin.m_Var)) + Vars::Misc::CL_Move::FakelagValueMin.m_Var; }
+			if (Vars::Misc::CL_Move::Fakelag.m_Var && !g_GlobalInfo.m_bRecharging && !g_GlobalInfo.m_nShifted && pLocal->IsAlive()) { // dont do this code if we are charging or have charged, for obvious fucking reasons
+				if (!Vars::Misc::CL_Move::FakelagRandom.m_Var) { g_GlobalInfo.m_nChokeAmount = Vars::Misc::CL_Move::FakelagValue.m_Var; }
 
-				if ((g_Interfaces.Engine->GetNetChannelInfo()->m_nChokedPackets < chokeamount) && !(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK)) && pLocal->IsAlive()) { *pSendPacket = false; }
-				else { *pSendPacket = true; }
+				if ((g_GlobalInfo.m_nChokedAmount < g_GlobalInfo.m_nChokeAmount) && !(pWeapon->CanShoot(pLocal) && (pCmd->buttons & IN_ATTACK))) { *pSendPacket = false; g_GlobalInfo.m_bChoking = true; g_GlobalInfo.m_nChokedAmount++; }
+				else { *pSendPacket = true; g_GlobalInfo.m_nChokedAmount = 0; if (Vars::Misc::CL_Move::FakelagRandom.m_Var) { g_GlobalInfo.m_nChokeAmount = (rand() % (Vars::Misc::CL_Move::FakelagValueMax.m_Var - Vars::Misc::CL_Move::FakelagValueMin.m_Var)) + Vars::Misc::CL_Move::FakelagValueMin.m_Var; } }
 			}
+			else if (g_GlobalInfo.m_bChoking) { *pSendPacket = true; g_GlobalInfo.m_bChoking = false; } // failsafe not retarded
 		}
 	}
 
@@ -285,7 +300,8 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		}
 	}
 
-	//failsafe
+	//failsafe (i genuinely think this is the most retarded code)
+	/*
 	{
 		static int nChoked = 0;
 
@@ -297,6 +313,7 @@ bool __stdcall ClientModeHook::CreateMove::Hook(float input_sample_frametime, CU
 		if (nChoked > 14)
 			*pSendPacket = true;
 	}
+	*/
 	if (static_cast<int>(g_Misc.strings.size()) > 0) {
 		g_GlobalInfo.tickCounter++;
 

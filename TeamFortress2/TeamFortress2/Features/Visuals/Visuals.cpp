@@ -152,8 +152,9 @@ void CVisuals::ThirdPerson()
 
 			if (Vars::Visuals::ThirdPersonInstantYaw.m_Var)
 			{
-				if (const auto &pAnimState = pLocal->GetAnimState())
+				if (const auto& pAnimState = pLocal->GetAnimState()) {
 					pAnimState->m_flCurrentFeetYaw = g_GlobalInfo.m_vRealViewAngles.y;
+				}
 			}
 		}
 	}
